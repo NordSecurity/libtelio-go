@@ -112,16 +112,6 @@ void uniffi_telio_fn_method_telio_connect_to_exit_node_with_id(
 	RustCallStatus* out_status
 );
 
-void uniffi_telio_fn_method_telio_destroy(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_destroy_hard(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
 void uniffi_telio_fn_method_telio_disable_magic_dns(
 	void* ptr,
 	RustCallStatus* out_status
@@ -218,6 +208,16 @@ void uniffi_telio_fn_method_telio_set_secret_key(
 	RustCallStatus* out_status
 );
 
+void uniffi_telio_fn_method_telio_shutdown(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void uniffi_telio_fn_method_telio_shutdown_hard(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
 void uniffi_telio_fn_method_telio_start(
 	void* ptr,
 	RustBuffer secret_key,
@@ -295,6 +295,10 @@ RustBuffer uniffi_telio_fn_func_get_commit_sha(
 );
 
 RustBuffer uniffi_telio_fn_func_get_default_adapter(
+	RustCallStatus* out_status
+);
+
+RustBuffer uniffi_telio_fn_func_get_default_feature_config(
 	RustCallStatus* out_status
 );
 
@@ -631,6 +635,10 @@ uint16_t uniffi_telio_checksum_func_get_default_adapter(
 	RustCallStatus* out_status
 );
 
+uint16_t uniffi_telio_checksum_func_get_default_feature_config(
+	RustCallStatus* out_status
+);
+
 uint16_t uniffi_telio_checksum_func_get_version_tag(
 	RustCallStatus* out_status
 );
@@ -648,14 +656,6 @@ uint16_t uniffi_telio_checksum_method_telio_connect_to_exit_node_postquantum(
 );
 
 uint16_t uniffi_telio_checksum_method_telio_connect_to_exit_node_with_id(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_destroy(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_destroy_hard(
 	RustCallStatus* out_status
 );
 
@@ -728,6 +728,14 @@ uint16_t uniffi_telio_checksum_method_telio_set_meshnet_off(
 );
 
 uint16_t uniffi_telio_checksum_method_telio_set_secret_key(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_telio_shutdown(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_telio_shutdown_hard(
 	RustCallStatus* out_status
 );
 

@@ -381,7 +381,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_func_generate_public_key(uniffiStatus)
 	})
-	if checksum != 37988 {
+	if checksum != 39651 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_func_generate_public_key: UniFFI API checksum mismatch")
 	}
@@ -390,7 +390,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_func_generate_secret_key(uniffiStatus)
 	})
-	if checksum != 136 {
+	if checksum != 44282 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_func_generate_secret_key: UniFFI API checksum mismatch")
 	}
@@ -415,6 +415,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_func_get_default_feature_config(uniffiStatus)
+	})
+	if checksum != 52439 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_func_get_default_feature_config: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_func_get_version_tag(uniffiStatus)
 	})
 	if checksum != 53700 {
@@ -435,7 +444,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node(uniffiStatus)
 	})
-	if checksum != 40874 {
+	if checksum != 30643 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node: UniFFI API checksum mismatch")
 	}
@@ -444,7 +453,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node_postquantum(uniffiStatus)
 	})
-	if checksum != 3463 {
+	if checksum != 4222 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node_postquantum: UniFFI API checksum mismatch")
 	}
@@ -453,27 +462,9 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node_with_id(uniffiStatus)
 	})
-	if checksum != 44197 {
+	if checksum != 31867 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node_with_id: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_destroy(uniffiStatus)
-	})
-	if checksum != 25234 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_destroy: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_destroy_hard(uniffiStatus)
-	})
-	if checksum != 37735 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_destroy_hard: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -489,7 +480,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_disconnect_from_exit_node(uniffiStatus)
 	})
-	if checksum != 10324 {
+	if checksum != 4404 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_disconnect_from_exit_node: UniFFI API checksum mismatch")
 	}
@@ -552,7 +543,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_get_secret_key(uniffiStatus)
 	})
-	if checksum != 35091 {
+	if checksum != 35090 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_get_secret_key: UniFFI API checksum mismatch")
 	}
@@ -633,16 +624,34 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_secret_key(uniffiStatus)
 	})
-	if checksum != 22691 {
+	if checksum != 4273 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_set_secret_key: UniFFI API checksum mismatch")
 	}
 	}
 	{
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_shutdown(uniffiStatus)
+	})
+	if checksum != 25385 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_shutdown: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_shutdown_hard(uniffiStatus)
+	})
+	if checksum != 46450 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_shutdown_hard: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_start(uniffiStatus)
 	})
-	if checksum != 62899 {
+	if checksum != 30743 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_start: UniFFI API checksum mismatch")
 	}
@@ -651,7 +660,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_start_named(uniffiStatus)
 	})
-	if checksum != 3558 {
+	if checksum != 50320 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_start_named: UniFFI API checksum mismatch")
 	}
@@ -660,7 +669,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_start_with_tun(uniffiStatus)
 	})
-	if checksum != 3376 {
+	if checksum != 57601 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_start_with_tun: UniFFI API checksum mismatch")
 	}
@@ -740,31 +749,6 @@ func uniffiCheckChecksums() {
 }
 
 
-
-
-type FfiConverterUint8 struct{}
-
-var FfiConverterUint8INSTANCE = FfiConverterUint8{}
-
-func (FfiConverterUint8) Lower(value uint8) C.uint8_t {
-	return C.uint8_t(value)
-}
-
-func (FfiConverterUint8) Write(writer io.Writer, value uint8) {
-	writeUint8(writer, value)
-}
-
-func (FfiConverterUint8) Lift(value C.uint8_t) uint8 {
-	return uint8(value)
-}
-
-func (FfiConverterUint8) Read(reader io.Reader) uint8 {
-	return readUint8(reader)
-}
-
-type FfiDestroyerUint8 struct {}
-
-func (FfiDestroyerUint8) Destroy(_ uint8) {}
 
 
 type FfiConverterUint16 struct{}
@@ -1151,32 +1135,6 @@ func (_self *Telio)ConnectToExitNodeWithId(identifier *string, publicKey PublicK
 }
 
 
-// Completely stop and uninit telio lib.
-func (_self *Telio)Destroy() error {
-	_pointer := _self.ffiObject.incrementPointer("*Telio")
-	defer _self.ffiObject.decrementPointer()
-	_, _uniffiErr := rustCallWithError(FfiConverterTypeTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_telio_destroy(
-		_pointer, _uniffiStatus)
-		return false
-	})
-		return _uniffiErr
-}
-
-
-// Explicitly deallocate telio object and shutdown async rt.
-func (_self *Telio)DestroyHard() error {
-	_pointer := _self.ffiObject.incrementPointer("*Telio")
-	defer _self.ffiObject.decrementPointer()
-	_, _uniffiErr := rustCallWithError(FfiConverterTypeTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_telio_destroy_hard(
-		_pointer, _uniffiStatus)
-		return false
-	})
-		return _uniffiErr
-}
-
-
 // Disables magic DNS if it was enabled.
 func (_self *Telio)DisableMagicDns() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
@@ -1436,6 +1394,32 @@ func (_self *Telio)SetSecretKey(secretKey SecretKey) error {
 	_, _uniffiErr := rustCallWithError(FfiConverterTypeTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_set_secret_key(
 		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey), _uniffiStatus)
+		return false
+	})
+		return _uniffiErr
+}
+
+
+// Completely stop and uninit telio lib.
+func (_self *Telio)Shutdown() error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError(FfiConverterTypeTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_shutdown(
+		_pointer, _uniffiStatus)
+		return false
+	})
+		return _uniffiErr
+}
+
+
+// Explicitly deallocate telio object and shutdown async rt.
+func (_self *Telio)ShutdownHard() error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError(FfiConverterTypeTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_shutdown_hard(
+		_pointer, _uniffiStatus)
 		return false
 	})
 		return _uniffiErr
@@ -1955,6 +1939,45 @@ func (_ FfiDestroyerTypeFeatureExitDns) Destroy(value FeatureExitDns) {
 }
 
 
+// Feature config for firewall
+type FeatureFirewall struct {
+	// Turns on connection resets upon VPN server change
+	BoringtunResetConns bool
+}
+
+func (r *FeatureFirewall) Destroy() {
+		FfiDestroyerBool{}.Destroy(r.BoringtunResetConns);
+}
+
+type FfiConverterTypeFeatureFirewall struct {}
+
+var FfiConverterTypeFeatureFirewallINSTANCE = FfiConverterTypeFeatureFirewall{}
+
+func (c FfiConverterTypeFeatureFirewall) Lift(rb RustBufferI) FeatureFirewall {
+	return LiftFromRustBuffer[FeatureFirewall](c, rb)
+}
+
+func (c FfiConverterTypeFeatureFirewall) Read(reader io.Reader) FeatureFirewall {
+	return FeatureFirewall {
+			FfiConverterBoolINSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterTypeFeatureFirewall) Lower(value FeatureFirewall) RustBuffer {
+	return LowerIntoRustBuffer[FeatureFirewall](c, value)
+}
+
+func (c FfiConverterTypeFeatureFirewall) Write(writer io.Writer, value FeatureFirewall) {
+		FfiConverterBoolINSTANCE.Write(writer, value.BoringtunResetConns);
+}
+
+type FfiDestroyerTypeFeatureFirewall struct {}
+
+func (_ FfiDestroyerTypeFeatureFirewall) Destroy(value FeatureFirewall) {
+	value.Destroy()
+}
+
+
 // Configurable features for Lana module
 type FeatureLana struct {
 	// Path of the file where events will be stored. If such file does not exist, it will be created, otherwise reused
@@ -2003,10 +2026,13 @@ func (_ FfiDestroyerTypeFeatureLana) Destroy(value FeatureLana) {
 type FeatureLinkDetection struct {
 	// Configurable rtt in seconds
 	RttSeconds uint64
+	// Check the link state before reporting it as down
+	NoOfPings uint32
 }
 
 func (r *FeatureLinkDetection) Destroy() {
 		FfiDestroyerUint64{}.Destroy(r.RttSeconds);
+		FfiDestroyerUint32{}.Destroy(r.NoOfPings);
 }
 
 type FfiConverterTypeFeatureLinkDetection struct {}
@@ -2020,6 +2046,7 @@ func (c FfiConverterTypeFeatureLinkDetection) Lift(rb RustBufferI) FeatureLinkDe
 func (c FfiConverterTypeFeatureLinkDetection) Read(reader io.Reader) FeatureLinkDetection {
 	return FeatureLinkDetection {
 			FfiConverterUint64INSTANCE.Read(reader),
+			FfiConverterUint32INSTANCE.Read(reader),
 	}
 }
 
@@ -2029,6 +2056,7 @@ func (c FfiConverterTypeFeatureLinkDetection) Lower(value FeatureLinkDetection) 
 
 func (c FfiConverterTypeFeatureLinkDetection) Write(writer io.Writer, value FeatureLinkDetection) {
 		FfiConverterUint64INSTANCE.Write(writer, value.RttSeconds);
+		FfiConverterUint32INSTANCE.Write(writer, value.NoOfPings);
 }
 
 type FfiDestroyerTypeFeatureLinkDetection struct {}
@@ -2443,11 +2471,11 @@ type Features struct {
 	Ipv6 bool
 	// Nicknames support
 	Nicknames bool
-	// Flag to turn on connection reset upon VPN server change for boringtun adapter
-	BoringtunResetConnections FeatureBoringtunResetConns
+	// Feature config for firewall
+	Firewall FeatureFirewall
 	// If and for how long to flush events when stopping telio. Setting to Some(0) means waiting until all events have been flushed, regardless of how long it takes
 	FlushEventsOnStopTimeoutSeconds *uint64
-	// No-link detection mechanism
+	// Link detection mechanism
 	LinkDetection *FeatureLinkDetection
 	// Feature configuration for DNS
 	Dns FeatureDns
@@ -2455,6 +2483,8 @@ type Features struct {
 	PostQuantumVpn FeaturePostQuantumVpn
 	// Enable PMTU discovery, enabled by default
 	PmtuDiscovery *FeaturePmtuDiscovery
+	// Multicast support
+	Multicast bool
 }
 
 func (r *Features) Destroy() {
@@ -2468,12 +2498,13 @@ func (r *Features) Destroy() {
 		FfiDestroyerTypeFeatureValidateKeys{}.Destroy(r.ValidateKeys);
 		FfiDestroyerBool{}.Destroy(r.Ipv6);
 		FfiDestroyerBool{}.Destroy(r.Nicknames);
-		FfiDestroyerTypeFeatureBoringtunResetConns{}.Destroy(r.BoringtunResetConnections);
+		FfiDestroyerTypeFeatureFirewall{}.Destroy(r.Firewall);
 		FfiDestroyerOptionalUint64{}.Destroy(r.FlushEventsOnStopTimeoutSeconds);
 		FfiDestroyerOptionalTypeFeatureLinkDetection{}.Destroy(r.LinkDetection);
 		FfiDestroyerTypeFeatureDns{}.Destroy(r.Dns);
 		FfiDestroyerTypeFeaturePostQuantumVpn{}.Destroy(r.PostQuantumVpn);
 		FfiDestroyerOptionalTypeFeaturePmtuDiscovery{}.Destroy(r.PmtuDiscovery);
+		FfiDestroyerBool{}.Destroy(r.Multicast);
 }
 
 type FfiConverterTypeFeatures struct {}
@@ -2496,12 +2527,13 @@ func (c FfiConverterTypeFeatures) Read(reader io.Reader) Features {
 			FfiConverterTypeFeatureValidateKeysINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterTypeFeatureBoringtunResetConnsINSTANCE.Read(reader),
+			FfiConverterTypeFeatureFirewallINSTANCE.Read(reader),
 			FfiConverterOptionalUint64INSTANCE.Read(reader),
 			FfiConverterOptionalTypeFeatureLinkDetectionINSTANCE.Read(reader),
 			FfiConverterTypeFeatureDnsINSTANCE.Read(reader),
 			FfiConverterTypeFeaturePostQuantumVPNINSTANCE.Read(reader),
 			FfiConverterOptionalTypeFeaturePmtuDiscoveryINSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -2520,12 +2552,13 @@ func (c FfiConverterTypeFeatures) Write(writer io.Writer, value Features) {
 		FfiConverterTypeFeatureValidateKeysINSTANCE.Write(writer, value.ValidateKeys);
 		FfiConverterBoolINSTANCE.Write(writer, value.Ipv6);
 		FfiConverterBoolINSTANCE.Write(writer, value.Nicknames);
-		FfiConverterTypeFeatureBoringtunResetConnsINSTANCE.Write(writer, value.BoringtunResetConnections);
+		FfiConverterTypeFeatureFirewallINSTANCE.Write(writer, value.Firewall);
 		FfiConverterOptionalUint64INSTANCE.Write(writer, value.FlushEventsOnStopTimeoutSeconds);
 		FfiConverterOptionalTypeFeatureLinkDetectionINSTANCE.Write(writer, value.LinkDetection);
 		FfiConverterTypeFeatureDnsINSTANCE.Write(writer, value.Dns);
 		FfiConverterTypeFeaturePostQuantumVPNINSTANCE.Write(writer, value.PostQuantumVpn);
 		FfiConverterOptionalTypeFeaturePmtuDiscoveryINSTANCE.Write(writer, value.PmtuDiscovery);
+		FfiConverterBoolINSTANCE.Write(writer, value.Multicast);
 }
 
 type FfiDestroyerTypeFeatures struct {}
@@ -2545,6 +2578,10 @@ type Peer struct {
 	AllowIncomingConnections bool
 	// Flag to control whether the peer allows incoming files
 	AllowPeerSendFiles bool
+	// Flag to control whether we allow multicast messages from the peer
+	AllowMulticast bool
+	// Flag to control whether the peer allows multicast messages from us
+	PeerAllowsMulticast bool
 }
 
 func (r *Peer) Destroy() {
@@ -2552,6 +2589,8 @@ func (r *Peer) Destroy() {
 		FfiDestroyerBool{}.Destroy(r.IsLocal);
 		FfiDestroyerBool{}.Destroy(r.AllowIncomingConnections);
 		FfiDestroyerBool{}.Destroy(r.AllowPeerSendFiles);
+		FfiDestroyerBool{}.Destroy(r.AllowMulticast);
+		FfiDestroyerBool{}.Destroy(r.PeerAllowsMulticast);
 }
 
 type FfiConverterTypePeer struct {}
@@ -2568,6 +2607,8 @@ func (c FfiConverterTypePeer) Read(reader io.Reader) Peer {
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -2580,6 +2621,8 @@ func (c FfiConverterTypePeer) Write(writer io.Writer, value Peer) {
 		FfiConverterBoolINSTANCE.Write(writer, value.IsLocal);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowIncomingConnections);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowPeerSendFiles);
+		FfiConverterBoolINSTANCE.Write(writer, value.AllowMulticast);
+		FfiConverterBoolINSTANCE.Write(writer, value.PeerAllowsMulticast);
 }
 
 type FfiDestroyerTypePeer struct {}
@@ -2769,6 +2812,10 @@ type TelioNode struct {
 	AllowPeerSendFiles bool
 	// Connection type in the network mesh (through Relay or hole punched directly)
 	Path PathType
+	// Flag to control whether we allow multicast messages from the Node
+	AllowMulticast bool
+	// Flag to control whether the Node allows multicast messages from us
+	PeerAllowsMulticast bool
 }
 
 func (r *TelioNode) Destroy() {
@@ -2786,6 +2833,8 @@ func (r *TelioNode) Destroy() {
 		FfiDestroyerBool{}.Destroy(r.AllowIncomingConnections);
 		FfiDestroyerBool{}.Destroy(r.AllowPeerSendFiles);
 		FfiDestroyerTypePathType{}.Destroy(r.Path);
+		FfiDestroyerBool{}.Destroy(r.AllowMulticast);
+		FfiDestroyerBool{}.Destroy(r.PeerAllowsMulticast);
 }
 
 type FfiConverterTypeTelioNode struct {}
@@ -2812,6 +2861,8 @@ func (c FfiConverterTypeTelioNode) Read(reader io.Reader) TelioNode {
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterTypePathTypeINSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -2834,6 +2885,8 @@ func (c FfiConverterTypeTelioNode) Write(writer io.Writer, value TelioNode) {
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowIncomingConnections);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowPeerSendFiles);
 		FfiConverterTypePathTypeINSTANCE.Write(writer, value.Path);
+		FfiConverterBoolINSTANCE.Write(writer, value.AllowMulticast);
+		FfiConverterBoolINSTANCE.Write(writer, value.PeerAllowsMulticast);
 }
 
 type FfiDestroyerTypeTelioNode struct {}
@@ -2970,28 +3023,28 @@ type Event interface {
 }
 // Used to report events related to the Relay
 type EventRelay struct {
-	Body *Server
+	Body Server
 }
 
 func (e EventRelay) Destroy() {
-		FfiDestroyerOptionalTypeServer{}.Destroy(e.Body);
+		FfiDestroyerTypeServer{}.Destroy(e.Body);
 }
 // Used to report events related to the Node
 type EventNode struct {
-	Body *TelioNode
+	Body TelioNode
 }
 
 func (e EventNode) Destroy() {
-		FfiDestroyerOptionalTypeTelioNode{}.Destroy(e.Body);
+		FfiDestroyerTypeTelioNode{}.Destroy(e.Body);
 }
 // Initialize an Error type event.
 // Used to inform errors to the upper layers of libtelio
 type EventError struct {
-	Body *ErrorEvent
+	Body ErrorEvent
 }
 
 func (e EventError) Destroy() {
-		FfiDestroyerOptionalTypeErrorEvent{}.Destroy(e.Body);
+		FfiDestroyerTypeErrorEvent{}.Destroy(e.Body);
 }
 
 type FfiConverterTypeEvent struct {}
@@ -3010,15 +3063,15 @@ func (FfiConverterTypeEvent) Read(reader io.Reader) Event {
 	switch (id) {
 		case 1:
 			return EventRelay{
-				FfiConverterOptionalTypeServerINSTANCE.Read(reader),
+				FfiConverterTypeServerINSTANCE.Read(reader),
 			};
 		case 2:
 			return EventNode{
-				FfiConverterOptionalTypeTelioNodeINSTANCE.Read(reader),
+				FfiConverterTypeTelioNodeINSTANCE.Read(reader),
 			};
 		case 3:
 			return EventError{
-				FfiConverterOptionalTypeErrorEventINSTANCE.Read(reader),
+				FfiConverterTypeErrorEventINSTANCE.Read(reader),
 			};
 		default:
 			panic(fmt.Sprintf("invalid enum value %v in FfiConverterTypeEvent.Read()", id));
@@ -3029,13 +3082,13 @@ func (FfiConverterTypeEvent) Write(writer io.Writer, value Event) {
 	switch variant_value := value.(type) {
 		case EventRelay:
 			writeInt32(writer, 1)
-			FfiConverterOptionalTypeServerINSTANCE.Write(writer, variant_value.Body)
+			FfiConverterTypeServerINSTANCE.Write(writer, variant_value.Body)
 		case EventNode:
 			writeInt32(writer, 2)
-			FfiConverterOptionalTypeTelioNodeINSTANCE.Write(writer, variant_value.Body)
+			FfiConverterTypeTelioNodeINSTANCE.Write(writer, variant_value.Body)
 		case EventError:
 			writeInt32(writer, 3)
-			FfiConverterOptionalTypeErrorEventINSTANCE.Write(writer, variant_value.Body)
+			FfiConverterTypeErrorEventINSTANCE.Write(writer, variant_value.Body)
 		default:
 			_ = variant_value
 			panic(fmt.Sprintf("invalid enum value `%v` in FfiConverterTypeEvent.Write", value))
@@ -4063,45 +4116,6 @@ func (_ FfiDestroyerOptionalTypeDnsConfig) Destroy(value *DnsConfig) {
 
 
 
-type FfiConverterOptionalTypeErrorEvent struct{}
-
-var FfiConverterOptionalTypeErrorEventINSTANCE = FfiConverterOptionalTypeErrorEvent{}
-
-func (c FfiConverterOptionalTypeErrorEvent) Lift(rb RustBufferI) *ErrorEvent {
-	return LiftFromRustBuffer[*ErrorEvent](c, rb)
-}
-
-func (_ FfiConverterOptionalTypeErrorEvent) Read(reader io.Reader) *ErrorEvent {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterTypeErrorEventINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalTypeErrorEvent) Lower(value *ErrorEvent) RustBuffer {
-	return LowerIntoRustBuffer[*ErrorEvent](c, value)
-}
-
-func (_ FfiConverterOptionalTypeErrorEvent) Write(writer io.Writer, value *ErrorEvent) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterTypeErrorEventINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalTypeErrorEvent struct {}
-
-func (_ FfiDestroyerOptionalTypeErrorEvent) Destroy(value *ErrorEvent) {
-	if value != nil {
-		FfiDestroyerTypeErrorEvent{}.Destroy(*value)
-	}
-}
-
-
-
 type FfiConverterOptionalTypeFeatureDerp struct{}
 
 var FfiConverterOptionalTypeFeatureDerpINSTANCE = FfiConverterOptionalTypeFeatureDerp{}
@@ -4531,84 +4545,6 @@ func (_ FfiDestroyerOptionalTypeFeatureSkipUnresponsivePeers) Destroy(value *Fea
 
 
 
-type FfiConverterOptionalTypeServer struct{}
-
-var FfiConverterOptionalTypeServerINSTANCE = FfiConverterOptionalTypeServer{}
-
-func (c FfiConverterOptionalTypeServer) Lift(rb RustBufferI) *Server {
-	return LiftFromRustBuffer[*Server](c, rb)
-}
-
-func (_ FfiConverterOptionalTypeServer) Read(reader io.Reader) *Server {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterTypeServerINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalTypeServer) Lower(value *Server) RustBuffer {
-	return LowerIntoRustBuffer[*Server](c, value)
-}
-
-func (_ FfiConverterOptionalTypeServer) Write(writer io.Writer, value *Server) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterTypeServerINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalTypeServer struct {}
-
-func (_ FfiDestroyerOptionalTypeServer) Destroy(value *Server) {
-	if value != nil {
-		FfiDestroyerTypeServer{}.Destroy(*value)
-	}
-}
-
-
-
-type FfiConverterOptionalTypeTelioNode struct{}
-
-var FfiConverterOptionalTypeTelioNodeINSTANCE = FfiConverterOptionalTypeTelioNode{}
-
-func (c FfiConverterOptionalTypeTelioNode) Lift(rb RustBufferI) *TelioNode {
-	return LiftFromRustBuffer[*TelioNode](c, rb)
-}
-
-func (_ FfiConverterOptionalTypeTelioNode) Read(reader io.Reader) *TelioNode {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterTypeTelioNodeINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalTypeTelioNode) Lower(value *TelioNode) RustBuffer {
-	return LowerIntoRustBuffer[*TelioNode](c, value)
-}
-
-func (_ FfiConverterOptionalTypeTelioNode) Write(writer io.Writer, value *TelioNode) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterTypeTelioNodeINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalTypeTelioNode struct {}
-
-func (_ FfiDestroyerOptionalTypeTelioNode) Destroy(value *TelioNode) {
-	if value != nil {
-		FfiDestroyerTypeTelioNode{}.Destroy(*value)
-	}
-}
-
-
-
 type FfiConverterOptionalTypeLinkState struct{}
 
 var FfiConverterOptionalTypeLinkStateINSTANCE = FfiConverterOptionalTypeLinkState{}
@@ -4916,51 +4852,6 @@ type FfiDestroyerOptionalTypeSocketAddr struct {}
 func (_ FfiDestroyerOptionalTypeSocketAddr) Destroy(value *SocketAddr) {
 	if value != nil {
 		FfiDestroyerTypeSocketAddr{}.Destroy(*value)
-	}
-}
-
-
-
-type FfiConverterSequenceUint8 struct{}
-
-var FfiConverterSequenceUint8INSTANCE = FfiConverterSequenceUint8{}
-
-func (c FfiConverterSequenceUint8) Lift(rb RustBufferI) []uint8 {
-	return LiftFromRustBuffer[[]uint8](c, rb)
-}
-
-func (c FfiConverterSequenceUint8) Read(reader io.Reader) []uint8 {
-	length := readInt32(reader)
-	if length == 0 {
-		return nil
-	}
-	result := make([]uint8, 0, length)
-	for i := int32(0); i < length; i++ {
-		result = append(result, FfiConverterUint8INSTANCE.Read(reader))
-	}
-	return result
-}
-
-func (c FfiConverterSequenceUint8) Lower(value []uint8) RustBuffer {
-	return LowerIntoRustBuffer[[]uint8](c, value)
-}
-
-func (c FfiConverterSequenceUint8) Write(writer io.Writer, value []uint8) {
-	if len(value) > math.MaxInt32 {
-		panic("[]uint8 is too large to fit into Int32")
-	}
-
-	writeInt32(writer, int32(len(value)))
-	for _, item := range value {
-		FfiConverterUint8INSTANCE.Write(writer, item)
-	}
-}
-
-type FfiDestroyerSequenceUint8 struct {}
-
-func (FfiDestroyerSequenceUint8) Destroy(sequence []uint8) {
-	for _, value := range sequence {
-		FfiDestroyerUint8{}.Destroy(value)	
 	}
 }
 
@@ -5341,17 +5232,6 @@ var FfiConverterTypeEndpointProvidersINSTANCE = FfiConverterSequenceTypeEndpoint
  * is needed because the UDL type name is used in function/method signatures.
  * It's also what we have an external type that references a custom type.
  */
-type FeatureBoringtunResetConns = bool
-type FfiConverterTypeFeatureBoringtunResetConns = FfiConverterBool
-type FfiDestroyerTypeFeatureBoringtunResetConns = FfiDestroyerBool
-var FfiConverterTypeFeatureBoringtunResetConnsINSTANCE = FfiConverterBool{}
-
-
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- * It's also what we have an external type that references a custom type.
- */
 type FeatureValidateKeys = bool
 type FfiConverterTypeFeatureValidateKeys = FfiConverterBool
 type FfiDestroyerTypeFeatureValidateKeys = FfiDestroyerBool
@@ -5407,10 +5287,10 @@ var FfiConverterTypeIpv4AddrINSTANCE = FfiConverterString{}
  * is needed because the UDL type name is used in function/method signatures.
  * It's also what we have an external type that references a custom type.
  */
-type PublicKey = []uint8
-type FfiConverterTypePublicKey = FfiConverterSequenceUint8
-type FfiDestroyerTypePublicKey = FfiDestroyerSequenceUint8
-var FfiConverterTypePublicKeyINSTANCE = FfiConverterSequenceUint8{}
+type PublicKey = string
+type FfiConverterTypePublicKey = FfiConverterString
+type FfiDestroyerTypePublicKey = FfiDestroyerString
+var FfiConverterTypePublicKeyINSTANCE = FfiConverterString{}
 
 
 /**
@@ -5418,10 +5298,10 @@ var FfiConverterTypePublicKeyINSTANCE = FfiConverterSequenceUint8{}
  * is needed because the UDL type name is used in function/method signatures.
  * It's also what we have an external type that references a custom type.
  */
-type SecretKey = []uint8
-type FfiConverterTypeSecretKey = FfiConverterSequenceUint8
-type FfiDestroyerTypeSecretKey = FfiDestroyerSequenceUint8
-var FfiConverterTypeSecretKeyINSTANCE = FfiConverterSequenceUint8{}
+type SecretKey = string
+type FfiConverterTypeSecretKey = FfiConverterString
+type FfiDestroyerTypeSecretKey = FfiDestroyerString
+var FfiConverterTypeSecretKeyINSTANCE = FfiConverterString{}
 
 
 /**
@@ -5497,6 +5377,13 @@ func GetCommitSha() string {
 func GetDefaultAdapter() TelioAdapterType {
 	return FfiConverterTypeTelioAdapterTypeINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
 		return C.uniffi_telio_fn_func_get_default_adapter( _uniffiStatus)
+	}))
+}
+
+// Utility function to get the default feature config
+func GetDefaultFeatureConfig() Features {
+	return FfiConverterTypeFeaturesINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
+		return C.uniffi_telio_fn_func_get_default_feature_config( _uniffiStatus)
 	}))
 }
 
