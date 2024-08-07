@@ -154,6 +154,13 @@ RustBuffer uniffi_telio_fn_method_telio_get_last_error(
 	RustCallStatus* out_status
 );
 
+RustBuffer uniffi_telio_fn_method_telio_get_nat(
+	void* ptr,
+	RustBuffer ip,
+	uint16_t port,
+	RustCallStatus* out_status
+);
+
 RustBuffer uniffi_telio_fn_method_telio_get_secret_key(
 	void* ptr,
 	RustCallStatus* out_status
@@ -181,6 +188,17 @@ void uniffi_telio_fn_method_telio_notify_sleep(
 );
 
 void uniffi_telio_fn_method_telio_notify_wakeup(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+uint32_t uniffi_telio_fn_method_telio_probe_pmtu(
+	void* ptr,
+	RustBuffer host,
+	RustCallStatus* out_status
+);
+
+RustBuffer uniffi_telio_fn_method_telio_receive_ping(
 	void* ptr,
 	RustCallStatus* out_status
 );
@@ -691,6 +709,10 @@ uint16_t uniffi_telio_checksum_method_telio_get_last_error(
 	RustCallStatus* out_status
 );
 
+uint16_t uniffi_telio_checksum_method_telio_get_nat(
+	RustCallStatus* out_status
+);
+
 uint16_t uniffi_telio_checksum_method_telio_get_secret_key(
 	RustCallStatus* out_status
 );
@@ -712,6 +734,14 @@ uint16_t uniffi_telio_checksum_method_telio_notify_sleep(
 );
 
 uint16_t uniffi_telio_checksum_method_telio_notify_wakeup(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_telio_probe_pmtu(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_telio_receive_ping(
 	RustCallStatus* out_status
 );
 
