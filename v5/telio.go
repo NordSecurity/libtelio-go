@@ -442,6 +442,132 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_build(uniffiStatus)
+	})
+	if checksum != 18842 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_build: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_batching(uniffiStatus)
+	})
+	if checksum != 27812 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_batching: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_battery_saving_defaults(uniffiStatus)
+	})
+	if checksum != 10214 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_battery_saving_defaults: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_direct(uniffiStatus)
+	})
+	if checksum != 8489 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_direct: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall_connection_reset(uniffiStatus)
+	})
+	if checksum != 63055 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall_connection_reset: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_flush_events_on_stop_timeout_seconds(uniffiStatus)
+	})
+	if checksum != 48141 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_flush_events_on_stop_timeout_seconds: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_ipv6(uniffiStatus)
+	})
+	if checksum != 25251 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_ipv6: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_lana(uniffiStatus)
+	})
+	if checksum != 20972 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_lana: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_link_detection(uniffiStatus)
+	})
+	if checksum != 35122 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_link_detection: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_multicast(uniffiStatus)
+	})
+	if checksum != 10758 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_multicast: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nicknames(uniffiStatus)
+	})
+	if checksum != 59848 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nicknames: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nurse(uniffiStatus)
+	})
+	if checksum != 24340 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nurse: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_pmtu_discovery(uniffiStatus)
+	})
+	if checksum != 39164 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_pmtu_discovery: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_validate_keys(uniffiStatus)
+	})
+	if checksum != 10605 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_validate_keys: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node(uniffiStatus)
 	})
 	if checksum != 62657 {
@@ -726,6 +852,15 @@ func uniffiCheckChecksums() {
 	if checksum != 37519 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_trigger_qos_collection: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_constructor_featuresdefaultsbuilder_new(uniffiStatus)
+	})
+	if checksum != 9604 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_constructor_featuresdefaultsbuilder_new: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1016,6 +1151,224 @@ func (ffiObject *FfiObject)freeRustArcPtr() {
 		return 0
 	})
 }
+// A [Features] builder that allows a simpler initialization of
+// features with defaults comming from libtelio lib.
+//
+// !!! Should only be used then remote config is inaccessible !!!
+
+type FeaturesDefaultsBuilder struct {
+	ffiObject FfiObject
+}
+// Create a builder for Features with minimal defaults.
+func NewFeaturesDefaultsBuilder() *FeaturesDefaultsBuilder {
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_constructor_featuresdefaultsbuilder_new( _uniffiStatus)
+	}))
+}
+
+
+
+
+// Build final config
+func (_self *FeaturesDefaultsBuilder)Build() Features {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterTypeFeaturesINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_build(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable keepalive batching feature
+func (_self *FeaturesDefaultsBuilder)EnableBatching() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_batching(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable default wireguard timings, derp timings and other features for best battery performance
+func (_self *FeaturesDefaultsBuilder)EnableBatterySavingDefaults() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_battery_saving_defaults(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable direct connections with defaults;
+func (_self *FeaturesDefaultsBuilder)EnableDirect() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_direct(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable firewall connection resets when boringtun is used
+func (_self *FeaturesDefaultsBuilder)EnableFirewallConnectionReset() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_firewall_connection_reset(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable blocking event flush with timout on stop with defaults
+func (_self *FeaturesDefaultsBuilder)EnableFlushEventsOnStopTimeoutSeconds() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_flush_events_on_stop_timeout_seconds(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable IPv6 with defaults
+func (_self *FeaturesDefaultsBuilder)EnableIpv6() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_ipv6(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable lana, this requires input from apps
+func (_self *FeaturesDefaultsBuilder)EnableLana(eventPath string, isProd bool) *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_lana(
+		_pointer,FfiConverterStringINSTANCE.Lower(eventPath), FfiConverterBoolINSTANCE.Lower(isProd), _uniffiStatus)
+	}))
+}
+
+
+// Enable Link detection mechanism with defaults
+func (_self *FeaturesDefaultsBuilder)EnableLinkDetection() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_link_detection(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Eanable multicast with defaults
+func (_self *FeaturesDefaultsBuilder)EnableMulticast() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_multicast(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable nicknames with defaults
+func (_self *FeaturesDefaultsBuilder)EnableNicknames() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nicknames(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable nurse with defaults
+func (_self *FeaturesDefaultsBuilder)EnableNurse() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nurse(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable PMTU discovery with defaults;
+func (_self *FeaturesDefaultsBuilder)EnablePmtuDiscovery() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_pmtu_discovery(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable key valiation in set_config call with defaults
+func (_self *FeaturesDefaultsBuilder)EnableValidateKeys() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_validate_keys(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+
+func (object *FeaturesDefaultsBuilder)Destroy() {
+	runtime.SetFinalizer(object, nil)
+	object.ffiObject.destroy()
+}
+
+type FfiConverterFeaturesDefaultsBuilder struct {}
+
+var FfiConverterFeaturesDefaultsBuilderINSTANCE = FfiConverterFeaturesDefaultsBuilder{}
+
+func (c FfiConverterFeaturesDefaultsBuilder) Lift(pointer unsafe.Pointer) *FeaturesDefaultsBuilder {
+	result := &FeaturesDefaultsBuilder {
+		newFfiObject(
+			pointer,
+			func(pointer unsafe.Pointer, status *C.RustCallStatus) {
+				C.uniffi_telio_fn_free_featuresdefaultsbuilder(pointer, status)
+		}),
+	}
+	runtime.SetFinalizer(result, (*FeaturesDefaultsBuilder).Destroy)
+	return result
+}
+
+func (c FfiConverterFeaturesDefaultsBuilder) Read(reader io.Reader) *FeaturesDefaultsBuilder {
+	return c.Lift(unsafe.Pointer(uintptr(readUint64(reader))))
+}
+
+func (c FfiConverterFeaturesDefaultsBuilder) Lower(value *FeaturesDefaultsBuilder) unsafe.Pointer {
+	// TODO: this is bad - all synchronization from ObjectRuntime.go is discarded here,
+	// because the pointer will be decremented immediately after this function returns,
+	// and someone will be left holding onto a non-locked pointer.
+	pointer := value.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer value.ffiObject.decrementPointer()
+	return pointer
+}
+
+func (c FfiConverterFeaturesDefaultsBuilder) Write(writer io.Writer, value *FeaturesDefaultsBuilder) {
+	writeUint64(writer, uint64(uintptr(c.Lower(value))))
+}
+
+type FfiDestroyerFeaturesDefaultsBuilder struct {}
+
+func (_ FfiDestroyerFeaturesDefaultsBuilder) Destroy(value *FeaturesDefaultsBuilder) {
+	value.Destroy()
+}
+
+
 type Telio struct {
 	ffiObject FfiObject
 }
@@ -1778,6 +2131,44 @@ func (_ FfiDestroyerTypeErrorEvent) Destroy(value ErrorEvent) {
 }
 
 
+type FeatureBatching struct {
+	// direct connection threshold for batching
+	DirectConnectionThreshold uint32
+}
+
+func (r *FeatureBatching) Destroy() {
+		FfiDestroyerUint32{}.Destroy(r.DirectConnectionThreshold);
+}
+
+type FfiConverterTypeFeatureBatching struct {}
+
+var FfiConverterTypeFeatureBatchingINSTANCE = FfiConverterTypeFeatureBatching{}
+
+func (c FfiConverterTypeFeatureBatching) Lift(rb RustBufferI) FeatureBatching {
+	return LiftFromRustBuffer[FeatureBatching](c, rb)
+}
+
+func (c FfiConverterTypeFeatureBatching) Read(reader io.Reader) FeatureBatching {
+	return FeatureBatching {
+			FfiConverterUint32INSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterTypeFeatureBatching) Lower(value FeatureBatching) RustBuffer {
+	return LowerIntoRustBuffer[FeatureBatching](c, value)
+}
+
+func (c FfiConverterTypeFeatureBatching) Write(writer io.Writer, value FeatureBatching) {
+		FfiConverterUint32INSTANCE.Write(writer, value.DirectConnectionThreshold);
+}
+
+type FfiDestroyerTypeFeatureBatching struct {}
+
+func (_ FfiDestroyerTypeFeatureBatching) Destroy(value FeatureBatching) {
+	value.Destroy()
+}
+
+
 // Configure derp behaviour
 type FeatureDerp struct {
 	// Tcp keepalive set on derp server's side [default 15s]
@@ -1837,7 +2228,7 @@ type FeatureDirect struct {
 	// Endpoint providers [default all]
 	Providers *EndpointProviders
 	// Polling interval for endpoints [default 10s]
-	EndpointIntervalSecs *uint64
+	EndpointIntervalSecs uint64
 	// Configuration options for skipping unresponsive peers
 	SkipUnresponsivePeers *FeatureSkipUnresponsivePeers
 	// Parameters to optimize battery lifetime
@@ -1846,7 +2237,7 @@ type FeatureDirect struct {
 
 func (r *FeatureDirect) Destroy() {
 		FfiDestroyerOptionalTypeEndpointProviders{}.Destroy(r.Providers);
-		FfiDestroyerOptionalUint64{}.Destroy(r.EndpointIntervalSecs);
+		FfiDestroyerUint64{}.Destroy(r.EndpointIntervalSecs);
 		FfiDestroyerOptionalTypeFeatureSkipUnresponsivePeers{}.Destroy(r.SkipUnresponsivePeers);
 		FfiDestroyerOptionalTypeFeatureEndpointProvidersOptimization{}.Destroy(r.EndpointProvidersOptimization);
 }
@@ -1862,7 +2253,7 @@ func (c FfiConverterTypeFeatureDirect) Lift(rb RustBufferI) FeatureDirect {
 func (c FfiConverterTypeFeatureDirect) Read(reader io.Reader) FeatureDirect {
 	return FeatureDirect {
 			FfiConverterOptionalTypeEndpointProvidersINSTANCE.Read(reader),
-			FfiConverterOptionalUint64INSTANCE.Read(reader),
+			FfiConverterUint64INSTANCE.Read(reader),
 			FfiConverterOptionalTypeFeatureSkipUnresponsivePeersINSTANCE.Read(reader),
 			FfiConverterOptionalTypeFeatureEndpointProvidersOptimizationINSTANCE.Read(reader),
 	}
@@ -1874,7 +2265,7 @@ func (c FfiConverterTypeFeatureDirect) Lower(value FeatureDirect) RustBuffer {
 
 func (c FfiConverterTypeFeatureDirect) Write(writer io.Writer, value FeatureDirect) {
 		FfiConverterOptionalTypeEndpointProvidersINSTANCE.Write(writer, value.Providers);
-		FfiConverterOptionalUint64INSTANCE.Write(writer, value.EndpointIntervalSecs);
+		FfiConverterUint64INSTANCE.Write(writer, value.EndpointIntervalSecs);
 		FfiConverterOptionalTypeFeatureSkipUnresponsivePeersINSTANCE.Write(writer, value.SkipUnresponsivePeers);
 		FfiConverterOptionalTypeFeatureEndpointProvidersOptimizationINSTANCE.Write(writer, value.EndpointProvidersOptimization);
 }
@@ -2543,6 +2934,8 @@ type Features struct {
 	Direct *FeatureDirect
 	// Should only be set for macos sideload
 	IsTestEnv *bool
+	// Controll if IP addresses should be hidden in logs
+	HideIps bool
 	// Derp server specific configuration
 	Derp *FeatureDerp
 	// Flag to specify if keys should be validated
@@ -2565,6 +2958,8 @@ type Features struct {
 	PmtuDiscovery *FeaturePmtuDiscovery
 	// Multicast support
 	Multicast bool
+	// Batching
+	Batching *FeatureBatching
 }
 
 func (r *Features) Destroy() {
@@ -2574,6 +2969,7 @@ func (r *Features) Destroy() {
 		FfiDestroyerOptionalTypeFeaturePaths{}.Destroy(r.Paths);
 		FfiDestroyerOptionalTypeFeatureDirect{}.Destroy(r.Direct);
 		FfiDestroyerOptionalBool{}.Destroy(r.IsTestEnv);
+		FfiDestroyerBool{}.Destroy(r.HideIps);
 		FfiDestroyerOptionalTypeFeatureDerp{}.Destroy(r.Derp);
 		FfiDestroyerTypeFeatureValidateKeys{}.Destroy(r.ValidateKeys);
 		FfiDestroyerBool{}.Destroy(r.Ipv6);
@@ -2585,6 +2981,7 @@ func (r *Features) Destroy() {
 		FfiDestroyerTypeFeaturePostQuantumVpn{}.Destroy(r.PostQuantumVpn);
 		FfiDestroyerOptionalTypeFeaturePmtuDiscovery{}.Destroy(r.PmtuDiscovery);
 		FfiDestroyerBool{}.Destroy(r.Multicast);
+		FfiDestroyerOptionalTypeFeatureBatching{}.Destroy(r.Batching);
 }
 
 type FfiConverterTypeFeatures struct {}
@@ -2603,6 +3000,7 @@ func (c FfiConverterTypeFeatures) Read(reader io.Reader) Features {
 			FfiConverterOptionalTypeFeaturePathsINSTANCE.Read(reader),
 			FfiConverterOptionalTypeFeatureDirectINSTANCE.Read(reader),
 			FfiConverterOptionalBoolINSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterOptionalTypeFeatureDerpINSTANCE.Read(reader),
 			FfiConverterTypeFeatureValidateKeysINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
@@ -2614,6 +3012,7 @@ func (c FfiConverterTypeFeatures) Read(reader io.Reader) Features {
 			FfiConverterTypeFeaturePostQuantumVPNINSTANCE.Read(reader),
 			FfiConverterOptionalTypeFeaturePmtuDiscoveryINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterOptionalTypeFeatureBatchingINSTANCE.Read(reader),
 	}
 }
 
@@ -2628,6 +3027,7 @@ func (c FfiConverterTypeFeatures) Write(writer io.Writer, value Features) {
 		FfiConverterOptionalTypeFeaturePathsINSTANCE.Write(writer, value.Paths);
 		FfiConverterOptionalTypeFeatureDirectINSTANCE.Write(writer, value.Direct);
 		FfiConverterOptionalBoolINSTANCE.Write(writer, value.IsTestEnv);
+		FfiConverterBoolINSTANCE.Write(writer, value.HideIps);
 		FfiConverterOptionalTypeFeatureDerpINSTANCE.Write(writer, value.Derp);
 		FfiConverterTypeFeatureValidateKeysINSTANCE.Write(writer, value.ValidateKeys);
 		FfiConverterBoolINSTANCE.Write(writer, value.Ipv6);
@@ -2639,6 +3039,7 @@ func (c FfiConverterTypeFeatures) Write(writer io.Writer, value Features) {
 		FfiConverterTypeFeaturePostQuantumVPNINSTANCE.Write(writer, value.PostQuantumVpn);
 		FfiConverterOptionalTypeFeaturePmtuDiscoveryINSTANCE.Write(writer, value.PmtuDiscovery);
 		FfiConverterBoolINSTANCE.Write(writer, value.Multicast);
+		FfiConverterOptionalTypeFeatureBatchingINSTANCE.Write(writer, value.Batching);
 }
 
 type FfiDestroyerTypeFeatures struct {}
@@ -4253,6 +4654,45 @@ type FfiDestroyerOptionalTypeDnsConfig struct {}
 func (_ FfiDestroyerOptionalTypeDnsConfig) Destroy(value *DnsConfig) {
 	if value != nil {
 		FfiDestroyerTypeDnsConfig{}.Destroy(*value)
+	}
+}
+
+
+
+type FfiConverterOptionalTypeFeatureBatching struct{}
+
+var FfiConverterOptionalTypeFeatureBatchingINSTANCE = FfiConverterOptionalTypeFeatureBatching{}
+
+func (c FfiConverterOptionalTypeFeatureBatching) Lift(rb RustBufferI) *FeatureBatching {
+	return LiftFromRustBuffer[*FeatureBatching](c, rb)
+}
+
+func (_ FfiConverterOptionalTypeFeatureBatching) Read(reader io.Reader) *FeatureBatching {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterTypeFeatureBatchingINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalTypeFeatureBatching) Lower(value *FeatureBatching) RustBuffer {
+	return LowerIntoRustBuffer[*FeatureBatching](c, value)
+}
+
+func (_ FfiConverterOptionalTypeFeatureBatching) Write(writer io.Writer, value *FeatureBatching) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterTypeFeatureBatchingINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalTypeFeatureBatching struct {}
+
+func (_ FfiDestroyerOptionalTypeFeatureBatching) Destroy(value *FeatureBatching) {
+	if value != nil {
+		FfiDestroyerTypeFeatureBatching{}.Destroy(*value)
 	}
 }
 
