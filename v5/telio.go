@@ -3124,7 +3124,7 @@ type PeerBase struct {
 	// Ip address of peer
 	IpAddresses *[]IpAddr
 	// Nickname for the peer
-	Nickname *string
+	Nickname *HiddenString
 }
 
 func (r *PeerBase) Destroy() {
@@ -3132,7 +3132,7 @@ func (r *PeerBase) Destroy() {
 		FfiDestroyerTypePublicKey{}.Destroy(r.PublicKey);
 		FfiDestroyerTypeHiddenString{}.Destroy(r.Hostname);
 		FfiDestroyerOptionalSequenceTypeIpAddr{}.Destroy(r.IpAddresses);
-		FfiDestroyerOptionalString{}.Destroy(r.Nickname);
+		FfiDestroyerOptionalTypeHiddenString{}.Destroy(r.Nickname);
 }
 
 type FfiConverterTypePeerBase struct {}
@@ -3149,7 +3149,7 @@ func (c FfiConverterTypePeerBase) Read(reader io.Reader) PeerBase {
 			FfiConverterTypePublicKeyINSTANCE.Read(reader),
 			FfiConverterTypeHiddenStringINSTANCE.Read(reader),
 			FfiConverterOptionalSequenceTypeIpAddrINSTANCE.Read(reader),
-			FfiConverterOptionalStringINSTANCE.Read(reader),
+			FfiConverterOptionalTypeHiddenStringINSTANCE.Read(reader),
 	}
 }
 
@@ -3162,7 +3162,7 @@ func (c FfiConverterTypePeerBase) Write(writer io.Writer, value PeerBase) {
 		FfiConverterTypePublicKeyINSTANCE.Write(writer, value.PublicKey);
 		FfiConverterTypeHiddenStringINSTANCE.Write(writer, value.Hostname);
 		FfiConverterOptionalSequenceTypeIpAddrINSTANCE.Write(writer, value.IpAddresses);
-		FfiConverterOptionalStringINSTANCE.Write(writer, value.Nickname);
+		FfiConverterOptionalTypeHiddenStringINSTANCE.Write(writer, value.Nickname);
 }
 
 type FfiDestroyerTypePeerBase struct {}
@@ -5395,6 +5395,45 @@ type FfiDestroyerOptionalTypeEndpointProviders struct {}
 func (_ FfiDestroyerOptionalTypeEndpointProviders) Destroy(value *EndpointProviders) {
 	if value != nil {
 		FfiDestroyerTypeEndpointProviders{}.Destroy(*value)
+	}
+}
+
+
+
+type FfiConverterOptionalTypeHiddenString struct{}
+
+var FfiConverterOptionalTypeHiddenStringINSTANCE = FfiConverterOptionalTypeHiddenString{}
+
+func (c FfiConverterOptionalTypeHiddenString) Lift(rb RustBufferI) *HiddenString {
+	return LiftFromRustBuffer[*HiddenString](c, rb)
+}
+
+func (_ FfiConverterOptionalTypeHiddenString) Read(reader io.Reader) *HiddenString {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterTypeHiddenStringINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalTypeHiddenString) Lower(value *HiddenString) RustBuffer {
+	return LowerIntoRustBuffer[*HiddenString](c, value)
+}
+
+func (_ FfiConverterOptionalTypeHiddenString) Write(writer io.Writer, value *HiddenString) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterTypeHiddenStringINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalTypeHiddenString struct {}
+
+func (_ FfiDestroyerOptionalTypeHiddenString) Destroy(value *HiddenString) {
+	if value != nil {
+		FfiDestroyerTypeHiddenString{}.Destroy(*value)
 	}
 }
 
