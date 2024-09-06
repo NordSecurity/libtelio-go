@@ -68,6 +68,87 @@ int8_t uniffiForeignExecutorCallbacktelio(uint64_t, uint32_t, RustTaskCallback, 
 
 void uniffiFutureContinuationCallbacktelio(void*, int8_t);
 
+void uniffi_telio_fn_free_featuresdefaultsbuilder(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_constructor_featuresdefaultsbuilder_new(
+	RustCallStatus* out_status
+);
+
+RustBuffer uniffi_telio_fn_method_featuresdefaultsbuilder_build(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_batching(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_battery_saving_defaults(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_direct(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_firewall_connection_reset(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_flush_events_on_stop_timeout_seconds(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_ipv6(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_lana(
+	void* ptr,
+	RustBuffer event_path,
+	int8_t is_prod,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_link_detection(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_multicast(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nicknames(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nurse(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_pmtu_discovery(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_validate_keys(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
 void uniffi_telio_fn_free_telio(
 	void* ptr,
 	RustCallStatus* out_status
@@ -665,6 +746,62 @@ uint16_t uniffi_telio_checksum_func_set_global_logger(
 	RustCallStatus* out_status
 );
 
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_build(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_batching(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_battery_saving_defaults(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_direct(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall_connection_reset(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_flush_events_on_stop_timeout_seconds(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_ipv6(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_lana(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_link_detection(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_multicast(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nicknames(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nurse(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_pmtu_discovery(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_validate_keys(
+	RustCallStatus* out_status
+);
+
 uint16_t uniffi_telio_checksum_method_telio_connect_to_exit_node(
 	RustCallStatus* out_status
 );
@@ -790,6 +927,10 @@ uint16_t uniffi_telio_checksum_method_telio_trigger_analytics_event(
 );
 
 uint16_t uniffi_telio_checksum_method_telio_trigger_qos_collection(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_constructor_featuresdefaultsbuilder_new(
 	RustCallStatus* out_status
 );
 
