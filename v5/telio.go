@@ -444,7 +444,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node(uniffiStatus)
 	})
-	if checksum != 30643 {
+	if checksum != 62657 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node: UniFFI API checksum mismatch")
 	}
@@ -453,7 +453,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node_postquantum(uniffiStatus)
 	})
-	if checksum != 4222 {
+	if checksum != 49599 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node_postquantum: UniFFI API checksum mismatch")
 	}
@@ -462,7 +462,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node_with_id(uniffiStatus)
 	})
-	if checksum != 31867 {
+	if checksum != 42608 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node_with_id: UniFFI API checksum mismatch")
 	}
@@ -541,6 +541,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_get_nat(uniffiStatus)
+	})
+	if checksum != 11642 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_get_nat: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_get_secret_key(uniffiStatus)
 	})
 	if checksum != 35090 {
@@ -591,6 +600,24 @@ func uniffiCheckChecksums() {
 	if checksum != 23592 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_notify_wakeup: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_probe_pmtu(uniffiStatus)
+	})
+	if checksum != 28113 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_probe_pmtu: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_receive_ping(uniffiStatus)
+	})
+	if checksum != 127 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_receive_ping: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1029,12 +1056,12 @@ func TelioNewWithProtect(features Features, events TelioEventCb, protect TelioPr
 
 
 // Wrapper for `telio_connect_to_exit_node_with_id` that doesn't take an identifier
-func (_self *Telio)ConnectToExitNode(publicKey PublicKey, allowedIps *[]IpNetwork, endpoint *SocketAddr) error {
+func (_self *Telio)ConnectToExitNode(publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError(FfiConverterTypeTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_connect_to_exit_node(
-		_pointer,FfiConverterTypePublicKeyINSTANCE.Lower(publicKey), FfiConverterOptionalSequenceTypeIpNetworkINSTANCE.Lower(allowedIps), FfiConverterOptionalTypeSocketAddrINSTANCE.Lower(endpoint), _uniffiStatus)
+		_pointer,FfiConverterTypePublicKeyINSTANCE.Lower(publicKey), FfiConverterOptionalSequenceTypeIpNetINSTANCE.Lower(allowedIps), FfiConverterOptionalTypeSocketAddrINSTANCE.Lower(endpoint), _uniffiStatus)
 		return false
 	})
 		return _uniffiErr
@@ -1072,12 +1099,12 @@ func (_self *Telio)ConnectToExitNode(publicKey PublicKey, allowedIps *[]IpNetwor
 // );
 // ```
 
-func (_self *Telio)ConnectToExitNodePostquantum(identifier *string, publicKey PublicKey, allowedIps *[]IpNetwork, endpoint SocketAddr) error {
+func (_self *Telio)ConnectToExitNodePostquantum(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint SocketAddr) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError(FfiConverterTypeTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_connect_to_exit_node_postquantum(
-		_pointer,FfiConverterOptionalStringINSTANCE.Lower(identifier), FfiConverterTypePublicKeyINSTANCE.Lower(publicKey), FfiConverterOptionalSequenceTypeIpNetworkINSTANCE.Lower(allowedIps), FfiConverterTypeSocketAddrINSTANCE.Lower(endpoint), _uniffiStatus)
+		_pointer,FfiConverterOptionalStringINSTANCE.Lower(identifier), FfiConverterTypePublicKeyINSTANCE.Lower(publicKey), FfiConverterOptionalSequenceTypeIpNetINSTANCE.Lower(allowedIps), FfiConverterTypeSocketAddrINSTANCE.Lower(endpoint), _uniffiStatus)
 		return false
 	})
 		return _uniffiErr
@@ -1123,12 +1150,12 @@ func (_self *Telio)ConnectToExitNodePostquantum(identifier *string, publicKey Pu
 // );
 // ```
 
-func (_self *Telio)ConnectToExitNodeWithId(identifier *string, publicKey PublicKey, allowedIps *[]IpNetwork, endpoint *SocketAddr) error {
+func (_self *Telio)ConnectToExitNodeWithId(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError(FfiConverterTypeTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_connect_to_exit_node_with_id(
-		_pointer,FfiConverterOptionalStringINSTANCE.Lower(identifier), FfiConverterTypePublicKeyINSTANCE.Lower(publicKey), FfiConverterOptionalSequenceTypeIpNetworkINSTANCE.Lower(allowedIps), FfiConverterOptionalTypeSocketAddrINSTANCE.Lower(endpoint), _uniffiStatus)
+		_pointer,FfiConverterOptionalStringINSTANCE.Lower(identifier), FfiConverterTypePublicKeyINSTANCE.Lower(publicKey), FfiConverterOptionalSequenceTypeIpNetINSTANCE.Lower(allowedIps), FfiConverterOptionalTypeSocketAddrINSTANCE.Lower(endpoint), _uniffiStatus)
 		return false
 	})
 		return _uniffiErr
@@ -1254,6 +1281,22 @@ func (_self *Telio)GetLastError() string {
 }
 
 
+func (_self *Telio)GetNat(ip string, port uint16) (NatType, error) {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_uniffiRV, _uniffiErr := rustCallWithError(FfiConverterTypeTelioError{},func(_uniffiStatus *C.RustCallStatus) RustBufferI {
+		return C.uniffi_telio_fn_method_telio_get_nat(
+		_pointer,FfiConverterStringINSTANCE.Lower(ip), FfiConverterUint16INSTANCE.Lower(port), _uniffiStatus)
+	})
+		if _uniffiErr != nil {
+			var _uniffiDefaultValue NatType
+			return _uniffiDefaultValue, _uniffiErr
+		} else {
+			return FfiConverterTypeNatTypeINSTANCE.Lift(_uniffiRV), _uniffiErr
+		}
+}
+
+
 func (_self *Telio)GetSecretKey() SecretKey {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
@@ -1330,6 +1373,38 @@ func (_self *Telio)NotifyWakeup() error {
 		return false
 	})
 		return _uniffiErr
+}
+
+
+func (_self *Telio)ProbePmtu(host string) (uint32, error) {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_uniffiRV, _uniffiErr := rustCallWithError(FfiConverterTypeTelioError{},func(_uniffiStatus *C.RustCallStatus) C.uint32_t {
+		return C.uniffi_telio_fn_method_telio_probe_pmtu(
+		_pointer,FfiConverterStringINSTANCE.Lower(host), _uniffiStatus)
+	})
+		if _uniffiErr != nil {
+			var _uniffiDefaultValue uint32
+			return _uniffiDefaultValue, _uniffiErr
+		} else {
+			return FfiConverterUint32INSTANCE.Lift(_uniffiRV), _uniffiErr
+		}
+}
+
+
+func (_self *Telio)ReceivePing() (string, error) {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_uniffiRV, _uniffiErr := rustCallWithError(FfiConverterTypeTelioError{},func(_uniffiStatus *C.RustCallStatus) RustBufferI {
+		return C.uniffi_telio_fn_method_telio_receive_ping(
+		_pointer, _uniffiStatus)
+	})
+		if _uniffiErr != nil {
+			var _uniffiDefaultValue string
+			return _uniffiDefaultValue, _uniffiErr
+		} else {
+			return FfiConverterStringINSTANCE.Lift(_uniffiRV), _uniffiErr
+		}
 }
 
 
@@ -1762,7 +1837,7 @@ type FeatureDirect struct {
 	// Endpoint providers [default all]
 	Providers *EndpointProviders
 	// Polling interval for endpoints [default 10s]
-	EndpointIntervalSecs *uint64
+	EndpointIntervalSecs uint64
 	// Configuration options for skipping unresponsive peers
 	SkipUnresponsivePeers *FeatureSkipUnresponsivePeers
 	// Parameters to optimize battery lifetime
@@ -1771,7 +1846,7 @@ type FeatureDirect struct {
 
 func (r *FeatureDirect) Destroy() {
 		FfiDestroyerOptionalTypeEndpointProviders{}.Destroy(r.Providers);
-		FfiDestroyerOptionalUint64{}.Destroy(r.EndpointIntervalSecs);
+		FfiDestroyerUint64{}.Destroy(r.EndpointIntervalSecs);
 		FfiDestroyerOptionalTypeFeatureSkipUnresponsivePeers{}.Destroy(r.SkipUnresponsivePeers);
 		FfiDestroyerOptionalTypeFeatureEndpointProvidersOptimization{}.Destroy(r.EndpointProvidersOptimization);
 }
@@ -1787,7 +1862,7 @@ func (c FfiConverterTypeFeatureDirect) Lift(rb RustBufferI) FeatureDirect {
 func (c FfiConverterTypeFeatureDirect) Read(reader io.Reader) FeatureDirect {
 	return FeatureDirect {
 			FfiConverterOptionalTypeEndpointProvidersINSTANCE.Read(reader),
-			FfiConverterOptionalUint64INSTANCE.Read(reader),
+			FfiConverterUint64INSTANCE.Read(reader),
 			FfiConverterOptionalTypeFeatureSkipUnresponsivePeersINSTANCE.Read(reader),
 			FfiConverterOptionalTypeFeatureEndpointProvidersOptimizationINSTANCE.Read(reader),
 	}
@@ -1799,7 +1874,7 @@ func (c FfiConverterTypeFeatureDirect) Lower(value FeatureDirect) RustBuffer {
 
 func (c FfiConverterTypeFeatureDirect) Write(writer io.Writer, value FeatureDirect) {
 		FfiConverterOptionalTypeEndpointProvidersINSTANCE.Write(writer, value.Providers);
-		FfiConverterOptionalUint64INSTANCE.Write(writer, value.EndpointIntervalSecs);
+		FfiConverterUint64INSTANCE.Write(writer, value.EndpointIntervalSecs);
 		FfiConverterOptionalTypeFeatureSkipUnresponsivePeersINSTANCE.Write(writer, value.SkipUnresponsivePeers);
 		FfiConverterOptionalTypeFeatureEndpointProvidersOptimizationINSTANCE.Write(writer, value.EndpointProvidersOptimization);
 }
@@ -2028,11 +2103,14 @@ type FeatureLinkDetection struct {
 	RttSeconds uint64
 	// Check the link state before reporting it as down
 	NoOfPings uint32
+	// Use link detection for downgrade logic
+	UseForDowngrade bool
 }
 
 func (r *FeatureLinkDetection) Destroy() {
 		FfiDestroyerUint64{}.Destroy(r.RttSeconds);
 		FfiDestroyerUint32{}.Destroy(r.NoOfPings);
+		FfiDestroyerBool{}.Destroy(r.UseForDowngrade);
 }
 
 type FfiConverterTypeFeatureLinkDetection struct {}
@@ -2047,6 +2125,7 @@ func (c FfiConverterTypeFeatureLinkDetection) Read(reader io.Reader) FeatureLink
 	return FeatureLinkDetection {
 			FfiConverterUint64INSTANCE.Read(reader),
 			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -2057,6 +2136,7 @@ func (c FfiConverterTypeFeatureLinkDetection) Lower(value FeatureLinkDetection) 
 func (c FfiConverterTypeFeatureLinkDetection) Write(writer io.Writer, value FeatureLinkDetection) {
 		FfiConverterUint64INSTANCE.Write(writer, value.RttSeconds);
 		FfiConverterUint32INSTANCE.Write(writer, value.NoOfPings);
+		FfiConverterBoolINSTANCE.Write(writer, value.UseForDowngrade);
 }
 
 type FfiDestroyerTypeFeatureLinkDetection struct {}
@@ -2068,8 +2148,6 @@ func (_ FfiDestroyerTypeFeatureLinkDetection) Destroy(value FeatureLinkDetection
 
 // Configurable features for Nurse module
 type FeatureNurse struct {
-	// The unique identifier of the device, used for meshnet ID
-	Fingerprint string
 	// Heartbeat interval in seconds. Default value is 3600.
 	HeartbeatInterval uint64
 	// Initial heartbeat interval in seconds. Default value is None.
@@ -2082,16 +2160,18 @@ type FeatureNurse struct {
 	EnableRelayConnData bool
 	// Enable/disable NAT-traversal connections data
 	EnableNatTraversalConnData bool
+	// How long a session can exist before it is forcibly reported, in seconds. Default value is 24h.
+	StateDurationCap uint64
 }
 
 func (r *FeatureNurse) Destroy() {
-		FfiDestroyerString{}.Destroy(r.Fingerprint);
 		FfiDestroyerUint64{}.Destroy(r.HeartbeatInterval);
 		FfiDestroyerUint64{}.Destroy(r.InitialHeartbeatInterval);
 		FfiDestroyerOptionalTypeFeatureQoS{}.Destroy(r.Qos);
 		FfiDestroyerBool{}.Destroy(r.EnableNatTypeCollection);
 		FfiDestroyerBool{}.Destroy(r.EnableRelayConnData);
 		FfiDestroyerBool{}.Destroy(r.EnableNatTraversalConnData);
+		FfiDestroyerUint64{}.Destroy(r.StateDurationCap);
 }
 
 type FfiConverterTypeFeatureNurse struct {}
@@ -2104,13 +2184,13 @@ func (c FfiConverterTypeFeatureNurse) Lift(rb RustBufferI) FeatureNurse {
 
 func (c FfiConverterTypeFeatureNurse) Read(reader io.Reader) FeatureNurse {
 	return FeatureNurse {
-			FfiConverterStringINSTANCE.Read(reader),
 			FfiConverterUint64INSTANCE.Read(reader),
 			FfiConverterUint64INSTANCE.Read(reader),
 			FfiConverterOptionalTypeFeatureQoSINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterUint64INSTANCE.Read(reader),
 	}
 }
 
@@ -2119,13 +2199,13 @@ func (c FfiConverterTypeFeatureNurse) Lower(value FeatureNurse) RustBuffer {
 }
 
 func (c FfiConverterTypeFeatureNurse) Write(writer io.Writer, value FeatureNurse) {
-		FfiConverterStringINSTANCE.Write(writer, value.Fingerprint);
 		FfiConverterUint64INSTANCE.Write(writer, value.HeartbeatInterval);
 		FfiConverterUint64INSTANCE.Write(writer, value.InitialHeartbeatInterval);
 		FfiConverterOptionalTypeFeatureQoSINSTANCE.Write(writer, value.Qos);
 		FfiConverterBoolINSTANCE.Write(writer, value.EnableNatTypeCollection);
 		FfiConverterBoolINSTANCE.Write(writer, value.EnableRelayConnData);
 		FfiConverterBoolINSTANCE.Write(writer, value.EnableNatTraversalConnData);
+		FfiConverterUint64INSTANCE.Write(writer, value.StateDurationCap);
 }
 
 type FfiDestroyerTypeFeatureNurse struct {}
@@ -2801,7 +2881,7 @@ type TelioNode struct {
 	// IP addresses of the node
 	IpAddresses []IpAddr
 	// List of IP's which can connect to the node
-	AllowedIps []IpNetwork
+	AllowedIps []IpNet
 	// Endpoint used by node
 	Endpoint *SocketAddr
 	// Hostname of the node
@@ -2827,7 +2907,7 @@ func (r *TelioNode) Destroy() {
 		FfiDestroyerBool{}.Destroy(r.IsExit);
 		FfiDestroyerBool{}.Destroy(r.IsVpn);
 		FfiDestroyerSequenceTypeIpAddr{}.Destroy(r.IpAddresses);
-		FfiDestroyerSequenceTypeIpNetwork{}.Destroy(r.AllowedIps);
+		FfiDestroyerSequenceTypeIpNet{}.Destroy(r.AllowedIps);
 		FfiDestroyerOptionalTypeSocketAddr{}.Destroy(r.Endpoint);
 		FfiDestroyerOptionalString{}.Destroy(r.Hostname);
 		FfiDestroyerBool{}.Destroy(r.AllowIncomingConnections);
@@ -2855,7 +2935,7 @@ func (c FfiConverterTypeTelioNode) Read(reader io.Reader) TelioNode {
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterSequenceTypeIpAddrINSTANCE.Read(reader),
-			FfiConverterSequenceTypeIpNetworkINSTANCE.Read(reader),
+			FfiConverterSequenceTypeIpNetINSTANCE.Read(reader),
 			FfiConverterOptionalTypeSocketAddrINSTANCE.Read(reader),
 			FfiConverterOptionalStringINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
@@ -2879,7 +2959,7 @@ func (c FfiConverterTypeTelioNode) Write(writer io.Writer, value TelioNode) {
 		FfiConverterBoolINSTANCE.Write(writer, value.IsExit);
 		FfiConverterBoolINSTANCE.Write(writer, value.IsVpn);
 		FfiConverterSequenceTypeIpAddrINSTANCE.Write(writer, value.IpAddresses);
-		FfiConverterSequenceTypeIpNetworkINSTANCE.Write(writer, value.AllowedIps);
+		FfiConverterSequenceTypeIpNetINSTANCE.Write(writer, value.AllowedIps);
 		FfiConverterOptionalTypeSocketAddrINSTANCE.Write(writer, value.Endpoint);
 		FfiConverterOptionalStringINSTANCE.Write(writer, value.Hostname);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowIncomingConnections);
@@ -3135,6 +3215,68 @@ func (FfiConverterTypeLinkState) Write(writer io.Writer, value LinkState) {
 type FfiDestroyerTypeLinkState struct {}
 
 func (_ FfiDestroyerTypeLinkState) Destroy(value LinkState) {
+}
+
+
+
+
+// Available NAT types
+type NatType uint
+
+const (
+	// UDP is always blocked.
+	NatTypeUdpBlocked NatType = 1
+	// No NAT, public IP, no firewall.
+	NatTypeOpenInternet NatType = 2
+	// No NAT, public IP, but symmetric UDP firewall.
+	NatTypeSymmetricUdpFirewall NatType = 3
+	// A full cone NAT is one where all requests from the same internal IP address and port are
+	// mapped to the same external IP address and port. Furthermore, any external host can send
+	// a packet to the internal host, by sending a packet to the mapped external address.
+	NatTypeFullCone NatType = 4
+	// A restricted cone NAT is one where all requests from the same internal IP address and
+	// port are mapped to the same external IP address and port. Unlike a full cone NAT, an external
+	// host (with IP address X) can send a packet to the internal host only if the internal host
+	// had previously sent a packet to IP address X.
+	NatTypeRestrictedCone NatType = 5
+	// A port restricted cone NAT is like a restricted cone NAT, but the restriction
+	// includes port numbers. Specifically, an external host can send a packet, with source IP
+	// address X and source port P, to the internal host only if the internal host had previously
+	// sent a packet to IP address X and port P.
+	NatTypePortRestrictedCone NatType = 6
+	// A symmetric NAT is one where all requests from the same internal IP address and port,
+	// to a specific destination IP address and port, are mapped to the same external IP address and
+	// port.  If the same host sends a packet with the same source address and port, but to
+	// a different destination, a different mapping is used. Furthermore, only the external host that
+	// receives a packet can send a UDP packet back to the internal host.
+	NatTypeSymmetric NatType = 7
+	// Unknown
+	NatTypeUnknown NatType = 8
+)
+
+type FfiConverterTypeNatType struct {}
+
+var FfiConverterTypeNatTypeINSTANCE = FfiConverterTypeNatType{}
+
+func (c FfiConverterTypeNatType) Lift(rb RustBufferI) NatType {
+	return LiftFromRustBuffer[NatType](c, rb)
+}
+
+func (c FfiConverterTypeNatType) Lower(value NatType) RustBuffer {
+	return LowerIntoRustBuffer[NatType](c, value)
+}
+func (FfiConverterTypeNatType) Read(reader io.Reader) NatType {
+	id := readInt32(reader)
+	return NatType(id)
+}
+
+func (FfiConverterTypeNatType) Write(writer io.Writer, value NatType) {
+	writeInt32(writer, int32(value))
+}
+
+type FfiDestroyerTypeNatType struct {}
+
+func (_ FfiDestroyerTypeNatType) Destroy(value NatType) {
 }
 
 
@@ -4740,40 +4882,40 @@ func (_ FfiDestroyerOptionalSequenceTypeIpAddr) Destroy(value *[]IpAddr) {
 
 
 
-type FfiConverterOptionalSequenceTypeIpNetwork struct{}
+type FfiConverterOptionalSequenceTypeIpNet struct{}
 
-var FfiConverterOptionalSequenceTypeIpNetworkINSTANCE = FfiConverterOptionalSequenceTypeIpNetwork{}
+var FfiConverterOptionalSequenceTypeIpNetINSTANCE = FfiConverterOptionalSequenceTypeIpNet{}
 
-func (c FfiConverterOptionalSequenceTypeIpNetwork) Lift(rb RustBufferI) *[]IpNetwork {
-	return LiftFromRustBuffer[*[]IpNetwork](c, rb)
+func (c FfiConverterOptionalSequenceTypeIpNet) Lift(rb RustBufferI) *[]IpNet {
+	return LiftFromRustBuffer[*[]IpNet](c, rb)
 }
 
-func (_ FfiConverterOptionalSequenceTypeIpNetwork) Read(reader io.Reader) *[]IpNetwork {
+func (_ FfiConverterOptionalSequenceTypeIpNet) Read(reader io.Reader) *[]IpNet {
 	if readInt8(reader) == 0 {
 		return nil
 	}
-	temp := FfiConverterSequenceTypeIpNetworkINSTANCE.Read(reader)
+	temp := FfiConverterSequenceTypeIpNetINSTANCE.Read(reader)
 	return &temp
 }
 
-func (c FfiConverterOptionalSequenceTypeIpNetwork) Lower(value *[]IpNetwork) RustBuffer {
-	return LowerIntoRustBuffer[*[]IpNetwork](c, value)
+func (c FfiConverterOptionalSequenceTypeIpNet) Lower(value *[]IpNet) RustBuffer {
+	return LowerIntoRustBuffer[*[]IpNet](c, value)
 }
 
-func (_ FfiConverterOptionalSequenceTypeIpNetwork) Write(writer io.Writer, value *[]IpNetwork) {
+func (_ FfiConverterOptionalSequenceTypeIpNet) Write(writer io.Writer, value *[]IpNet) {
 	if value == nil {
 		writeInt8(writer, 0)
 	} else {
 		writeInt8(writer, 1)
-		FfiConverterSequenceTypeIpNetworkINSTANCE.Write(writer, *value)
+		FfiConverterSequenceTypeIpNetINSTANCE.Write(writer, *value)
 	}
 }
 
-type FfiDestroyerOptionalSequenceTypeIpNetwork struct {}
+type FfiDestroyerOptionalSequenceTypeIpNet struct {}
 
-func (_ FfiDestroyerOptionalSequenceTypeIpNetwork) Destroy(value *[]IpNetwork) {
+func (_ FfiDestroyerOptionalSequenceTypeIpNet) Destroy(value *[]IpNet) {
 	if value != nil {
-		FfiDestroyerSequenceTypeIpNetwork{}.Destroy(*value)
+		FfiDestroyerSequenceTypeIpNet{}.Destroy(*value)
 	}
 }
 
@@ -5172,46 +5314,46 @@ func (FfiDestroyerSequenceTypeIpAddr) Destroy(sequence []IpAddr) {
 
 
 
-type FfiConverterSequenceTypeIpNetwork struct{}
+type FfiConverterSequenceTypeIpNet struct{}
 
-var FfiConverterSequenceTypeIpNetworkINSTANCE = FfiConverterSequenceTypeIpNetwork{}
+var FfiConverterSequenceTypeIpNetINSTANCE = FfiConverterSequenceTypeIpNet{}
 
-func (c FfiConverterSequenceTypeIpNetwork) Lift(rb RustBufferI) []IpNetwork {
-	return LiftFromRustBuffer[[]IpNetwork](c, rb)
+func (c FfiConverterSequenceTypeIpNet) Lift(rb RustBufferI) []IpNet {
+	return LiftFromRustBuffer[[]IpNet](c, rb)
 }
 
-func (c FfiConverterSequenceTypeIpNetwork) Read(reader io.Reader) []IpNetwork {
+func (c FfiConverterSequenceTypeIpNet) Read(reader io.Reader) []IpNet {
 	length := readInt32(reader)
 	if length == 0 {
 		return nil
 	}
-	result := make([]IpNetwork, 0, length)
+	result := make([]IpNet, 0, length)
 	for i := int32(0); i < length; i++ {
-		result = append(result, FfiConverterTypeIpNetworkINSTANCE.Read(reader))
+		result = append(result, FfiConverterTypeIpNetINSTANCE.Read(reader))
 	}
 	return result
 }
 
-func (c FfiConverterSequenceTypeIpNetwork) Lower(value []IpNetwork) RustBuffer {
-	return LowerIntoRustBuffer[[]IpNetwork](c, value)
+func (c FfiConverterSequenceTypeIpNet) Lower(value []IpNet) RustBuffer {
+	return LowerIntoRustBuffer[[]IpNet](c, value)
 }
 
-func (c FfiConverterSequenceTypeIpNetwork) Write(writer io.Writer, value []IpNetwork) {
+func (c FfiConverterSequenceTypeIpNet) Write(writer io.Writer, value []IpNet) {
 	if len(value) > math.MaxInt32 {
-		panic("[]IpNetwork is too large to fit into Int32")
+		panic("[]IpNet is too large to fit into Int32")
 	}
 
 	writeInt32(writer, int32(len(value)))
 	for _, item := range value {
-		FfiConverterTypeIpNetworkINSTANCE.Write(writer, item)
+		FfiConverterTypeIpNetINSTANCE.Write(writer, item)
 	}
 }
 
-type FfiDestroyerSequenceTypeIpNetwork struct {}
+type FfiDestroyerSequenceTypeIpNet struct {}
 
-func (FfiDestroyerSequenceTypeIpNetwork) Destroy(sequence []IpNetwork) {
+func (FfiDestroyerSequenceTypeIpNet) Destroy(sequence []IpNet) {
 	for _, value := range sequence {
-		FfiDestroyerTypeIpNetwork{}.Destroy(value)	
+		FfiDestroyerTypeIpNet{}.Destroy(value)	
 	}
 }
 
@@ -5265,10 +5407,10 @@ var FfiConverterTypeIpAddrINSTANCE = FfiConverterString{}
  * is needed because the UDL type name is used in function/method signatures.
  * It's also what we have an external type that references a custom type.
  */
-type IpNetwork = string
-type FfiConverterTypeIpNetwork = FfiConverterString
-type FfiDestroyerTypeIpNetwork = FfiDestroyerString
-var FfiConverterTypeIpNetworkINSTANCE = FfiConverterString{}
+type IpNet = string
+type FfiConverterTypeIpNet = FfiConverterString
+type FfiDestroyerTypeIpNet = FfiDestroyerString
+var FfiConverterTypeIpNetINSTANCE = FfiConverterString{}
 
 
 /**
