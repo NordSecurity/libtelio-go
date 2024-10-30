@@ -2233,8 +2233,6 @@ type FeatureDirect struct {
 	SkipUnresponsivePeers *FeatureSkipUnresponsivePeers
 	// Parameters to optimize battery lifetime
 	EndpointProvidersOptimization *FeatureEndpointProvidersOptimization
-	// Configurable features for UPNP endpoint provider
-	UpnpFeatures *FeatureUpnp
 }
 
 func (r *FeatureDirect) Destroy() {
@@ -2242,7 +2240,6 @@ func (r *FeatureDirect) Destroy() {
 		FfiDestroyerUint64{}.Destroy(r.EndpointIntervalSecs);
 		FfiDestroyerOptionalTypeFeatureSkipUnresponsivePeers{}.Destroy(r.SkipUnresponsivePeers);
 		FfiDestroyerOptionalTypeFeatureEndpointProvidersOptimization{}.Destroy(r.EndpointProvidersOptimization);
-		FfiDestroyerOptionalTypeFeatureUpnp{}.Destroy(r.UpnpFeatures);
 }
 
 type FfiConverterTypeFeatureDirect struct {}
@@ -2259,7 +2256,6 @@ func (c FfiConverterTypeFeatureDirect) Read(reader io.Reader) FeatureDirect {
 			FfiConverterUint64INSTANCE.Read(reader),
 			FfiConverterOptionalTypeFeatureSkipUnresponsivePeersINSTANCE.Read(reader),
 			FfiConverterOptionalTypeFeatureEndpointProvidersOptimizationINSTANCE.Read(reader),
-			FfiConverterOptionalTypeFeatureUpnpINSTANCE.Read(reader),
 	}
 }
 
@@ -2272,7 +2268,6 @@ func (c FfiConverterTypeFeatureDirect) Write(writer io.Writer, value FeatureDire
 		FfiConverterUint64INSTANCE.Write(writer, value.EndpointIntervalSecs);
 		FfiConverterOptionalTypeFeatureSkipUnresponsivePeersINSTANCE.Write(writer, value.SkipUnresponsivePeers);
 		FfiConverterOptionalTypeFeatureEndpointProvidersOptimizationINSTANCE.Write(writer, value.EndpointProvidersOptimization);
-		FfiConverterOptionalTypeFeatureUpnpINSTANCE.Write(writer, value.UpnpFeatures);
 }
 
 type FfiDestroyerTypeFeatureDirect struct {}
@@ -2886,45 +2881,6 @@ func (_ FfiDestroyerTypeFeatureSkipUnresponsivePeers) Destroy(value FeatureSkipU
 }
 
 
-// Configurable features for UPNP endpoint provider
-type FeatureUpnp struct {
-	// The upnp lease_duration parameter, in seconds. A value of 0 is infinite.
-	LeaseDurationS uint32
-}
-
-func (r *FeatureUpnp) Destroy() {
-		FfiDestroyerUint32{}.Destroy(r.LeaseDurationS);
-}
-
-type FfiConverterTypeFeatureUpnp struct {}
-
-var FfiConverterTypeFeatureUpnpINSTANCE = FfiConverterTypeFeatureUpnp{}
-
-func (c FfiConverterTypeFeatureUpnp) Lift(rb RustBufferI) FeatureUpnp {
-	return LiftFromRustBuffer[FeatureUpnp](c, rb)
-}
-
-func (c FfiConverterTypeFeatureUpnp) Read(reader io.Reader) FeatureUpnp {
-	return FeatureUpnp {
-			FfiConverterUint32INSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterTypeFeatureUpnp) Lower(value FeatureUpnp) RustBuffer {
-	return LowerIntoRustBuffer[FeatureUpnp](c, value)
-}
-
-func (c FfiConverterTypeFeatureUpnp) Write(writer io.Writer, value FeatureUpnp) {
-		FfiConverterUint32INSTANCE.Write(writer, value.LeaseDurationS);
-}
-
-type FfiDestroyerTypeFeatureUpnp struct {}
-
-func (_ FfiDestroyerTypeFeatureUpnp) Destroy(value FeatureUpnp) {
-	value.Destroy()
-}
-
-
 // Configurable features for Wireguard peers
 type FeatureWireguard struct {
 	// Configurable persistent keepalive periods for wireguard peers
@@ -2978,8 +2934,8 @@ type Features struct {
 	Direct *FeatureDirect
 	// Should only be set for macos sideload
 	IsTestEnv *bool
-	// Controll if IP addresses and domains should be hidden in logs
-	HideUserData bool
+	// Controll if IP addresses should be hidden in logs
+	HideIps bool
 	// Derp server specific configuration
 	Derp *FeatureDerp
 	// Flag to specify if keys should be validated
@@ -3013,7 +2969,7 @@ func (r *Features) Destroy() {
 		FfiDestroyerOptionalTypeFeaturePaths{}.Destroy(r.Paths);
 		FfiDestroyerOptionalTypeFeatureDirect{}.Destroy(r.Direct);
 		FfiDestroyerOptionalBool{}.Destroy(r.IsTestEnv);
-		FfiDestroyerBool{}.Destroy(r.HideUserData);
+		FfiDestroyerBool{}.Destroy(r.HideIps);
 		FfiDestroyerOptionalTypeFeatureDerp{}.Destroy(r.Derp);
 		FfiDestroyerTypeFeatureValidateKeys{}.Destroy(r.ValidateKeys);
 		FfiDestroyerBool{}.Destroy(r.Ipv6);
@@ -3071,7 +3027,7 @@ func (c FfiConverterTypeFeatures) Write(writer io.Writer, value Features) {
 		FfiConverterOptionalTypeFeaturePathsINSTANCE.Write(writer, value.Paths);
 		FfiConverterOptionalTypeFeatureDirectINSTANCE.Write(writer, value.Direct);
 		FfiConverterOptionalBoolINSTANCE.Write(writer, value.IsTestEnv);
-		FfiConverterBoolINSTANCE.Write(writer, value.HideUserData);
+		FfiConverterBoolINSTANCE.Write(writer, value.HideIps);
 		FfiConverterOptionalTypeFeatureDerpINSTANCE.Write(writer, value.Derp);
 		FfiConverterTypeFeatureValidateKeysINSTANCE.Write(writer, value.ValidateKeys);
 		FfiConverterBoolINSTANCE.Write(writer, value.Ipv6);
@@ -5166,45 +5122,6 @@ type FfiDestroyerOptionalTypeFeatureSkipUnresponsivePeers struct {}
 func (_ FfiDestroyerOptionalTypeFeatureSkipUnresponsivePeers) Destroy(value *FeatureSkipUnresponsivePeers) {
 	if value != nil {
 		FfiDestroyerTypeFeatureSkipUnresponsivePeers{}.Destroy(*value)
-	}
-}
-
-
-
-type FfiConverterOptionalTypeFeatureUpnp struct{}
-
-var FfiConverterOptionalTypeFeatureUpnpINSTANCE = FfiConverterOptionalTypeFeatureUpnp{}
-
-func (c FfiConverterOptionalTypeFeatureUpnp) Lift(rb RustBufferI) *FeatureUpnp {
-	return LiftFromRustBuffer[*FeatureUpnp](c, rb)
-}
-
-func (_ FfiConverterOptionalTypeFeatureUpnp) Read(reader io.Reader) *FeatureUpnp {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterTypeFeatureUpnpINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalTypeFeatureUpnp) Lower(value *FeatureUpnp) RustBuffer {
-	return LowerIntoRustBuffer[*FeatureUpnp](c, value)
-}
-
-func (_ FfiConverterOptionalTypeFeatureUpnp) Write(writer io.Writer, value *FeatureUpnp) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterTypeFeatureUpnpINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalTypeFeatureUpnp struct {}
-
-func (_ FfiDestroyerOptionalTypeFeatureUpnp) Destroy(value *FeatureUpnp) {
-	if value != nil {
-		FfiDestroyerTypeFeatureUpnp{}.Destroy(*value)
 	}
 }
 
