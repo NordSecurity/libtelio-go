@@ -411,6 +411,10 @@ void uniffi_telio_fn_func_set_global_logger(
 	RustCallStatus* out_status
 );
 
+void uniffi_telio_fn_func_unset_global_logger(
+	RustCallStatus* out_status
+);
+
 RustBuffer ffi_telio_rustbuffer_alloc(
 	int32_t size,
 	RustCallStatus* out_status
@@ -743,6 +747,10 @@ uint16_t uniffi_telio_checksum_func_get_version_tag(
 );
 
 uint16_t uniffi_telio_checksum_func_set_global_logger(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_func_unset_global_logger(
 	RustCallStatus* out_status
 );
 
