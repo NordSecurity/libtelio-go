@@ -442,15 +442,6 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_func_unset_global_logger(uniffiStatus)
-	})
-	if checksum != 32201 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_func_unset_global_logger: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_build(uniffiStatus)
 	})
 	if checksum != 18842 {
@@ -6114,15 +6105,6 @@ func GetVersionTag() string {
 func SetGlobalLogger(logLevel TelioLogLevel, logger TelioLoggerCb)  {
 	rustCall(func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_func_set_global_logger(FfiConverterTypeTelioLogLevelINSTANCE.Lower(logLevel), FfiConverterCallbackInterfaceTelioLoggerCbINSTANCE.Lower(logger), _uniffiStatus)
-		return false
-	})
-}
-
-// Unset the global logger.
-// After this call finishes, previously registered logger will not be called.
-func UnsetGlobalLogger()  {
-	rustCall(func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_func_unset_global_logger( _uniffiStatus)
 		return false
 	})
 }
