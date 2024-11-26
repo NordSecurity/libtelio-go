@@ -442,6 +442,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_func_unset_global_logger(uniffiStatus)
+	})
+	if checksum != 32201 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_func_unset_global_logger: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_build(uniffiStatus)
 	})
 	if checksum != 18842 {
@@ -1213,7 +1222,7 @@ func (_self *FeaturesDefaultsBuilder)EnableDirect() *FeaturesDefaultsBuilder {
 }
 
 
-// Enable firewall connection resets when boringtun is used
+// Enable firewall connection resets when NepTUN is used
 func (_self *FeaturesDefaultsBuilder)EnableFirewallConnectionReset() *FeaturesDefaultsBuilder {
 	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
 	defer _self.ffiObject.decrementPointer()
@@ -2413,10 +2422,13 @@ func (_ FfiDestroyerTypeFeatureExitDns) Destroy(value FeatureExitDns) {
 // Feature config for firewall
 type FeatureFirewall struct {
 	// Turns on connection resets upon VPN server change
+	NeptunResetConns bool
+	// Turns on connection resets upon VPN server change (Deprecated alias for neptun_reset_conns)
 	BoringtunResetConns bool
 }
 
 func (r *FeatureFirewall) Destroy() {
+		FfiDestroyerBool{}.Destroy(r.NeptunResetConns);
 		FfiDestroyerBool{}.Destroy(r.BoringtunResetConns);
 }
 
@@ -2431,6 +2443,7 @@ func (c FfiConverterTypeFeatureFirewall) Lift(rb RustBufferI) FeatureFirewall {
 func (c FfiConverterTypeFeatureFirewall) Read(reader io.Reader) FeatureFirewall {
 	return FeatureFirewall {
 			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -2439,6 +2452,7 @@ func (c FfiConverterTypeFeatureFirewall) Lower(value FeatureFirewall) RustBuffer
 }
 
 func (c FfiConverterTypeFeatureFirewall) Write(writer io.Writer, value FeatureFirewall) {
+		FfiConverterBoolINSTANCE.Write(writer, value.NeptunResetConns);
 		FfiConverterBoolINSTANCE.Write(writer, value.BoringtunResetConns);
 }
 
@@ -3886,13 +3900,15 @@ type TelioAdapterType uint
 
 const (
 	// Userland rust implementation.
-	TelioAdapterTypeBoringTun TelioAdapterType = 1
+	TelioAdapterTypeNepTun TelioAdapterType = 1
+	// Userland rust implementation. (Deprecated alias for NepTUN).
+	TelioAdapterTypeBoringTun TelioAdapterType = 2
 	// Linux in-kernel WireGuard implementation
-	TelioAdapterTypeLinuxNativeTun TelioAdapterType = 2
+	TelioAdapterTypeLinuxNativeTun TelioAdapterType = 3
 	// WireguardGo implementation
-	TelioAdapterTypeWireguardGoTun TelioAdapterType = 3
+	TelioAdapterTypeWireguardGoTun TelioAdapterType = 4
 	// WindowsNativeWireguardNt implementation
-	TelioAdapterTypeWindowsNativeTun TelioAdapterType = 4
+	TelioAdapterTypeWindowsNativeTun TelioAdapterType = 5
 )
 
 type FfiConverterTypeTelioAdapterType struct {}
@@ -6105,6 +6121,15 @@ func GetVersionTag() string {
 func SetGlobalLogger(logLevel TelioLogLevel, logger TelioLoggerCb)  {
 	rustCall(func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_func_set_global_logger(FfiConverterTypeTelioLogLevelINSTANCE.Lower(logLevel), FfiConverterCallbackInterfaceTelioLoggerCbINSTANCE.Lower(logger), _uniffiStatus)
+		return false
+	})
+}
+
+// Unset the global logger.
+// After this call finishes, previously registered logger will not be called.
+func UnsetGlobalLogger()  {
+	rustCall(func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_func_unset_global_logger( _uniffiStatus)
 		return false
 	})
 }
