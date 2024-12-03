@@ -2143,16 +2143,10 @@ func (_ FfiDestroyerTypeErrorEvent) Destroy(value ErrorEvent) {
 type FeatureBatching struct {
 	// direct connection threshold for batching
 	DirectConnectionThreshold uint32
-	// effective trigger period
-	TriggerEffectiveDuration uint32
-	// / cooldown after trigger was used
-	TriggerCooldownDuration uint32
 }
 
 func (r *FeatureBatching) Destroy() {
 		FfiDestroyerUint32{}.Destroy(r.DirectConnectionThreshold);
-		FfiDestroyerUint32{}.Destroy(r.TriggerEffectiveDuration);
-		FfiDestroyerUint32{}.Destroy(r.TriggerCooldownDuration);
 }
 
 type FfiConverterTypeFeatureBatching struct {}
@@ -2166,8 +2160,6 @@ func (c FfiConverterTypeFeatureBatching) Lift(rb RustBufferI) FeatureBatching {
 func (c FfiConverterTypeFeatureBatching) Read(reader io.Reader) FeatureBatching {
 	return FeatureBatching {
 			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
 	}
 }
 
@@ -2177,8 +2169,6 @@ func (c FfiConverterTypeFeatureBatching) Lower(value FeatureBatching) RustBuffer
 
 func (c FfiConverterTypeFeatureBatching) Write(writer io.Writer, value FeatureBatching) {
 		FfiConverterUint32INSTANCE.Write(writer, value.DirectConnectionThreshold);
-		FfiConverterUint32INSTANCE.Write(writer, value.TriggerEffectiveDuration);
-		FfiConverterUint32INSTANCE.Write(writer, value.TriggerCooldownDuration);
 }
 
 type FfiDestroyerTypeFeatureBatching struct {}
