@@ -487,11 +487,11 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall(uniffiStatus)
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall_connection_reset(uniffiStatus)
 	})
-	if checksum != 55907 {
+	if checksum != 63055 {
 		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall: UniFFI API checksum mismatch")
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall_connection_reset: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1223,12 +1223,12 @@ func (_self *FeaturesDefaultsBuilder)EnableDirect() *FeaturesDefaultsBuilder {
 
 
 // Enable firewall connection resets when NepTUN is used
-func (_self *FeaturesDefaultsBuilder)EnableFirewall(customIps string, neptunResetConns bool) *FeaturesDefaultsBuilder {
+func (_self *FeaturesDefaultsBuilder)EnableFirewallConnectionReset() *FeaturesDefaultsBuilder {
 	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
 	defer _self.ffiObject.decrementPointer()
 	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
-		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_firewall(
-		_pointer,FfiConverterStringINSTANCE.Lower(customIps), FfiConverterBoolINSTANCE.Lower(neptunResetConns), _uniffiStatus)
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_firewall_connection_reset(
+		_pointer, _uniffiStatus)
 	}))
 }
 
@@ -2435,14 +2435,14 @@ type FeatureFirewall struct {
 	NeptunResetConns bool
 	// Turns on connection resets upon VPN server change (Deprecated alias for neptun_reset_conns)
 	BoringtunResetConns bool
-	// Custom private IP range
-	CustomPrivateIpRange *Ipv4Net
+	// Ip range from RFC1918 to exclude from firewall blocking
+	ExcludePrivateIpRange *Ipv4Net
 }
 
 func (r *FeatureFirewall) Destroy() {
 		FfiDestroyerBool{}.Destroy(r.NeptunResetConns);
 		FfiDestroyerBool{}.Destroy(r.BoringtunResetConns);
-		FfiDestroyerOptionalTypeIpv4Net{}.Destroy(r.CustomPrivateIpRange);
+		FfiDestroyerOptionalTypeIpv4Net{}.Destroy(r.ExcludePrivateIpRange);
 }
 
 type FfiConverterTypeFeatureFirewall struct {}
@@ -2468,7 +2468,7 @@ func (c FfiConverterTypeFeatureFirewall) Lower(value FeatureFirewall) RustBuffer
 func (c FfiConverterTypeFeatureFirewall) Write(writer io.Writer, value FeatureFirewall) {
 		FfiConverterBoolINSTANCE.Write(writer, value.NeptunResetConns);
 		FfiConverterBoolINSTANCE.Write(writer, value.BoringtunResetConns);
-		FfiConverterOptionalTypeIpv4NetINSTANCE.Write(writer, value.CustomPrivateIpRange);
+		FfiConverterOptionalTypeIpv4NetINSTANCE.Write(writer, value.ExcludePrivateIpRange);
 }
 
 type FfiDestroyerTypeFeatureFirewall struct {}

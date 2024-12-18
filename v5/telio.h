@@ -97,10 +97,8 @@ void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_direct(
 	RustCallStatus* out_status
 );
 
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_firewall(
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_firewall_connection_reset(
 	void* ptr,
-	RustBuffer custom_ips,
-	int8_t neptun_reset_conns,
 	RustCallStatus* out_status
 );
 
@@ -772,7 +770,7 @@ uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_direct(
 	RustCallStatus* out_status
 );
 
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall(
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall_connection_reset(
 	RustCallStatus* out_status
 );
 
