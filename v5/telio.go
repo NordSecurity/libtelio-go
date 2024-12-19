@@ -361,6 +361,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_func_add_timestamps_to_logs(uniffiStatus)
+	})
+	if checksum != 10620 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_func_add_timestamps_to_logs: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_func_deserialize_feature_config(uniffiStatus)
 	})
 	if checksum != 61040 {
@@ -6129,6 +6138,14 @@ type TtlValue = uint32
 type FfiConverterTypeTtlValue = FfiConverterUint32
 type FfiDestroyerTypeTtlValue = FfiDestroyerUint32
 var FfiConverterTypeTtlValueINSTANCE = FfiConverterUint32{}
+
+// For testing only - embeds timestamps into generated logs
+func AddTimestampsToLogs()  {
+	rustCall(func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_func_add_timestamps_to_logs( _uniffiStatus)
+		return false
+	})
+}
 
 // Utility function to create a `Features` object from a json-string
 // Passing an empty string will return the default feature config

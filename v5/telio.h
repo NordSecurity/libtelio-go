@@ -370,6 +370,10 @@ void uniffi_telio_fn_init_callback_telioprotectcb(
 	RustCallStatus* out_status
 );
 
+void uniffi_telio_fn_func_add_timestamps_to_logs(
+	RustCallStatus* out_status
+);
+
 RustBuffer uniffi_telio_fn_func_deserialize_feature_config(
 	RustBuffer fstr,
 	RustCallStatus* out_status
@@ -711,6 +715,10 @@ void ffi_telio_rust_future_free_void(
 
 void ffi_telio_rust_future_complete_void(
 	void* handle,
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_func_add_timestamps_to_logs(
 	RustCallStatus* out_status
 );
 
