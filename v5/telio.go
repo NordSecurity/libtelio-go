@@ -2205,7 +2205,7 @@ type FeatureDerp struct {
 	DerpKeepalive *uint32
 	// Poll Keepalive: Application level keepalives meant to replace the TCP keepalives
 	// They will reuse the derp_keepalive interval
-	PollKeepalive bool
+	PollKeepalive *bool
 	// Enable polling of remote peer states to reduce derp traffic
 	EnablePolling *bool
 	// Use Mozilla's root certificates instead of OS ones [default false]
@@ -2215,7 +2215,7 @@ type FeatureDerp struct {
 func (r *FeatureDerp) Destroy() {
 		FfiDestroyerOptionalUint32{}.Destroy(r.TcpKeepalive);
 		FfiDestroyerOptionalUint32{}.Destroy(r.DerpKeepalive);
-		FfiDestroyerBool{}.Destroy(r.PollKeepalive);
+		FfiDestroyerOptionalBool{}.Destroy(r.PollKeepalive);
 		FfiDestroyerOptionalBool{}.Destroy(r.EnablePolling);
 		FfiDestroyerBool{}.Destroy(r.UseBuiltInRootCertificates);
 }
@@ -2232,7 +2232,7 @@ func (c FfiConverterTypeFeatureDerp) Read(reader io.Reader) FeatureDerp {
 	return FeatureDerp {
 			FfiConverterOptionalUint32INSTANCE.Read(reader),
 			FfiConverterOptionalUint32INSTANCE.Read(reader),
-			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterOptionalBoolINSTANCE.Read(reader),
 			FfiConverterOptionalBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 	}
@@ -2245,7 +2245,7 @@ func (c FfiConverterTypeFeatureDerp) Lower(value FeatureDerp) RustBuffer {
 func (c FfiConverterTypeFeatureDerp) Write(writer io.Writer, value FeatureDerp) {
 		FfiConverterOptionalUint32INSTANCE.Write(writer, value.TcpKeepalive);
 		FfiConverterOptionalUint32INSTANCE.Write(writer, value.DerpKeepalive);
-		FfiConverterBoolINSTANCE.Write(writer, value.PollKeepalive);
+		FfiConverterOptionalBoolINSTANCE.Write(writer, value.PollKeepalive);
 		FfiConverterOptionalBoolINSTANCE.Write(writer, value.EnablePolling);
 		FfiConverterBoolINSTANCE.Write(writer, value.UseBuiltInRootCertificates);
 }
