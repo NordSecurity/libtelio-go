@@ -2261,7 +2261,7 @@ func (_ FfiDestroyerTypeFeatureDerp) Destroy(value FeatureDerp) {
 type FeatureDirect struct {
 	// Endpoint providers [default all]
 	Providers *EndpointProviders
-	// Polling interval for endpoints [default 10s]
+	// Polling interval for endpoints [default 25s]
 	EndpointIntervalSecs uint64
 	// Configuration options for skipping unresponsive peers
 	SkipUnresponsivePeers *FeatureSkipUnresponsivePeers
@@ -2793,6 +2793,50 @@ func (_ FfiDestroyerTypeFeaturePmtuDiscovery) Destroy(value FeaturePmtuDiscovery
 }
 
 
+// Configurable WireGuard polling periods
+type FeaturePolling struct {
+	// Wireguard state polling period (in milliseconds) [default 1000ms]
+	WireguardPollingPeriod uint32
+	// Wireguard state polling period after state change (in milliseconds) [default 50ms]
+	WireguardPollingPeriodAfterStateChange uint32
+}
+
+func (r *FeaturePolling) Destroy() {
+		FfiDestroyerUint32{}.Destroy(r.WireguardPollingPeriod);
+		FfiDestroyerUint32{}.Destroy(r.WireguardPollingPeriodAfterStateChange);
+}
+
+type FfiConverterTypeFeaturePolling struct {}
+
+var FfiConverterTypeFeaturePollingINSTANCE = FfiConverterTypeFeaturePolling{}
+
+func (c FfiConverterTypeFeaturePolling) Lift(rb RustBufferI) FeaturePolling {
+	return LiftFromRustBuffer[FeaturePolling](c, rb)
+}
+
+func (c FfiConverterTypeFeaturePolling) Read(reader io.Reader) FeaturePolling {
+	return FeaturePolling {
+			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterUint32INSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterTypeFeaturePolling) Lower(value FeaturePolling) RustBuffer {
+	return LowerIntoRustBuffer[FeaturePolling](c, value)
+}
+
+func (c FfiConverterTypeFeaturePolling) Write(writer io.Writer, value FeaturePolling) {
+		FfiConverterUint32INSTANCE.Write(writer, value.WireguardPollingPeriod);
+		FfiConverterUint32INSTANCE.Write(writer, value.WireguardPollingPeriodAfterStateChange);
+}
+
+type FfiDestroyerTypeFeaturePolling struct {}
+
+func (_ FfiDestroyerTypeFeaturePolling) Destroy(value FeaturePolling) {
+	value.Destroy()
+}
+
+
 // Turns on post quantum VPN tunnel
 type FeaturePostQuantumVpn struct {
 	// Initial handshake retry interval in seconds
@@ -2973,10 +3017,13 @@ func (_ FfiDestroyerTypeFeatureUpnp) Destroy(value FeatureUpnp) {
 type FeatureWireguard struct {
 	// Configurable persistent keepalive periods for wireguard peers
 	PersistentKeepalive FeaturePersistentKeepalive
+	// Configurable WireGuard polling periods
+	Polling FeaturePolling
 }
 
 func (r *FeatureWireguard) Destroy() {
 		FfiDestroyerTypeFeaturePersistentKeepalive{}.Destroy(r.PersistentKeepalive);
+		FfiDestroyerTypeFeaturePolling{}.Destroy(r.Polling);
 }
 
 type FfiConverterTypeFeatureWireguard struct {}
@@ -2990,6 +3037,7 @@ func (c FfiConverterTypeFeatureWireguard) Lift(rb RustBufferI) FeatureWireguard 
 func (c FfiConverterTypeFeatureWireguard) Read(reader io.Reader) FeatureWireguard {
 	return FeatureWireguard {
 			FfiConverterTypeFeaturePersistentKeepaliveINSTANCE.Read(reader),
+			FfiConverterTypeFeaturePollingINSTANCE.Read(reader),
 	}
 }
 
@@ -2999,6 +3047,7 @@ func (c FfiConverterTypeFeatureWireguard) Lower(value FeatureWireguard) RustBuff
 
 func (c FfiConverterTypeFeatureWireguard) Write(writer io.Writer, value FeatureWireguard) {
 		FfiConverterTypeFeaturePersistentKeepaliveINSTANCE.Write(writer, value.PersistentKeepalive);
+		FfiConverterTypeFeaturePollingINSTANCE.Write(writer, value.Polling);
 }
 
 type FfiDestroyerTypeFeatureWireguard struct {}
