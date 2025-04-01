@@ -97,6 +97,11 @@ void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_direct(
 	RustCallStatus* out_status
 );
 
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control(
+	void* ptr,
+	RustCallStatus* out_status
+);
+
 void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_firewall_connection_reset(
 	void* ptr,
 	RustCallStatus* out_status
@@ -775,6 +780,10 @@ uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_battery_sav
 );
 
 uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_direct(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control(
 	RustCallStatus* out_status
 );
 

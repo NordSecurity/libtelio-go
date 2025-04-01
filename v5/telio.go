@@ -496,6 +496,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control(uniffiStatus)
+	})
+	if checksum != 29236 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall_connection_reset(uniffiStatus)
 	})
 	if checksum != 63055 {
@@ -1226,6 +1235,17 @@ func (_self *FeaturesDefaultsBuilder)EnableDirect() *FeaturesDefaultsBuilder {
 	defer _self.ffiObject.decrementPointer()
 	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
 		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_direct(
+		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable dynamic WireGuard-NT control as per RFC LLT-0089
+func (_self *FeaturesDefaultsBuilder)EnableDynamicWgNtControl() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control(
 		_pointer, _uniffiStatus)
 	}))
 }
@@ -3019,11 +3039,14 @@ type FeatureWireguard struct {
 	PersistentKeepalive FeaturePersistentKeepalive
 	// Configurable WireGuard polling periods
 	Polling FeaturePolling
+	// Configurable up/down behavior of WireGuard-NT adapter. See RFC LLT-0089 for details
+	EnableDynamicWgNtControl bool
 }
 
 func (r *FeatureWireguard) Destroy() {
 		FfiDestroyerTypeFeaturePersistentKeepalive{}.Destroy(r.PersistentKeepalive);
 		FfiDestroyerTypeFeaturePolling{}.Destroy(r.Polling);
+		FfiDestroyerBool{}.Destroy(r.EnableDynamicWgNtControl);
 }
 
 type FfiConverterTypeFeatureWireguard struct {}
@@ -3038,6 +3061,7 @@ func (c FfiConverterTypeFeatureWireguard) Read(reader io.Reader) FeatureWireguar
 	return FeatureWireguard {
 			FfiConverterTypeFeaturePersistentKeepaliveINSTANCE.Read(reader),
 			FfiConverterTypeFeaturePollingINSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -3048,6 +3072,7 @@ func (c FfiConverterTypeFeatureWireguard) Lower(value FeatureWireguard) RustBuff
 func (c FfiConverterTypeFeatureWireguard) Write(writer io.Writer, value FeatureWireguard) {
 		FfiConverterTypeFeaturePersistentKeepaliveINSTANCE.Write(writer, value.PersistentKeepalive);
 		FfiConverterTypeFeaturePollingINSTANCE.Write(writer, value.Polling);
+		FfiConverterBoolINSTANCE.Write(writer, value.EnableDynamicWgNtControl);
 }
 
 type FfiDestroyerTypeFeatureWireguard struct {}
