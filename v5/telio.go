@@ -361,15 +361,6 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_func_add_timestamps_to_logs(uniffiStatus)
-	})
-	if checksum != 10620 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_func_add_timestamps_to_logs: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_func_deserialize_feature_config(uniffiStatus)
 	})
 	if checksum != 61040 {
@@ -451,15 +442,6 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_func_unset_global_logger(uniffiStatus)
-	})
-	if checksum != 32201 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_func_unset_global_logger: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_build(uniffiStatus)
 	})
 	if checksum != 18842 {
@@ -492,15 +474,6 @@ func uniffiCheckChecksums() {
 	if checksum != 8489 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_direct: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control(uniffiStatus)
-	})
-	if checksum != 29236 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1240,18 +1213,7 @@ func (_self *FeaturesDefaultsBuilder)EnableDirect() *FeaturesDefaultsBuilder {
 }
 
 
-// Enable dynamic WireGuard-NT control as per RFC LLT-0089
-func (_self *FeaturesDefaultsBuilder)EnableDynamicWgNtControl() *FeaturesDefaultsBuilder {
-	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
-		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control(
-		_pointer, _uniffiStatus)
-	}))
-}
-
-
-// Enable firewall connection resets when NepTUN is used
+// Enable firewall connection resets when boringtun is used
 func (_self *FeaturesDefaultsBuilder)EnableFirewallConnectionReset() *FeaturesDefaultsBuilder {
 	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
 	defer _self.ffiObject.decrementPointer()
@@ -2172,16 +2134,10 @@ func (_ FfiDestroyerTypeErrorEvent) Destroy(value ErrorEvent) {
 type FeatureBatching struct {
 	// direct connection threshold for batching
 	DirectConnectionThreshold uint32
-	// effective trigger period
-	TriggerEffectiveDuration uint32
-	// / cooldown after trigger was used
-	TriggerCooldownDuration uint32
 }
 
 func (r *FeatureBatching) Destroy() {
 		FfiDestroyerUint32{}.Destroy(r.DirectConnectionThreshold);
-		FfiDestroyerUint32{}.Destroy(r.TriggerEffectiveDuration);
-		FfiDestroyerUint32{}.Destroy(r.TriggerCooldownDuration);
 }
 
 type FfiConverterTypeFeatureBatching struct {}
@@ -2195,8 +2151,6 @@ func (c FfiConverterTypeFeatureBatching) Lift(rb RustBufferI) FeatureBatching {
 func (c FfiConverterTypeFeatureBatching) Read(reader io.Reader) FeatureBatching {
 	return FeatureBatching {
 			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
 	}
 }
 
@@ -2206,8 +2160,6 @@ func (c FfiConverterTypeFeatureBatching) Lower(value FeatureBatching) RustBuffer
 
 func (c FfiConverterTypeFeatureBatching) Write(writer io.Writer, value FeatureBatching) {
 		FfiConverterUint32INSTANCE.Write(writer, value.DirectConnectionThreshold);
-		FfiConverterUint32INSTANCE.Write(writer, value.TriggerEffectiveDuration);
-		FfiConverterUint32INSTANCE.Write(writer, value.TriggerCooldownDuration);
 }
 
 type FfiDestroyerTypeFeatureBatching struct {}
@@ -2223,9 +2175,6 @@ type FeatureDerp struct {
 	TcpKeepalive *uint32
 	// Derp will send empty messages after this many seconds of not sending/receiving any data [default 60s]
 	DerpKeepalive *uint32
-	// Poll Keepalive: Application level keepalives meant to replace the TCP keepalives
-	// They will reuse the derp_keepalive interval
-	PollKeepalive *bool
 	// Enable polling of remote peer states to reduce derp traffic
 	EnablePolling *bool
 	// Use Mozilla's root certificates instead of OS ones [default false]
@@ -2235,7 +2184,6 @@ type FeatureDerp struct {
 func (r *FeatureDerp) Destroy() {
 		FfiDestroyerOptionalUint32{}.Destroy(r.TcpKeepalive);
 		FfiDestroyerOptionalUint32{}.Destroy(r.DerpKeepalive);
-		FfiDestroyerOptionalBool{}.Destroy(r.PollKeepalive);
 		FfiDestroyerOptionalBool{}.Destroy(r.EnablePolling);
 		FfiDestroyerBool{}.Destroy(r.UseBuiltInRootCertificates);
 }
@@ -2253,7 +2201,6 @@ func (c FfiConverterTypeFeatureDerp) Read(reader io.Reader) FeatureDerp {
 			FfiConverterOptionalUint32INSTANCE.Read(reader),
 			FfiConverterOptionalUint32INSTANCE.Read(reader),
 			FfiConverterOptionalBoolINSTANCE.Read(reader),
-			FfiConverterOptionalBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
@@ -2265,7 +2212,6 @@ func (c FfiConverterTypeFeatureDerp) Lower(value FeatureDerp) RustBuffer {
 func (c FfiConverterTypeFeatureDerp) Write(writer io.Writer, value FeatureDerp) {
 		FfiConverterOptionalUint32INSTANCE.Write(writer, value.TcpKeepalive);
 		FfiConverterOptionalUint32INSTANCE.Write(writer, value.DerpKeepalive);
-		FfiConverterOptionalBoolINSTANCE.Write(writer, value.PollKeepalive);
 		FfiConverterOptionalBoolINSTANCE.Write(writer, value.EnablePolling);
 		FfiConverterBoolINSTANCE.Write(writer, value.UseBuiltInRootCertificates);
 }
@@ -2281,7 +2227,7 @@ func (_ FfiDestroyerTypeFeatureDerp) Destroy(value FeatureDerp) {
 type FeatureDirect struct {
 	// Endpoint providers [default all]
 	Providers *EndpointProviders
-	// Polling interval for endpoints [default 25s]
+	// Polling interval for endpoints [default 10s]
 	EndpointIntervalSecs uint64
 	// Configuration options for skipping unresponsive peers
 	SkipUnresponsivePeers *FeatureSkipUnresponsivePeers
@@ -2467,17 +2413,11 @@ func (_ FfiDestroyerTypeFeatureExitDns) Destroy(value FeatureExitDns) {
 // Feature config for firewall
 type FeatureFirewall struct {
 	// Turns on connection resets upon VPN server change
-	NeptunResetConns bool
-	// Turns on connection resets upon VPN server change (Deprecated alias for neptun_reset_conns)
 	BoringtunResetConns bool
-	// Ip range from RFC1918 to exclude from firewall blocking
-	ExcludePrivateIpRange *Ipv4Net
 }
 
 func (r *FeatureFirewall) Destroy() {
-		FfiDestroyerBool{}.Destroy(r.NeptunResetConns);
 		FfiDestroyerBool{}.Destroy(r.BoringtunResetConns);
-		FfiDestroyerOptionalTypeIpv4Net{}.Destroy(r.ExcludePrivateIpRange);
 }
 
 type FfiConverterTypeFeatureFirewall struct {}
@@ -2491,8 +2431,6 @@ func (c FfiConverterTypeFeatureFirewall) Lift(rb RustBufferI) FeatureFirewall {
 func (c FfiConverterTypeFeatureFirewall) Read(reader io.Reader) FeatureFirewall {
 	return FeatureFirewall {
 			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterOptionalTypeIpv4NetINSTANCE.Read(reader),
 	}
 }
 
@@ -2501,9 +2439,7 @@ func (c FfiConverterTypeFeatureFirewall) Lower(value FeatureFirewall) RustBuffer
 }
 
 func (c FfiConverterTypeFeatureFirewall) Write(writer io.Writer, value FeatureFirewall) {
-		FfiConverterBoolINSTANCE.Write(writer, value.NeptunResetConns);
 		FfiConverterBoolINSTANCE.Write(writer, value.BoringtunResetConns);
-		FfiConverterOptionalTypeIpv4NetINSTANCE.Write(writer, value.ExcludePrivateIpRange);
 }
 
 type FfiDestroyerTypeFeatureFirewall struct {}
@@ -2813,50 +2749,6 @@ func (_ FfiDestroyerTypeFeaturePmtuDiscovery) Destroy(value FeaturePmtuDiscovery
 }
 
 
-// Configurable WireGuard polling periods
-type FeaturePolling struct {
-	// Wireguard state polling period (in milliseconds) [default 1000ms]
-	WireguardPollingPeriod uint32
-	// Wireguard state polling period after state change (in milliseconds) [default 50ms]
-	WireguardPollingPeriodAfterStateChange uint32
-}
-
-func (r *FeaturePolling) Destroy() {
-		FfiDestroyerUint32{}.Destroy(r.WireguardPollingPeriod);
-		FfiDestroyerUint32{}.Destroy(r.WireguardPollingPeriodAfterStateChange);
-}
-
-type FfiConverterTypeFeaturePolling struct {}
-
-var FfiConverterTypeFeaturePollingINSTANCE = FfiConverterTypeFeaturePolling{}
-
-func (c FfiConverterTypeFeaturePolling) Lift(rb RustBufferI) FeaturePolling {
-	return LiftFromRustBuffer[FeaturePolling](c, rb)
-}
-
-func (c FfiConverterTypeFeaturePolling) Read(reader io.Reader) FeaturePolling {
-	return FeaturePolling {
-			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterTypeFeaturePolling) Lower(value FeaturePolling) RustBuffer {
-	return LowerIntoRustBuffer[FeaturePolling](c, value)
-}
-
-func (c FfiConverterTypeFeaturePolling) Write(writer io.Writer, value FeaturePolling) {
-		FfiConverterUint32INSTANCE.Write(writer, value.WireguardPollingPeriod);
-		FfiConverterUint32INSTANCE.Write(writer, value.WireguardPollingPeriodAfterStateChange);
-}
-
-type FfiDestroyerTypeFeaturePolling struct {}
-
-func (_ FfiDestroyerTypeFeaturePolling) Destroy(value FeaturePolling) {
-	value.Destroy()
-}
-
-
 // Turns on post quantum VPN tunnel
 type FeaturePostQuantumVpn struct {
 	// Initial handshake retry interval in seconds
@@ -3037,16 +2929,10 @@ func (_ FfiDestroyerTypeFeatureUpnp) Destroy(value FeatureUpnp) {
 type FeatureWireguard struct {
 	// Configurable persistent keepalive periods for wireguard peers
 	PersistentKeepalive FeaturePersistentKeepalive
-	// Configurable WireGuard polling periods
-	Polling FeaturePolling
-	// Configurable up/down behavior of WireGuard-NT adapter. See RFC LLT-0089 for details
-	EnableDynamicWgNtControl bool
 }
 
 func (r *FeatureWireguard) Destroy() {
 		FfiDestroyerTypeFeaturePersistentKeepalive{}.Destroy(r.PersistentKeepalive);
-		FfiDestroyerTypeFeaturePolling{}.Destroy(r.Polling);
-		FfiDestroyerBool{}.Destroy(r.EnableDynamicWgNtControl);
 }
 
 type FfiConverterTypeFeatureWireguard struct {}
@@ -3060,8 +2946,6 @@ func (c FfiConverterTypeFeatureWireguard) Lift(rb RustBufferI) FeatureWireguard 
 func (c FfiConverterTypeFeatureWireguard) Read(reader io.Reader) FeatureWireguard {
 	return FeatureWireguard {
 			FfiConverterTypeFeaturePersistentKeepaliveINSTANCE.Read(reader),
-			FfiConverterTypeFeaturePollingINSTANCE.Read(reader),
-			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -3071,8 +2955,6 @@ func (c FfiConverterTypeFeatureWireguard) Lower(value FeatureWireguard) RustBuff
 
 func (c FfiConverterTypeFeatureWireguard) Write(writer io.Writer, value FeatureWireguard) {
 		FfiConverterTypeFeaturePersistentKeepaliveINSTANCE.Write(writer, value.PersistentKeepalive);
-		FfiConverterTypeFeaturePollingINSTANCE.Write(writer, value.Polling);
-		FfiConverterBoolINSTANCE.Write(writer, value.EnableDynamicWgNtControl);
 }
 
 type FfiDestroyerTypeFeatureWireguard struct {}
@@ -3219,10 +3101,6 @@ type Peer struct {
 	IsLocal bool
 	// Flag to control whether the peer allows incoming connections
 	AllowIncomingConnections bool
-	// Flag to control whether the Node allows routing through
-	AllowPeerTrafficRouting bool
-	// Flag to control whether the Node allows incoming local area access
-	AllowPeerLocalNetworkAccess bool
 	// Flag to control whether the peer allows incoming files
 	AllowPeerSendFiles bool
 	// Flag to control whether we allow multicast messages from the peer
@@ -3235,8 +3113,6 @@ func (r *Peer) Destroy() {
 		FfiDestroyerTypePeerBase{}.Destroy(r.Base);
 		FfiDestroyerBool{}.Destroy(r.IsLocal);
 		FfiDestroyerBool{}.Destroy(r.AllowIncomingConnections);
-		FfiDestroyerBool{}.Destroy(r.AllowPeerTrafficRouting);
-		FfiDestroyerBool{}.Destroy(r.AllowPeerLocalNetworkAccess);
 		FfiDestroyerBool{}.Destroy(r.AllowPeerSendFiles);
 		FfiDestroyerBool{}.Destroy(r.AllowMulticast);
 		FfiDestroyerBool{}.Destroy(r.PeerAllowsMulticast);
@@ -3258,8 +3134,6 @@ func (c FfiConverterTypePeer) Read(reader io.Reader) Peer {
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -3271,8 +3145,6 @@ func (c FfiConverterTypePeer) Write(writer io.Writer, value Peer) {
 		FfiConverterTypePeerBaseINSTANCE.Write(writer, value.Base);
 		FfiConverterBoolINSTANCE.Write(writer, value.IsLocal);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowIncomingConnections);
-		FfiConverterBoolINSTANCE.Write(writer, value.AllowPeerTrafficRouting);
-		FfiConverterBoolINSTANCE.Write(writer, value.AllowPeerLocalNetworkAccess);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowPeerSendFiles);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowMulticast);
 		FfiConverterBoolINSTANCE.Write(writer, value.PeerAllowsMulticast);
@@ -3461,10 +3333,6 @@ type TelioNode struct {
 	Hostname *string
 	// Flag to control whether the Node allows incoming connections
 	AllowIncomingConnections bool
-	// Flag to control whether the Node allows routing through
-	AllowPeerTrafficRouting bool
-	// Flag to control whether the Node allows incoming local area access
-	AllowPeerLocalNetworkAccess bool
 	// Flag to control whether the Node allows incoming files
 	AllowPeerSendFiles bool
 	// Connection type in the network mesh (through Relay or hole punched directly)
@@ -3488,8 +3356,6 @@ func (r *TelioNode) Destroy() {
 		FfiDestroyerOptionalTypeSocketAddr{}.Destroy(r.Endpoint);
 		FfiDestroyerOptionalString{}.Destroy(r.Hostname);
 		FfiDestroyerBool{}.Destroy(r.AllowIncomingConnections);
-		FfiDestroyerBool{}.Destroy(r.AllowPeerTrafficRouting);
-		FfiDestroyerBool{}.Destroy(r.AllowPeerLocalNetworkAccess);
 		FfiDestroyerBool{}.Destroy(r.AllowPeerSendFiles);
 		FfiDestroyerTypePathType{}.Destroy(r.Path);
 		FfiDestroyerBool{}.Destroy(r.AllowMulticast);
@@ -3519,8 +3385,6 @@ func (c FfiConverterTypeTelioNode) Read(reader io.Reader) TelioNode {
 			FfiConverterOptionalStringINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterTypePathTypeINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
@@ -3544,8 +3408,6 @@ func (c FfiConverterTypeTelioNode) Write(writer io.Writer, value TelioNode) {
 		FfiConverterOptionalTypeSocketAddrINSTANCE.Write(writer, value.Endpoint);
 		FfiConverterOptionalStringINSTANCE.Write(writer, value.Hostname);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowIncomingConnections);
-		FfiConverterBoolINSTANCE.Write(writer, value.AllowPeerTrafficRouting);
-		FfiConverterBoolINSTANCE.Write(writer, value.AllowPeerLocalNetworkAccess);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowPeerSendFiles);
 		FfiConverterTypePathTypeINSTANCE.Write(writer, value.Path);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowMulticast);
@@ -4024,15 +3886,13 @@ type TelioAdapterType uint
 
 const (
 	// Userland rust implementation.
-	TelioAdapterTypeNepTun TelioAdapterType = 1
-	// Userland rust implementation. (Deprecated alias for NepTUN).
-	TelioAdapterTypeBoringTun TelioAdapterType = 2
+	TelioAdapterTypeBoringTun TelioAdapterType = 1
 	// Linux in-kernel WireGuard implementation
-	TelioAdapterTypeLinuxNativeTun TelioAdapterType = 3
+	TelioAdapterTypeLinuxNativeTun TelioAdapterType = 2
 	// WireguardGo implementation
-	TelioAdapterTypeWireguardGoTun TelioAdapterType = 4
+	TelioAdapterTypeWireguardGoTun TelioAdapterType = 3
 	// WindowsNativeWireguardNt implementation
-	TelioAdapterTypeWindowsNativeTun TelioAdapterType = 5
+	TelioAdapterTypeWindowsNativeTun TelioAdapterType = 4
 )
 
 type FfiConverterTypeTelioAdapterType struct {}
@@ -5662,45 +5522,6 @@ func (_ FfiDestroyerOptionalTypeHiddenString) Destroy(value *HiddenString) {
 
 
 
-type FfiConverterOptionalTypeIpv4Net struct{}
-
-var FfiConverterOptionalTypeIpv4NetINSTANCE = FfiConverterOptionalTypeIpv4Net{}
-
-func (c FfiConverterOptionalTypeIpv4Net) Lift(rb RustBufferI) *Ipv4Net {
-	return LiftFromRustBuffer[*Ipv4Net](c, rb)
-}
-
-func (_ FfiConverterOptionalTypeIpv4Net) Read(reader io.Reader) *Ipv4Net {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterTypeIpv4NetINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalTypeIpv4Net) Lower(value *Ipv4Net) RustBuffer {
-	return LowerIntoRustBuffer[*Ipv4Net](c, value)
-}
-
-func (_ FfiConverterOptionalTypeIpv4Net) Write(writer io.Writer, value *Ipv4Net) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterTypeIpv4NetINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalTypeIpv4Net struct {}
-
-func (_ FfiDestroyerOptionalTypeIpv4Net) Destroy(value *Ipv4Net) {
-	if value != nil {
-		FfiDestroyerTypeIpv4Net{}.Destroy(*value)
-	}
-}
-
-
-
 type FfiConverterOptionalTypeSocketAddr struct{}
 
 var FfiConverterOptionalTypeSocketAddrINSTANCE = FfiConverterOptionalTypeSocketAddr{}
@@ -6170,17 +5991,6 @@ var FfiConverterTypeIpv4AddrINSTANCE = FfiConverterString{}
  * is needed because the UDL type name is used in function/method signatures.
  * It's also what we have an external type that references a custom type.
  */
-type Ipv4Net = string
-type FfiConverterTypeIpv4Net = FfiConverterString
-type FfiDestroyerTypeIpv4Net = FfiDestroyerString
-var FfiConverterTypeIpv4NetINSTANCE = FfiConverterString{}
-
-
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- * It's also what we have an external type that references a custom type.
- */
 type PublicKey = string
 type FfiConverterTypePublicKey = FfiConverterString
 type FfiDestroyerTypePublicKey = FfiDestroyerString
@@ -6218,14 +6028,6 @@ type TtlValue = uint32
 type FfiConverterTypeTtlValue = FfiConverterUint32
 type FfiDestroyerTypeTtlValue = FfiDestroyerUint32
 var FfiConverterTypeTtlValueINSTANCE = FfiConverterUint32{}
-
-// For testing only - embeds timestamps into generated logs
-func AddTimestampsToLogs()  {
-	rustCall(func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_func_add_timestamps_to_logs( _uniffiStatus)
-		return false
-	})
-}
 
 // Utility function to create a `Features` object from a json-string
 // Passing an empty string will return the default feature config
@@ -6303,15 +6105,6 @@ func GetVersionTag() string {
 func SetGlobalLogger(logLevel TelioLogLevel, logger TelioLoggerCb)  {
 	rustCall(func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_func_set_global_logger(FfiConverterTypeTelioLogLevelINSTANCE.Lower(logLevel), FfiConverterCallbackInterfaceTelioLoggerCbINSTANCE.Lower(logger), _uniffiStatus)
-		return false
-	})
-}
-
-// Unset the global logger.
-// After this call finishes, previously registered logger will not be called.
-func UnsetGlobalLogger()  {
-	rustCall(func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_func_unset_global_logger( _uniffiStatus)
 		return false
 	})
 }
