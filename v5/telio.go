@@ -595,6 +595,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_set_skt_buffer_size(uniffiStatus)
+	})
+	if checksum != 35161 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_set_skt_buffer_size: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node(uniffiStatus)
 	})
 	if checksum != 62657 {
@@ -1357,6 +1366,17 @@ func (_self *FeaturesDefaultsBuilder)EnableValidateKeys() *FeaturesDefaultsBuild
 	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
 		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_validate_keys(
 		_pointer, _uniffiStatus)
+	}))
+}
+
+
+// Enable custom socket buffer sizes for NepTUN
+func (_self *FeaturesDefaultsBuilder)SetSktBufferSize(sktBufferSize uint32) *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_set_skt_buffer_size(
+		_pointer,FfiConverterUint32INSTANCE.Lower(sktBufferSize), _uniffiStatus)
 	}))
 }
 
@@ -3041,12 +3061,15 @@ type FeatureWireguard struct {
 	Polling FeaturePolling
 	// Configurable up/down behavior of WireGuard-NT adapter. See RFC LLT-0089 for details
 	EnableDynamicWgNtControl bool
+	// Configurable socket buffer size for NepTUN
+	SktBufferSize *uint32
 }
 
 func (r *FeatureWireguard) Destroy() {
 		FfiDestroyerTypeFeaturePersistentKeepalive{}.Destroy(r.PersistentKeepalive);
 		FfiDestroyerTypeFeaturePolling{}.Destroy(r.Polling);
 		FfiDestroyerBool{}.Destroy(r.EnableDynamicWgNtControl);
+		FfiDestroyerOptionalUint32{}.Destroy(r.SktBufferSize);
 }
 
 type FfiConverterTypeFeatureWireguard struct {}
@@ -3062,6 +3085,7 @@ func (c FfiConverterTypeFeatureWireguard) Read(reader io.Reader) FeatureWireguar
 			FfiConverterTypeFeaturePersistentKeepaliveINSTANCE.Read(reader),
 			FfiConverterTypeFeaturePollingINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterOptionalUint32INSTANCE.Read(reader),
 	}
 }
 
@@ -3073,6 +3097,7 @@ func (c FfiConverterTypeFeatureWireguard) Write(writer io.Writer, value FeatureW
 		FfiConverterTypeFeaturePersistentKeepaliveINSTANCE.Write(writer, value.PersistentKeepalive);
 		FfiConverterTypeFeaturePollingINSTANCE.Write(writer, value.Polling);
 		FfiConverterBoolINSTANCE.Write(writer, value.EnableDynamicWgNtControl);
+		FfiConverterOptionalUint32INSTANCE.Write(writer, value.SktBufferSize);
 }
 
 type FfiDestroyerTypeFeatureWireguard struct {}

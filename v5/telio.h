@@ -154,6 +154,12 @@ void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_validate_keys(
 	RustCallStatus* out_status
 );
 
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_set_skt_buffer_size(
+	void* ptr,
+	uint32_t skt_buffer_size,
+	RustCallStatus* out_status
+);
+
 void uniffi_telio_fn_free_telio(
 	void* ptr,
 	RustCallStatus* out_status
@@ -824,6 +830,10 @@ uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_pmtu_discov
 );
 
 uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_validate_keys(
+	RustCallStatus* out_status
+);
+
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_set_skt_buffer_size(
 	RustCallStatus* out_status
 );
 
