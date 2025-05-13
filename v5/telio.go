@@ -4054,10 +4054,8 @@ const (
 	TelioAdapterTypeBoringTun TelioAdapterType = 2
 	// Linux in-kernel WireGuard implementation
 	TelioAdapterTypeLinuxNativeTun TelioAdapterType = 3
-	// WireguardGo implementation
-	TelioAdapterTypeWireguardGoTun TelioAdapterType = 4
 	// WindowsNativeWireguardNt implementation
-	TelioAdapterTypeWindowsNativeTun TelioAdapterType = 5
+	TelioAdapterTypeWindowsNativeTun TelioAdapterType = 4
 )
 
 type FfiConverterTypeTelioAdapterType struct {}
