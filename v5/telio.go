@@ -2492,12 +2492,15 @@ type FeatureFirewall struct {
 	BoringtunResetConns bool
 	// Ip range from RFC1918 to exclude from firewall blocking
 	ExcludePrivateIpRange *Ipv4Net
+	// Blackist for outgoing connections
+	OutgoingBlacklist []FirewallBlacklistTuple
 }
 
 func (r *FeatureFirewall) Destroy() {
 		FfiDestroyerBool{}.Destroy(r.NeptunResetConns);
 		FfiDestroyerBool{}.Destroy(r.BoringtunResetConns);
 		FfiDestroyerOptionalTypeIpv4Net{}.Destroy(r.ExcludePrivateIpRange);
+		FfiDestroyerSequenceTypeFirewallBlacklistTuple{}.Destroy(r.OutgoingBlacklist);
 }
 
 type FfiConverterTypeFeatureFirewall struct {}
@@ -2513,6 +2516,7 @@ func (c FfiConverterTypeFeatureFirewall) Read(reader io.Reader) FeatureFirewall 
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterOptionalTypeIpv4NetINSTANCE.Read(reader),
+			FfiConverterSequenceTypeFirewallBlacklistTupleINSTANCE.Read(reader),
 	}
 }
 
@@ -2524,6 +2528,7 @@ func (c FfiConverterTypeFeatureFirewall) Write(writer io.Writer, value FeatureFi
 		FfiConverterBoolINSTANCE.Write(writer, value.NeptunResetConns);
 		FfiConverterBoolINSTANCE.Write(writer, value.BoringtunResetConns);
 		FfiConverterOptionalTypeIpv4NetINSTANCE.Write(writer, value.ExcludePrivateIpRange);
+		FfiConverterSequenceTypeFirewallBlacklistTupleINSTANCE.Write(writer, value.OutgoingBlacklist);
 }
 
 type FfiDestroyerTypeFeatureFirewall struct {}
@@ -3236,6 +3241,55 @@ func (_ FfiDestroyerTypeFeatures) Destroy(value Features) {
 }
 
 
+// Tuple used to blacklist outgoing connections in Telio firewall
+type FirewallBlacklistTuple struct {
+	// Protocol of the packet to be blacklisted
+	Protocol IpProtocol
+	// Destination IP address of the packet
+	Ip IpAddr
+	// Destination port of the packet
+	Port uint16
+}
+
+func (r *FirewallBlacklistTuple) Destroy() {
+		FfiDestroyerTypeIpProtocol{}.Destroy(r.Protocol);
+		FfiDestroyerTypeIpAddr{}.Destroy(r.Ip);
+		FfiDestroyerUint16{}.Destroy(r.Port);
+}
+
+type FfiConverterTypeFirewallBlacklistTuple struct {}
+
+var FfiConverterTypeFirewallBlacklistTupleINSTANCE = FfiConverterTypeFirewallBlacklistTuple{}
+
+func (c FfiConverterTypeFirewallBlacklistTuple) Lift(rb RustBufferI) FirewallBlacklistTuple {
+	return LiftFromRustBuffer[FirewallBlacklistTuple](c, rb)
+}
+
+func (c FfiConverterTypeFirewallBlacklistTuple) Read(reader io.Reader) FirewallBlacklistTuple {
+	return FirewallBlacklistTuple {
+			FfiConverterTypeIpProtocolINSTANCE.Read(reader),
+			FfiConverterTypeIpAddrINSTANCE.Read(reader),
+			FfiConverterUint16INSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterTypeFirewallBlacklistTuple) Lower(value FirewallBlacklistTuple) RustBuffer {
+	return LowerIntoRustBuffer[FirewallBlacklistTuple](c, value)
+}
+
+func (c FfiConverterTypeFirewallBlacklistTuple) Write(writer io.Writer, value FirewallBlacklistTuple) {
+		FfiConverterTypeIpProtocolINSTANCE.Write(writer, value.Protocol);
+		FfiConverterTypeIpAddrINSTANCE.Write(writer, value.Ip);
+		FfiConverterUint16INSTANCE.Write(writer, value.Port);
+}
+
+type FfiDestroyerTypeFirewallBlacklistTuple struct {}
+
+func (_ FfiDestroyerTypeFirewallBlacklistTuple) Destroy(value FirewallBlacklistTuple) {
+	value.Destroy()
+}
+
+
 // Description of a peer
 type Peer struct {
 	// The base object describing a peer
@@ -3787,6 +3841,44 @@ type FfiDestroyerTypeEvent struct {}
 
 func (_ FfiDestroyerTypeEvent) Destroy(value Event) {
 	value.Destroy()
+}
+
+
+
+
+// Next layer protocol for IP packet
+type IpProtocol uint
+
+const (
+	// UDP protocol
+	IpProtocolUdp IpProtocol = 1
+	// TCP protocol
+	IpProtocolTcp IpProtocol = 2
+)
+
+type FfiConverterTypeIpProtocol struct {}
+
+var FfiConverterTypeIpProtocolINSTANCE = FfiConverterTypeIpProtocol{}
+
+func (c FfiConverterTypeIpProtocol) Lift(rb RustBufferI) IpProtocol {
+	return LiftFromRustBuffer[IpProtocol](c, rb)
+}
+
+func (c FfiConverterTypeIpProtocol) Lower(value IpProtocol) RustBuffer {
+	return LowerIntoRustBuffer[IpProtocol](c, value)
+}
+func (FfiConverterTypeIpProtocol) Read(reader io.Reader) IpProtocol {
+	id := readInt32(reader)
+	return IpProtocol(id)
+}
+
+func (FfiConverterTypeIpProtocol) Write(writer io.Writer, value IpProtocol) {
+	writeInt32(writer, int32(value))
+}
+
+type FfiDestroyerTypeIpProtocol struct {}
+
+func (_ FfiDestroyerTypeIpProtocol) Destroy(value IpProtocol) {
 }
 
 
@@ -5758,6 +5850,51 @@ type FfiDestroyerOptionalTypeSocketAddr struct {}
 func (_ FfiDestroyerOptionalTypeSocketAddr) Destroy(value *SocketAddr) {
 	if value != nil {
 		FfiDestroyerTypeSocketAddr{}.Destroy(*value)
+	}
+}
+
+
+
+type FfiConverterSequenceTypeFirewallBlacklistTuple struct{}
+
+var FfiConverterSequenceTypeFirewallBlacklistTupleINSTANCE = FfiConverterSequenceTypeFirewallBlacklistTuple{}
+
+func (c FfiConverterSequenceTypeFirewallBlacklistTuple) Lift(rb RustBufferI) []FirewallBlacklistTuple {
+	return LiftFromRustBuffer[[]FirewallBlacklistTuple](c, rb)
+}
+
+func (c FfiConverterSequenceTypeFirewallBlacklistTuple) Read(reader io.Reader) []FirewallBlacklistTuple {
+	length := readInt32(reader)
+	if length == 0 {
+		return nil
+	}
+	result := make([]FirewallBlacklistTuple, 0, length)
+	for i := int32(0); i < length; i++ {
+		result = append(result, FfiConverterTypeFirewallBlacklistTupleINSTANCE.Read(reader))
+	}
+	return result
+}
+
+func (c FfiConverterSequenceTypeFirewallBlacklistTuple) Lower(value []FirewallBlacklistTuple) RustBuffer {
+	return LowerIntoRustBuffer[[]FirewallBlacklistTuple](c, value)
+}
+
+func (c FfiConverterSequenceTypeFirewallBlacklistTuple) Write(writer io.Writer, value []FirewallBlacklistTuple) {
+	if len(value) > math.MaxInt32 {
+		panic("[]FirewallBlacklistTuple is too large to fit into Int32")
+	}
+
+	writeInt32(writer, int32(len(value)))
+	for _, item := range value {
+		FfiConverterTypeFirewallBlacklistTupleINSTANCE.Write(writer, item)
+	}
+}
+
+type FfiDestroyerSequenceTypeFirewallBlacklistTuple struct {}
+
+func (FfiDestroyerSequenceTypeFirewallBlacklistTuple) Destroy(sequence []FirewallBlacklistTuple) {
+	for _, value := range sequence {
+		FfiDestroyerTypeFirewallBlacklistTuple{}.Destroy(value)	
 	}
 }
 
