@@ -3328,8 +3328,10 @@ type Features struct {
 	Direct *FeatureDirect
 	// Should only be set for macos sideload
 	IsTestEnv *bool
-	// Controll if IP addresses and domains should be hidden in logs
+	// Control if IP addresses and domains should be hidden in logs
 	HideUserData bool
+	// Control if thread IDs should be shown in the logs
+	HideThreadId bool
 	// Derp server specific configuration
 	Derp *FeatureDerp
 	// Flag to specify if keys should be validated
@@ -3364,6 +3366,7 @@ func (r *Features) Destroy() {
 		FfiDestroyerOptionalFeatureDirect{}.Destroy(r.Direct);
 		FfiDestroyerOptionalBool{}.Destroy(r.IsTestEnv);
 		FfiDestroyerBool{}.Destroy(r.HideUserData);
+		FfiDestroyerBool{}.Destroy(r.HideThreadId);
 		FfiDestroyerOptionalFeatureDerp{}.Destroy(r.Derp);
 		FfiDestroyerTypeFeatureValidateKeys{}.Destroy(r.ValidateKeys);
 		FfiDestroyerBool{}.Destroy(r.Ipv6);
@@ -3395,6 +3398,7 @@ func (c FfiConverterFeatures) Read(reader io.Reader) Features {
 			FfiConverterOptionalFeatureDirectINSTANCE.Read(reader),
 			FfiConverterOptionalBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterOptionalFeatureDerpINSTANCE.Read(reader),
 			FfiConverterTypeFeatureValidateKeysINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
@@ -3422,6 +3426,7 @@ func (c FfiConverterFeatures) Write(writer io.Writer, value Features) {
 		FfiConverterOptionalFeatureDirectINSTANCE.Write(writer, value.Direct);
 		FfiConverterOptionalBoolINSTANCE.Write(writer, value.IsTestEnv);
 		FfiConverterBoolINSTANCE.Write(writer, value.HideUserData);
+		FfiConverterBoolINSTANCE.Write(writer, value.HideThreadId);
 		FfiConverterOptionalFeatureDerpINSTANCE.Write(writer, value.Derp);
 		FfiConverterTypeFeatureValidateKeysINSTANCE.Write(writer, value.ValidateKeys);
 		FfiConverterBoolINSTANCE.Write(writer, value.Ipv6);
