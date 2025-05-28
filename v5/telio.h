@@ -525,11 +525,6 @@ void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nicknames(void* ptr,
 void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nurse(void* ptr, RustCallStatus *out_status
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_PMTU_DISCOVERY
-#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_PMTU_DISCOVERY
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_pmtu_discovery(void* ptr, RustCallStatus *out_status
-);
-#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_VALIDATE_KEYS
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_VALIDATE_KEYS
 void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_validate_keys(void* ptr, RustCallStatus *out_status
@@ -648,11 +643,6 @@ void uniffi_telio_fn_method_telio_notify_sleep(void* ptr, RustCallStatus *out_st
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_NOTIFY_WAKEUP
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_NOTIFY_WAKEUP
 void uniffi_telio_fn_method_telio_notify_wakeup(void* ptr, RustCallStatus *out_status
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_PROBE_PMTU
-#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_PROBE_PMTU
-uint32_t uniffi_telio_fn_method_telio_probe_pmtu(void* ptr, RustBuffer host, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_RECEIVE_PING
@@ -1221,12 +1211,6 @@ uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nurse(void
     
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_PMTU_DISCOVERY
-#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_PMTU_DISCOVERY
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_pmtu_discovery(void
-    
-);
-#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_VALIDATE_KEYS
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_VALIDATE_KEYS
 uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_validate_keys(void
@@ -1344,12 +1328,6 @@ uint16_t uniffi_telio_checksum_method_telio_notify_sleep(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_NOTIFY_WAKEUP
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_NOTIFY_WAKEUP
 uint16_t uniffi_telio_checksum_method_telio_notify_wakeup(void
-    
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_PROBE_PMTU
-#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_PROBE_PMTU
-uint16_t uniffi_telio_checksum_method_telio_probe_pmtu(void
     
 );
 #endif

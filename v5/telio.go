@@ -578,15 +578,6 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_pmtu_discovery()
-	})
-	if checksum != 39164 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_pmtu_discovery: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_validate_keys()
 	})
 	if checksum != 10605 {
@@ -763,15 +754,6 @@ func uniffiCheckChecksums() {
 	if checksum != 58222 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_notify_wakeup: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_probe_pmtu()
-	})
-	if checksum != 34307 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_probe_pmtu: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1228,8 +1210,6 @@ type FeaturesDefaultsBuilderInterface interface {
 	EnableNicknames() *FeaturesDefaultsBuilder
 	// Enable nurse with defaults
 	EnableNurse() *FeaturesDefaultsBuilder
-	// Enable PMTU discovery with defaults;
-	EnablePmtuDiscovery() *FeaturesDefaultsBuilder
 	// Enable key valiation in set_config call with defaults
 	EnableValidateKeys() *FeaturesDefaultsBuilder
 	// Enable custom socket buffer sizes for NepTUN
@@ -1381,16 +1361,6 @@ func (_self *FeaturesDefaultsBuilder) EnableNurse() *FeaturesDefaultsBuilder {
 	defer _self.ffiObject.decrementPointer()
 	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
 		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nurse(
-		_pointer,_uniffiStatus)
-	}))
-}
-
-// Enable PMTU discovery with defaults;
-func (_self *FeaturesDefaultsBuilder) EnablePmtuDiscovery() *FeaturesDefaultsBuilder {
-	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
-		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_pmtu_discovery(
 		_pointer,_uniffiStatus)
 	}))
 }
@@ -1592,7 +1562,6 @@ type TelioInterface interface {
 	NotifySleep() *TelioError
 	// Notify telio when system wakes up.
 	NotifyWakeup() *TelioError
-	ProbePmtu(host string) (uint32, *TelioError)
 	ReceivePing() (string, *TelioError)
 	// Sets fmark for started device.
 	//
@@ -1992,21 +1961,6 @@ func (_self *Telio) NotifyWakeup() *TelioError {
 		return false
 	})
 		return _uniffiErr
-}
-
-func (_self *Telio) ProbePmtu(host string) (uint32, *TelioError) {
-	_pointer := _self.ffiObject.incrementPointer("*Telio")
-	defer _self.ffiObject.decrementPointer()
-	_uniffiRV, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) C.uint32_t {
-		return C.uniffi_telio_fn_method_telio_probe_pmtu(
-		_pointer,FfiConverterStringINSTANCE.Lower(host),_uniffiStatus)
-	})
-		if _uniffiErr != nil {
-			var _uniffiDefaultValue uint32
-			return _uniffiDefaultValue, _uniffiErr
-		} else {
-			return FfiConverterUint32INSTANCE.Lift(_uniffiRV), _uniffiErr
-		}
 }
 
 func (_self *Telio) ReceivePing() (string, *TelioError) {
@@ -3001,45 +2955,6 @@ func (_ FfiDestroyerFeaturePersistentKeepalive) Destroy(value FeaturePersistentK
 }
 
 
-// PMTU discovery configuration for VPN connection
-type FeaturePmtuDiscovery struct {
-	// A timeout for wait for the ICMP response packet
-	ResponseWaitTimeoutS uint32
-}
-
-func (r *FeaturePmtuDiscovery) Destroy() {
-		FfiDestroyerUint32{}.Destroy(r.ResponseWaitTimeoutS);
-}
-
-type FfiConverterFeaturePmtuDiscovery struct {}
-
-var FfiConverterFeaturePmtuDiscoveryINSTANCE = FfiConverterFeaturePmtuDiscovery{}
-
-func (c FfiConverterFeaturePmtuDiscovery) Lift(rb RustBufferI) FeaturePmtuDiscovery {
-	return LiftFromRustBuffer[FeaturePmtuDiscovery](c, rb)
-}
-
-func (c FfiConverterFeaturePmtuDiscovery) Read(reader io.Reader) FeaturePmtuDiscovery {
-	return FeaturePmtuDiscovery {
-			FfiConverterUint32INSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterFeaturePmtuDiscovery) Lower(value FeaturePmtuDiscovery) C.RustBuffer {
-	return LowerIntoRustBuffer[FeaturePmtuDiscovery](c, value)
-}
-
-func (c FfiConverterFeaturePmtuDiscovery) Write(writer io.Writer, value FeaturePmtuDiscovery) {
-		FfiConverterUint32INSTANCE.Write(writer, value.ResponseWaitTimeoutS);
-}
-
-type FfiDestroyerFeaturePmtuDiscovery struct {}
-
-func (_ FfiDestroyerFeaturePmtuDiscovery) Destroy(value FeaturePmtuDiscovery) {
-	value.Destroy()
-}
-
-
 // Configurable WireGuard polling periods
 type FeaturePolling struct {
 	// Wireguard state polling period (in milliseconds) [default 1000ms]
@@ -3350,8 +3265,6 @@ type Features struct {
 	Dns FeatureDns
 	// Post quantum VPN tunnel configuration
 	PostQuantumVpn FeaturePostQuantumVpn
-	// Enable PMTU discovery, enabled by default
-	PmtuDiscovery *FeaturePmtuDiscovery
 	// Multicast support
 	Multicast bool
 	// Batching
@@ -3376,7 +3289,6 @@ func (r *Features) Destroy() {
 		FfiDestroyerOptionalFeatureLinkDetection{}.Destroy(r.LinkDetection);
 		FfiDestroyerFeatureDns{}.Destroy(r.Dns);
 		FfiDestroyerFeaturePostQuantumVpn{}.Destroy(r.PostQuantumVpn);
-		FfiDestroyerOptionalFeaturePmtuDiscovery{}.Destroy(r.PmtuDiscovery);
 		FfiDestroyerBool{}.Destroy(r.Multicast);
 		FfiDestroyerOptionalFeatureBatching{}.Destroy(r.Batching);
 }
@@ -3408,7 +3320,6 @@ func (c FfiConverterFeatures) Read(reader io.Reader) Features {
 			FfiConverterOptionalFeatureLinkDetectionINSTANCE.Read(reader),
 			FfiConverterFeatureDnsINSTANCE.Read(reader),
 			FfiConverterFeaturePostQuantumVpnINSTANCE.Read(reader),
-			FfiConverterOptionalFeaturePmtuDiscoveryINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterOptionalFeatureBatchingINSTANCE.Read(reader),
 	}
@@ -3436,7 +3347,6 @@ func (c FfiConverterFeatures) Write(writer io.Writer, value Features) {
 		FfiConverterOptionalFeatureLinkDetectionINSTANCE.Write(writer, value.LinkDetection);
 		FfiConverterFeatureDnsINSTANCE.Write(writer, value.Dns);
 		FfiConverterFeaturePostQuantumVpnINSTANCE.Write(writer, value.PostQuantumVpn);
-		FfiConverterOptionalFeaturePmtuDiscoveryINSTANCE.Write(writer, value.PmtuDiscovery);
 		FfiConverterBoolINSTANCE.Write(writer, value.Multicast);
 		FfiConverterOptionalFeatureBatchingINSTANCE.Write(writer, value.Batching);
 }
@@ -5567,45 +5477,6 @@ type FfiDestroyerOptionalFeaturePaths struct {}
 func (_ FfiDestroyerOptionalFeaturePaths) Destroy(value *FeaturePaths) {
 	if value != nil {
 		FfiDestroyerFeaturePaths{}.Destroy(*value)
-	}
-}
-
-
-
-type FfiConverterOptionalFeaturePmtuDiscovery struct{}
-
-var FfiConverterOptionalFeaturePmtuDiscoveryINSTANCE = FfiConverterOptionalFeaturePmtuDiscovery{}
-
-func (c FfiConverterOptionalFeaturePmtuDiscovery) Lift(rb RustBufferI) *FeaturePmtuDiscovery {
-	return LiftFromRustBuffer[*FeaturePmtuDiscovery](c, rb)
-}
-
-func (_ FfiConverterOptionalFeaturePmtuDiscovery) Read(reader io.Reader) *FeaturePmtuDiscovery {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterFeaturePmtuDiscoveryINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalFeaturePmtuDiscovery) Lower(value *FeaturePmtuDiscovery) C.RustBuffer {
-	return LowerIntoRustBuffer[*FeaturePmtuDiscovery](c, value)
-}
-
-func (_ FfiConverterOptionalFeaturePmtuDiscovery) Write(writer io.Writer, value *FeaturePmtuDiscovery) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterFeaturePmtuDiscoveryINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalFeaturePmtuDiscovery struct {}
-
-func (_ FfiDestroyerOptionalFeaturePmtuDiscovery) Destroy(value *FeaturePmtuDiscovery) {
-	if value != nil {
-		FfiDestroyerFeaturePmtuDiscovery{}.Destroy(*value)
 	}
 }
 
