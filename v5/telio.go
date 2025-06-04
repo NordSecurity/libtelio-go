@@ -10,6 +10,7 @@ import (
 	"io"
 	"unsafe"
 	"encoding/binary"
+	"errors"
 	"math"
 	"runtime"
 	"sync"
@@ -1082,7 +1083,7 @@ func (FfiConverterString) Read(reader io.Reader) string {
 	length := readInt32(reader)
 	buffer := make([]byte, length)
 	read_length, err := reader.Read(buffer)
-	if err != nil {
+	if err != nil && err != io.EOF {
 		panic(err)
 	}
 	if read_length != int(length) {
@@ -1440,7 +1441,7 @@ func (_ FfiDestroyerFeaturesDefaultsBuilder) Destroy(value *FeaturesDefaultsBuil
 
 type TelioInterface interface {
 	// Wrapper for `telio_connect_to_exit_node_with_id` that doesn't take an identifier
-	ConnectToExitNode(publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) *TelioError
+	ConnectToExitNode(publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) error
 	// Connects to the VPN exit node with post quantum tunnel
 	//
 	// Routing should be set by the user accordingly.
@@ -1472,7 +1473,7 @@ type TelioInterface interface {
 	// );
 	// ```
 
-	ConnectToExitNodePostquantum(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint SocketAddr) *TelioError
+	ConnectToExitNodePostquantum(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint SocketAddr) error
 	// Connects to an exit node. (VPN if endpoint is not NULL, Peer if endpoint is NULL)
 	//
 	// Routing should be set by the user accordingly.
@@ -1512,17 +1513,17 @@ type TelioInterface interface {
 	// );
 	// ```
 
-	ConnectToExitNodeWithId(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) *TelioError
+	ConnectToExitNodeWithId(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) error
 	// Disables magic DNS if it was enabled.
-	DisableMagicDns() *TelioError
+	DisableMagicDns() error
 	// Disconnects from specified exit node.
 	//
 	// # Parameters
 	// - `public_key`: WireGuard public key for exit node.
 
-	DisconnectFromExitNode(publicKey PublicKey) *TelioError
+	DisconnectFromExitNode(publicKey PublicKey) error
 	// Disconnects from all exit nodes with no parameters required.
-	DisconnectFromExitNodes() *TelioError
+	DisconnectFromExitNodes() error
 	// Enables magic DNS if it was not enabled yet,
 	//
 	// Routing should be set by the user accordingly.
@@ -1539,45 +1540,45 @@ type TelioInterface interface {
 	// // Enable magic dns with no forward server
 	// telio.enable_magic_dns("[\"\"]");
 	// ```
-	EnableMagicDns(forwardServers []IpAddr) *TelioError
+	EnableMagicDns(forwardServers []IpAddr) error
 	// For testing only.
-	GenerateStackPanic() *TelioError
+	GenerateStackPanic() error
 	// For testing only.
-	GenerateThreadPanic() *TelioError
+	GenerateThreadPanic() error
 	// get device luid.
 	GetAdapterLuid() uint64
 	// Get last error's message length, including trailing null
 	GetLastError() string
-	GetNat(ip string, port uint16) (NatType, *TelioError)
+	GetNat(ip string, port uint16) (NatType, error)
 	GetSecretKey() SecretKey
 	GetStatusMap() []TelioNode
-	IsRunning() (bool, *TelioError)
+	IsRunning() (bool, error)
 	// Notify telio with network state changes.
 	//
 	// # Parameters
 	// - `network_info`: Json encoded network sate info.
 	//                   Format to be decided, pass empty string for now.
-	NotifyNetworkChange(networkInfo string) *TelioError
+	NotifyNetworkChange(networkInfo string) error
 	// Notify telio when system goes to sleep.
-	NotifySleep() *TelioError
+	NotifySleep() error
 	// Notify telio when system wakes up.
-	NotifyWakeup() *TelioError
-	ReceivePing() (string, *TelioError)
+	NotifyWakeup() error
+	ReceivePing() (string, error)
 	// Sets fmark for started device.
 	//
 	// # Parameters
 	// - `fwmark`: unsigned 32-bit integer
 
-	SetFwmark(fwmark uint32) *TelioError
+	SetFwmark(fwmark uint32) error
 	// Enables meshnet if it is not enabled yet.
 	// In case meshnet is enabled, this updates the peer map with the specified one.
 	//
 	// # Parameters
 	// - `cfg`: Output of GET /v1/meshnet/machines/{machineIdentifier}/map
 
-	SetMeshnet(cfg Config) *TelioError
+	SetMeshnet(cfg Config) error
 	// Disables the meshnet functionality by closing all the connections.
-	SetMeshnetOff() *TelioError
+	SetMeshnetOff() error
 	// Sets private key for started device.
 	//
 	// If private_key is not set, device will never connect.
@@ -1585,19 +1586,19 @@ type TelioInterface interface {
 	// # Parameters
 	// - `private_key`: WireGuard private key.
 
-	SetSecretKey(secretKey SecretKey) *TelioError
+	SetSecretKey(secretKey SecretKey) error
 	// Completely stop and uninit telio lib.
-	Shutdown() *TelioError
+	Shutdown() error
 	// Explicitly deallocate telio object and shutdown async rt.
-	ShutdownHard() *TelioError
+	ShutdownHard() error
 	// Start telio with specified adapter.
 	//
 	// Adapter will attempt to open its own tunnel.
-	Start(secretKey SecretKey, adapter TelioAdapterType) *TelioError
+	Start(secretKey SecretKey, adapter TelioAdapterType) error
 	// Start telio with specified adapter and name.
 	//
 	// Adapter will attempt to open its own tunnel.
-	StartNamed(secretKey SecretKey, adapter TelioAdapterType, name string) *TelioError
+	StartNamed(secretKey SecretKey, adapter TelioAdapterType, name string) error
 	// Start telio device with specified adapter and already open tunnel.
 	//
 	// Telio will take ownership of tunnel , and close it on stop.
@@ -1607,11 +1608,11 @@ type TelioInterface interface {
 	// - `adapter`: Adapter type.
 	// - `tun`: A valid filedescriptor to tun device.
 
-	StartWithTun(secretKey SecretKey, adapter TelioAdapterType, tun int32) *TelioError
+	StartWithTun(secretKey SecretKey, adapter TelioAdapterType, tun int32) error
 	// Stop telio device.
-	Stop() *TelioError
-	TriggerAnalyticsEvent() *TelioError
-	TriggerQosCollection() *TelioError
+	Stop() error
+	TriggerAnalyticsEvent() error
+	TriggerQosCollection() error
 }
 type Telio struct {
 	ffiObject FfiObject
@@ -1620,7 +1621,7 @@ type Telio struct {
 // # Parameters
 // - `events`:     Events callback
 // - `features`:   JSON string of enabled features
-func NewTelio(features Features, events TelioEventCb) (*Telio, *TelioError) {
+func NewTelio(features Features, events TelioEventCb) (*Telio, error) {
 	_uniffiRV, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
 		return C.uniffi_telio_fn_constructor_telio_new(FfiConverterFeaturesINSTANCE.Lower(features), FfiConverterCallbackInterfaceTelioEventCbINSTANCE.Lower(events),_uniffiStatus)
 	})
@@ -1628,7 +1629,7 @@ func NewTelio(features Features, events TelioEventCb) (*Telio, *TelioError) {
 			var _uniffiDefaultValue *Telio
 			return _uniffiDefaultValue, _uniffiErr
 		} else {
-			return FfiConverterTelioINSTANCE.Lift(_uniffiRV), _uniffiErr
+			return FfiConverterTelioINSTANCE.Lift(_uniffiRV), nil
 		}
 }
 
@@ -1638,7 +1639,7 @@ func NewTelio(features Features, events TelioEventCb) (*Telio, *TelioError) {
 // - `events`:     Events callback
 // - `features`:   JSON string of enabled features
 // - `protect`:    Callback executed after exit-node connect (for VpnService::protectFromVpn())
-func TelioNewWithProtect(features Features, events TelioEventCb, protect TelioProtectCb) (*Telio, *TelioError) {
+func TelioNewWithProtect(features Features, events TelioEventCb, protect TelioProtectCb) (*Telio, error) {
 	_uniffiRV, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
 		return C.uniffi_telio_fn_constructor_telio_new_with_protect(FfiConverterFeaturesINSTANCE.Lower(features), FfiConverterCallbackInterfaceTelioEventCbINSTANCE.Lower(events), FfiConverterCallbackInterfaceTelioProtectCbINSTANCE.Lower(protect),_uniffiStatus)
 	})
@@ -1646,14 +1647,14 @@ func TelioNewWithProtect(features Features, events TelioEventCb, protect TelioPr
 			var _uniffiDefaultValue *Telio
 			return _uniffiDefaultValue, _uniffiErr
 		} else {
-			return FfiConverterTelioINSTANCE.Lift(_uniffiRV), _uniffiErr
+			return FfiConverterTelioINSTANCE.Lift(_uniffiRV), nil
 		}
 }
 
 
 
 // Wrapper for `telio_connect_to_exit_node_with_id` that doesn't take an identifier
-func (_self *Telio) ConnectToExitNode(publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) *TelioError {
+func (_self *Telio) ConnectToExitNode(publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1661,7 +1662,7 @@ func (_self *Telio) ConnectToExitNode(publicKey PublicKey, allowedIps *[]IpNet, 
 		_pointer,FfiConverterTypePublicKeyINSTANCE.Lower(publicKey), FfiConverterOptionalSequenceTypeIpNetINSTANCE.Lower(allowedIps), FfiConverterOptionalTypeSocketAddrINSTANCE.Lower(endpoint),_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Connects to the VPN exit node with post quantum tunnel
@@ -1695,7 +1696,7 @@ func (_self *Telio) ConnectToExitNode(publicKey PublicKey, allowedIps *[]IpNet, 
 // );
 // ```
 
-func (_self *Telio) ConnectToExitNodePostquantum(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint SocketAddr) *TelioError {
+func (_self *Telio) ConnectToExitNodePostquantum(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint SocketAddr) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1703,7 +1704,7 @@ func (_self *Telio) ConnectToExitNodePostquantum(identifier *string, publicKey P
 		_pointer,FfiConverterOptionalStringINSTANCE.Lower(identifier), FfiConverterTypePublicKeyINSTANCE.Lower(publicKey), FfiConverterOptionalSequenceTypeIpNetINSTANCE.Lower(allowedIps), FfiConverterTypeSocketAddrINSTANCE.Lower(endpoint),_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Connects to an exit node. (VPN if endpoint is not NULL, Peer if endpoint is NULL)
@@ -1745,7 +1746,7 @@ func (_self *Telio) ConnectToExitNodePostquantum(identifier *string, publicKey P
 // );
 // ```
 
-func (_self *Telio) ConnectToExitNodeWithId(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) *TelioError {
+func (_self *Telio) ConnectToExitNodeWithId(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1753,11 +1754,11 @@ func (_self *Telio) ConnectToExitNodeWithId(identifier *string, publicKey Public
 		_pointer,FfiConverterOptionalStringINSTANCE.Lower(identifier), FfiConverterTypePublicKeyINSTANCE.Lower(publicKey), FfiConverterOptionalSequenceTypeIpNetINSTANCE.Lower(allowedIps), FfiConverterOptionalTypeSocketAddrINSTANCE.Lower(endpoint),_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Disables magic DNS if it was enabled.
-func (_self *Telio) DisableMagicDns() *TelioError {
+func (_self *Telio) DisableMagicDns() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1765,7 +1766,7 @@ func (_self *Telio) DisableMagicDns() *TelioError {
 		_pointer,_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Disconnects from specified exit node.
@@ -1773,7 +1774,7 @@ func (_self *Telio) DisableMagicDns() *TelioError {
 // # Parameters
 // - `public_key`: WireGuard public key for exit node.
 
-func (_self *Telio) DisconnectFromExitNode(publicKey PublicKey) *TelioError {
+func (_self *Telio) DisconnectFromExitNode(publicKey PublicKey) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1781,11 +1782,11 @@ func (_self *Telio) DisconnectFromExitNode(publicKey PublicKey) *TelioError {
 		_pointer,FfiConverterTypePublicKeyINSTANCE.Lower(publicKey),_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Disconnects from all exit nodes with no parameters required.
-func (_self *Telio) DisconnectFromExitNodes() *TelioError {
+func (_self *Telio) DisconnectFromExitNodes() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1793,7 +1794,7 @@ func (_self *Telio) DisconnectFromExitNodes() *TelioError {
 		_pointer,_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Enables magic DNS if it was not enabled yet,
@@ -1812,7 +1813,7 @@ func (_self *Telio) DisconnectFromExitNodes() *TelioError {
 // // Enable magic dns with no forward server
 // telio.enable_magic_dns("[\"\"]");
 // ```
-func (_self *Telio) EnableMagicDns(forwardServers []IpAddr) *TelioError {
+func (_self *Telio) EnableMagicDns(forwardServers []IpAddr) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1820,11 +1821,11 @@ func (_self *Telio) EnableMagicDns(forwardServers []IpAddr) *TelioError {
 		_pointer,FfiConverterSequenceTypeIpAddrINSTANCE.Lower(forwardServers),_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // For testing only.
-func (_self *Telio) GenerateStackPanic() *TelioError {
+func (_self *Telio) GenerateStackPanic() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1832,11 +1833,11 @@ func (_self *Telio) GenerateStackPanic() *TelioError {
 		_pointer,_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // For testing only.
-func (_self *Telio) GenerateThreadPanic() *TelioError {
+func (_self *Telio) GenerateThreadPanic() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1844,7 +1845,7 @@ func (_self *Telio) GenerateThreadPanic() *TelioError {
 		_pointer,_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // get device luid.
@@ -1869,7 +1870,7 @@ func (_self *Telio) GetLastError() string {
 	}))
 }
 
-func (_self *Telio) GetNat(ip string, port uint16) (NatType, *TelioError) {
+func (_self *Telio) GetNat(ip string, port uint16) (NatType, error) {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_uniffiRV, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) RustBufferI {
@@ -1882,7 +1883,7 @@ func (_self *Telio) GetNat(ip string, port uint16) (NatType, *TelioError) {
 			var _uniffiDefaultValue NatType
 			return _uniffiDefaultValue, _uniffiErr
 		} else {
-			return FfiConverterNatTypeINSTANCE.Lift(_uniffiRV), _uniffiErr
+			return FfiConverterNatTypeINSTANCE.Lift(_uniffiRV), nil
 		}
 }
 
@@ -1908,7 +1909,7 @@ func (_self *Telio) GetStatusMap() []TelioNode {
 	}))
 }
 
-func (_self *Telio) IsRunning() (bool, *TelioError) {
+func (_self *Telio) IsRunning() (bool, error) {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_uniffiRV, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) C.int8_t {
@@ -1919,7 +1920,7 @@ func (_self *Telio) IsRunning() (bool, *TelioError) {
 			var _uniffiDefaultValue bool
 			return _uniffiDefaultValue, _uniffiErr
 		} else {
-			return FfiConverterBoolINSTANCE.Lift(_uniffiRV), _uniffiErr
+			return FfiConverterBoolINSTANCE.Lift(_uniffiRV), nil
 		}
 }
 
@@ -1928,7 +1929,7 @@ func (_self *Telio) IsRunning() (bool, *TelioError) {
 // # Parameters
 // - `network_info`: Json encoded network sate info.
 //                   Format to be decided, pass empty string for now.
-func (_self *Telio) NotifyNetworkChange(networkInfo string) *TelioError {
+func (_self *Telio) NotifyNetworkChange(networkInfo string) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1936,11 +1937,11 @@ func (_self *Telio) NotifyNetworkChange(networkInfo string) *TelioError {
 		_pointer,FfiConverterStringINSTANCE.Lower(networkInfo),_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Notify telio when system goes to sleep.
-func (_self *Telio) NotifySleep() *TelioError {
+func (_self *Telio) NotifySleep() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1948,11 +1949,11 @@ func (_self *Telio) NotifySleep() *TelioError {
 		_pointer,_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Notify telio when system wakes up.
-func (_self *Telio) NotifyWakeup() *TelioError {
+func (_self *Telio) NotifyWakeup() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1960,10 +1961,10 @@ func (_self *Telio) NotifyWakeup() *TelioError {
 		_pointer,_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
-func (_self *Telio) ReceivePing() (string, *TelioError) {
+func (_self *Telio) ReceivePing() (string, error) {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_uniffiRV, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) RustBufferI {
@@ -1976,7 +1977,7 @@ func (_self *Telio) ReceivePing() (string, *TelioError) {
 			var _uniffiDefaultValue string
 			return _uniffiDefaultValue, _uniffiErr
 		} else {
-			return FfiConverterStringINSTANCE.Lift(_uniffiRV), _uniffiErr
+			return FfiConverterStringINSTANCE.Lift(_uniffiRV), nil
 		}
 }
 
@@ -1985,7 +1986,7 @@ func (_self *Telio) ReceivePing() (string, *TelioError) {
 // # Parameters
 // - `fwmark`: unsigned 32-bit integer
 
-func (_self *Telio) SetFwmark(fwmark uint32) *TelioError {
+func (_self *Telio) SetFwmark(fwmark uint32) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -1993,7 +1994,7 @@ func (_self *Telio) SetFwmark(fwmark uint32) *TelioError {
 		_pointer,FfiConverterUint32INSTANCE.Lower(fwmark),_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Enables meshnet if it is not enabled yet.
@@ -2002,7 +2003,7 @@ func (_self *Telio) SetFwmark(fwmark uint32) *TelioError {
 // # Parameters
 // - `cfg`: Output of GET /v1/meshnet/machines/{machineIdentifier}/map
 
-func (_self *Telio) SetMeshnet(cfg Config) *TelioError {
+func (_self *Telio) SetMeshnet(cfg Config) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2010,11 +2011,11 @@ func (_self *Telio) SetMeshnet(cfg Config) *TelioError {
 		_pointer,FfiConverterConfigINSTANCE.Lower(cfg),_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Disables the meshnet functionality by closing all the connections.
-func (_self *Telio) SetMeshnetOff() *TelioError {
+func (_self *Telio) SetMeshnetOff() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2022,7 +2023,7 @@ func (_self *Telio) SetMeshnetOff() *TelioError {
 		_pointer,_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Sets private key for started device.
@@ -2032,7 +2033,7 @@ func (_self *Telio) SetMeshnetOff() *TelioError {
 // # Parameters
 // - `private_key`: WireGuard private key.
 
-func (_self *Telio) SetSecretKey(secretKey SecretKey) *TelioError {
+func (_self *Telio) SetSecretKey(secretKey SecretKey) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2040,11 +2041,11 @@ func (_self *Telio) SetSecretKey(secretKey SecretKey) *TelioError {
 		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey),_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Completely stop and uninit telio lib.
-func (_self *Telio) Shutdown() *TelioError {
+func (_self *Telio) Shutdown() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2052,11 +2053,11 @@ func (_self *Telio) Shutdown() *TelioError {
 		_pointer,_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Explicitly deallocate telio object and shutdown async rt.
-func (_self *Telio) ShutdownHard() *TelioError {
+func (_self *Telio) ShutdownHard() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2064,13 +2065,13 @@ func (_self *Telio) ShutdownHard() *TelioError {
 		_pointer,_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Start telio with specified adapter.
 //
 // Adapter will attempt to open its own tunnel.
-func (_self *Telio) Start(secretKey SecretKey, adapter TelioAdapterType) *TelioError {
+func (_self *Telio) Start(secretKey SecretKey, adapter TelioAdapterType) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2078,13 +2079,13 @@ func (_self *Telio) Start(secretKey SecretKey, adapter TelioAdapterType) *TelioE
 		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey), FfiConverterTelioAdapterTypeINSTANCE.Lower(adapter),_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Start telio with specified adapter and name.
 //
 // Adapter will attempt to open its own tunnel.
-func (_self *Telio) StartNamed(secretKey SecretKey, adapter TelioAdapterType, name string) *TelioError {
+func (_self *Telio) StartNamed(secretKey SecretKey, adapter TelioAdapterType, name string) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2092,7 +2093,7 @@ func (_self *Telio) StartNamed(secretKey SecretKey, adapter TelioAdapterType, na
 		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey), FfiConverterTelioAdapterTypeINSTANCE.Lower(adapter), FfiConverterStringINSTANCE.Lower(name),_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Start telio device with specified adapter and already open tunnel.
@@ -2104,7 +2105,7 @@ func (_self *Telio) StartNamed(secretKey SecretKey, adapter TelioAdapterType, na
 // - `adapter`: Adapter type.
 // - `tun`: A valid filedescriptor to tun device.
 
-func (_self *Telio) StartWithTun(secretKey SecretKey, adapter TelioAdapterType, tun int32) *TelioError {
+func (_self *Telio) StartWithTun(secretKey SecretKey, adapter TelioAdapterType, tun int32) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2112,11 +2113,11 @@ func (_self *Telio) StartWithTun(secretKey SecretKey, adapter TelioAdapterType, 
 		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey), FfiConverterTelioAdapterTypeINSTANCE.Lower(adapter), FfiConverterInt32INSTANCE.Lower(tun),_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
 // Stop telio device.
-func (_self *Telio) Stop() *TelioError {
+func (_self *Telio) Stop() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2124,10 +2125,10 @@ func (_self *Telio) Stop() *TelioError {
 		_pointer,_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
-func (_self *Telio) TriggerAnalyticsEvent() *TelioError {
+func (_self *Telio) TriggerAnalyticsEvent() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2135,10 +2136,10 @@ func (_self *Telio) TriggerAnalyticsEvent() *TelioError {
 		_pointer,_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 
-func (_self *Telio) TriggerQosCollection() *TelioError {
+func (_self *Telio) TriggerQosCollection() error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2146,7 +2147,7 @@ func (_self *Telio) TriggerQosCollection() *TelioError {
 		_pointer,_uniffiStatus)
 		return false
 	})
-		return _uniffiErr
+		return _uniffiErr.AsError()
 }
 func (object *Telio) Destroy() {
 	runtime.SetFinalizer(object, nil)
@@ -4606,7 +4607,7 @@ func (_ FfiDestroyerTelioLogLevel) Destroy(value TelioLogLevel) {
 
 type TelioEventCb interface {
 	
-	Event(payload Event) *TelioError
+	Event(payload Event) error
 	
 }
 
@@ -4707,22 +4708,22 @@ func telio_cgo_dispatchCallbackInterfaceTelioEventCbMethod0(uniffiHandle C.uint6
 	}),
     )
 	
-    if err != nil {
-		// The only way to bypass an unexpected error is to bypass pointer to an empty
-		// instance of the error
-		if err.err == nil {
+    
+	if err != nil {
+		var actualError *TelioError
+		if errors.As(err, &actualError) {
+			*callStatus = C.RustCallStatus {
+				code: C.int8_t(uniffiCallbackResultError),
+				errorBuf: FfiConverterTelioErrorINSTANCE.Lower(actualError),
+			}
+		} else {
 			*callStatus = C.RustCallStatus {
 				code: C.int8_t(uniffiCallbackUnexpectedResultError),
 			}
-			return
-		}
-		
-		*callStatus = C.RustCallStatus {
-			code: C.int8_t(uniffiCallbackResultError),
-			errorBuf: FfiConverterTelioErrorINSTANCE.Lower(err),
 		}
 		return
 	}
+
 
 	
 }
@@ -4746,7 +4747,7 @@ func (c FfiConverterCallbackInterfaceTelioEventCb) register() {
 
 type TelioLoggerCb interface {
 	
-	Log(logLevel TelioLogLevel, payload string) *TelioError
+	Log(logLevel TelioLogLevel, payload string) error
 	
 }
 
@@ -4805,22 +4806,22 @@ func telio_cgo_dispatchCallbackInterfaceTelioLoggerCbMethod0(uniffiHandle C.uint
 	}),
     )
 	
-    if err != nil {
-		// The only way to bypass an unexpected error is to bypass pointer to an empty
-		// instance of the error
-		if err.err == nil {
+    
+	if err != nil {
+		var actualError *TelioError
+		if errors.As(err, &actualError) {
+			*callStatus = C.RustCallStatus {
+				code: C.int8_t(uniffiCallbackResultError),
+				errorBuf: FfiConverterTelioErrorINSTANCE.Lower(actualError),
+			}
+		} else {
 			*callStatus = C.RustCallStatus {
 				code: C.int8_t(uniffiCallbackUnexpectedResultError),
 			}
-			return
-		}
-		
-		*callStatus = C.RustCallStatus {
-			code: C.int8_t(uniffiCallbackResultError),
-			errorBuf: FfiConverterTelioErrorINSTANCE.Lower(err),
 		}
 		return
 	}
+
 
 	
 }
@@ -4844,7 +4845,7 @@ func (c FfiConverterCallbackInterfaceTelioLoggerCb) register() {
 
 type TelioProtectCb interface {
 	
-	Protect(socketId int32) *TelioError
+	Protect(socketId int32) error
 	
 }
 
@@ -4898,22 +4899,22 @@ func telio_cgo_dispatchCallbackInterfaceTelioProtectCbMethod0(uniffiHandle C.uin
         FfiConverterInt32INSTANCE.Lift(socketId),
     )
 	
-    if err != nil {
-		// The only way to bypass an unexpected error is to bypass pointer to an empty
-		// instance of the error
-		if err.err == nil {
+    
+	if err != nil {
+		var actualError *TelioError
+		if errors.As(err, &actualError) {
+			*callStatus = C.RustCallStatus {
+				code: C.int8_t(uniffiCallbackResultError),
+				errorBuf: FfiConverterTelioErrorINSTANCE.Lower(actualError),
+			}
+		} else {
 			*callStatus = C.RustCallStatus {
 				code: C.int8_t(uniffiCallbackUnexpectedResultError),
 			}
-			return
-		}
-		
-		*callStatus = C.RustCallStatus {
-			code: C.int8_t(uniffiCallbackResultError),
-			errorBuf: FfiConverterTelioErrorINSTANCE.Lower(err),
 		}
 		return
 	}
+
 
 	
 }
@@ -6523,7 +6524,7 @@ func AddTimestampsToLogs()  {
 
 // Utility function to create a `Features` object from a json-string
 // Passing an empty string will return the default feature config
-func DeserializeFeatureConfig(fstr string) (Features, *TelioError) {
+func DeserializeFeatureConfig(fstr string) (Features, error) {
 	_uniffiRV, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) RustBufferI {
 		return GoRustBuffer {
 		inner: C.uniffi_telio_fn_func_deserialize_feature_config(FfiConverterStringINSTANCE.Lower(fstr),_uniffiStatus),
@@ -6533,12 +6534,12 @@ func DeserializeFeatureConfig(fstr string) (Features, *TelioError) {
 			var _uniffiDefaultValue Features
 			return _uniffiDefaultValue, _uniffiErr
 		} else {
-			return FfiConverterFeaturesINSTANCE.Lift(_uniffiRV), _uniffiErr
+			return FfiConverterFeaturesINSTANCE.Lift(_uniffiRV), nil
 		}
 }
 
 // Utility function to create a `Config` object from a json-string
-func DeserializeMeshnetConfig(cfgStr string) (Config, *TelioError) {
+func DeserializeMeshnetConfig(cfgStr string) (Config, error) {
 	_uniffiRV, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) RustBufferI {
 		return GoRustBuffer {
 		inner: C.uniffi_telio_fn_func_deserialize_meshnet_config(FfiConverterStringINSTANCE.Lower(cfgStr),_uniffiStatus),
@@ -6548,7 +6549,7 @@ func DeserializeMeshnetConfig(cfgStr string) (Config, *TelioError) {
 			var _uniffiDefaultValue Config
 			return _uniffiDefaultValue, _uniffiErr
 		} else {
-			return FfiConverterConfigINSTANCE.Lift(_uniffiRV), _uniffiErr
+			return FfiConverterConfigINSTANCE.Lift(_uniffiRV), nil
 		}
 }
 
