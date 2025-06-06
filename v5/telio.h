@@ -776,6 +776,11 @@ RustBuffer uniffi_telio_fn_func_get_version_tag(RustCallStatus *out_status
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_SERIALIZE_FEATURE_CONFIG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_SERIALIZE_FEATURE_CONFIG
+RustBuffer uniffi_telio_fn_func_serialize_feature_config(RustBuffer features, RustCallStatus *out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_SET_GLOBAL_LOGGER
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_SET_GLOBAL_LOGGER
 void uniffi_telio_fn_func_set_global_logger(RustBuffer log_level, uint64_t logger, RustCallStatus *out_status
@@ -1118,6 +1123,12 @@ uint16_t uniffi_telio_checksum_func_get_default_feature_config(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GET_VERSION_TAG
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GET_VERSION_TAG
 uint16_t uniffi_telio_checksum_func_get_version_tag(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_SERIALIZE_FEATURE_CONFIG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_SERIALIZE_FEATURE_CONFIG
+uint16_t uniffi_telio_checksum_func_serialize_feature_config(void
     
 );
 #endif

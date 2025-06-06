@@ -444,6 +444,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_func_serialize_feature_config()
+	})
+	if checksum != 64562 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_func_serialize_feature_config: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_func_set_global_logger()
 	})
 	if checksum != 47236 {
@@ -6605,6 +6614,21 @@ func GetVersionTag() string {
 		inner: C.uniffi_telio_fn_func_get_version_tag(_uniffiStatus),
 	}
 	}))
+}
+
+// Utility function to create a json-string from a Features instance
+func SerializeFeatureConfig(features Features) (string, error) {
+	_uniffiRV, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) RustBufferI {
+		return GoRustBuffer {
+		inner: C.uniffi_telio_fn_func_serialize_feature_config(FfiConverterFeaturesINSTANCE.Lower(features),_uniffiStatus),
+	}
+	})
+		if _uniffiErr != nil {
+			var _uniffiDefaultValue string
+			return _uniffiDefaultValue, _uniffiErr
+		} else {
+			return FfiConverterStringINSTANCE.Lift(_uniffiRV), nil
+		}
 }
 
 // Set the global logger.
