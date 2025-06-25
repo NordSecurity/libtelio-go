@@ -24,24 +24,10 @@
 // ⚠️ increment the version suffix in all instances of UNIFFI_SHARED_HEADER_V6 in this file.           ⚠️
 
 typedef struct RustBuffer {
-	int32_t capacity;
-	int32_t len;
+	uint64_t capacity;
+	uint64_t len;
 	uint8_t *data;
 } RustBuffer;
-
-typedef int32_t (*ForeignCallback)(uint64_t, int32_t, uint8_t *, int32_t, RustBuffer *);
-
-// Task defined in Rust that Go executes
-typedef void (*RustTaskCallback)(const void *, int8_t);
-
-// Callback to execute Rust tasks using a Go routine
-//
-// Args:
-//   executor: ForeignExecutor lowered into a uint64_t value
-//   delay: Delay in MS
-//   task: RustTaskCallback to call
-//   task_data: data to pass the task callback
-typedef int8_t (*ForeignExecutorCallback)(uint64_t, uint32_t, RustTaskCallback, void *);
 
 typedef struct ForeignBytes {
 	int32_t len;
@@ -54,947 +40,1443 @@ typedef struct RustCallStatus {
 	RustBuffer errorBuf;
 } RustCallStatus;
 
-// Continuation callback for UniFFI Futures
-typedef void (*RustFutureContinuation)(void * , int8_t);
-
-// ⚠️ Attention: If you change this #else block (ending in `#endif // def UNIFFI_SHARED_H`) you *must* ⚠️
-// ⚠️ increment the version suffix in all instances of UNIFFI_SHARED_HEADER_V6 in this file.           ⚠️
-#endif // def UNIFFI_SHARED_H
-
-// Needed because we can't execute the callback directly from go.
-void cgo_rust_task_callback_bridge_telio(RustTaskCallback, const void *, int8_t);
-
-int8_t uniffiForeignExecutorCallbacktelio(uint64_t, uint32_t, RustTaskCallback, void*);
-
-void uniffiFutureContinuationCallbacktelio(void*, int8_t);
-
-void uniffi_telio_fn_free_featuresdefaultsbuilder(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_constructor_featuresdefaultsbuilder_new(
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_method_featuresdefaultsbuilder_build(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_batching(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_battery_saving_defaults(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_direct(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_firewall_connection_reset(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_flush_events_on_stop_timeout_seconds(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_ipv6(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_lana(
-	void* ptr,
-	RustBuffer event_path,
-	int8_t is_prod,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_link_detection(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_multicast(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nicknames(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nurse(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_pmtu_discovery(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_validate_keys(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_set_skt_buffer_size(
-	void* ptr,
-	uint32_t skt_buffer_size,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_free_telio(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_constructor_telio_new(
-	RustBuffer features,
-	uint64_t events,
-	RustCallStatus* out_status
-);
-
-void* uniffi_telio_fn_constructor_telio_new_with_protect(
-	RustBuffer features,
-	uint64_t events,
-	uint64_t protect,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_connect_to_exit_node(
-	void* ptr,
-	RustBuffer public_key,
-	RustBuffer allowed_ips,
-	RustBuffer endpoint,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_connect_to_exit_node_postquantum(
-	void* ptr,
-	RustBuffer identifier,
-	RustBuffer public_key,
-	RustBuffer allowed_ips,
-	RustBuffer endpoint,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_connect_to_exit_node_with_id(
-	void* ptr,
-	RustBuffer identifier,
-	RustBuffer public_key,
-	RustBuffer allowed_ips,
-	RustBuffer endpoint,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_disable_magic_dns(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_disconnect_from_exit_node(
-	void* ptr,
-	RustBuffer public_key,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_disconnect_from_exit_nodes(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_enable_magic_dns(
-	void* ptr,
-	RustBuffer forward_servers,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_generate_stack_panic(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_generate_thread_panic(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-uint64_t uniffi_telio_fn_method_telio_get_adapter_luid(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_method_telio_get_last_error(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_method_telio_get_nat(
-	void* ptr,
-	RustBuffer ip,
-	uint16_t port,
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_method_telio_get_secret_key(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_method_telio_get_status_map(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-int8_t uniffi_telio_fn_method_telio_is_running(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_notify_network_change(
-	void* ptr,
-	RustBuffer network_info,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_notify_sleep(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_notify_wakeup(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-uint32_t uniffi_telio_fn_method_telio_probe_pmtu(
-	void* ptr,
-	RustBuffer host,
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_method_telio_receive_ping(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_set_fwmark(
-	void* ptr,
-	uint32_t fwmark,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_set_meshnet(
-	void* ptr,
-	RustBuffer cfg,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_set_meshnet_off(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_set_secret_key(
-	void* ptr,
-	RustBuffer secret_key,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_shutdown(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_shutdown_hard(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_start(
-	void* ptr,
-	RustBuffer secret_key,
-	RustBuffer adapter,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_start_named(
-	void* ptr,
-	RustBuffer secret_key,
-	RustBuffer adapter,
-	RustBuffer name,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_start_with_tun(
-	void* ptr,
-	RustBuffer secret_key,
-	RustBuffer adapter,
-	int32_t tun,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_stop(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_trigger_analytics_event(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_method_telio_trigger_qos_collection(
-	void* ptr,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_init_callback_telioeventcb(
-	ForeignCallback callback_stub,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_init_callback_teliologgercb(
-	ForeignCallback callback_stub,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_init_callback_telioprotectcb(
-	ForeignCallback callback_stub,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_func_add_timestamps_to_logs(
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_func_deserialize_feature_config(
-	RustBuffer fstr,
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_func_deserialize_meshnet_config(
-	RustBuffer cfg_str,
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_func_generate_public_key(
-	RustBuffer secret_key,
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_func_generate_secret_key(
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_func_get_commit_sha(
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_func_get_default_adapter(
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_func_get_default_feature_config(
-	RustCallStatus* out_status
-);
-
-RustBuffer uniffi_telio_fn_func_get_version_tag(
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_func_set_global_logger(
-	RustBuffer log_level,
-	uint64_t logger,
-	RustCallStatus* out_status
-);
-
-void uniffi_telio_fn_func_unset_global_logger(
-	RustCallStatus* out_status
-);
-
-RustBuffer ffi_telio_rustbuffer_alloc(
-	int32_t size,
-	RustCallStatus* out_status
-);
-
-RustBuffer ffi_telio_rustbuffer_from_bytes(
-	ForeignBytes bytes,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rustbuffer_free(
-	RustBuffer buf,
-	RustCallStatus* out_status
-);
-
-RustBuffer ffi_telio_rustbuffer_reserve(
-	RustBuffer buf,
-	int32_t additional,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_continuation_callback_set(
-	RustFutureContinuation callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_u8(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_u8(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_u8(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-uint8_t ffi_telio_rust_future_complete_u8(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_i8(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_i8(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_i8(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-int8_t ffi_telio_rust_future_complete_i8(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_u16(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_u16(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_u16(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-uint16_t ffi_telio_rust_future_complete_u16(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_i16(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_i16(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_i16(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-int16_t ffi_telio_rust_future_complete_i16(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_u32(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_u32(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_u32(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-uint32_t ffi_telio_rust_future_complete_u32(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_i32(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_i32(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_i32(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-int32_t ffi_telio_rust_future_complete_i32(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_u64(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_u64(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_u64(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-uint64_t ffi_telio_rust_future_complete_u64(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_i64(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_i64(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_i64(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-int64_t ffi_telio_rust_future_complete_i64(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_f32(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_f32(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_f32(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-float ffi_telio_rust_future_complete_f32(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_f64(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_f64(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_f64(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-double ffi_telio_rust_future_complete_f64(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_pointer(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_pointer(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_pointer(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void* ffi_telio_rust_future_complete_pointer(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_rust_buffer(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_rust_buffer(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_rust_buffer(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-RustBuffer ffi_telio_rust_future_complete_rust_buffer(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_poll_void(
-	void* handle,
-	void* uniffi_callback,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_cancel_void(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_free_void(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-void ffi_telio_rust_future_complete_void(
-	void* handle,
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_func_add_timestamps_to_logs(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_func_deserialize_feature_config(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_func_deserialize_meshnet_config(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_func_generate_public_key(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_func_generate_secret_key(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_func_get_commit_sha(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_func_get_default_adapter(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_func_get_default_feature_config(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_func_get_version_tag(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_func_set_global_logger(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_func_unset_global_logger(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_build(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_batching(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_battery_saving_defaults(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_direct(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall_connection_reset(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_flush_events_on_stop_timeout_seconds(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_ipv6(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_lana(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_link_detection(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_multicast(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nicknames(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nurse(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_pmtu_discovery(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_validate_keys(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_set_skt_buffer_size(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_connect_to_exit_node(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_connect_to_exit_node_postquantum(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_connect_to_exit_node_with_id(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_disable_magic_dns(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_disconnect_from_exit_node(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_disconnect_from_exit_nodes(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_enable_magic_dns(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_generate_stack_panic(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_generate_thread_panic(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_get_adapter_luid(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_get_last_error(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_get_nat(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_get_secret_key(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_get_status_map(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_is_running(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_notify_network_change(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_notify_sleep(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_notify_wakeup(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_probe_pmtu(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_receive_ping(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_set_fwmark(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_set_meshnet(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_set_meshnet_off(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_set_secret_key(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_shutdown(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_shutdown_hard(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_start(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_start_named(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_start_with_tun(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_stop(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_trigger_analytics_event(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telio_trigger_qos_collection(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_constructor_featuresdefaultsbuilder_new(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_constructor_telio_new(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_constructor_telio_new_with_protect(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telioeventcb_event(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_teliologgercb_log(
-	RustCallStatus* out_status
-);
-
-uint16_t uniffi_telio_checksum_method_telioprotectcb_protect(
-	RustCallStatus* out_status
-);
-
-uint32_t ffi_telio_uniffi_contract_version(
-	RustCallStatus* out_status
-);
-
-
-int32_t telio_cgo_TelioEventCb(uint64_t, int32_t, uint8_t *, int32_t, RustBuffer *);
-int32_t telio_cgo_TelioLoggerCb(uint64_t, int32_t, uint8_t *, int32_t, RustBuffer *);
-int32_t telio_cgo_TelioProtectCb(uint64_t, int32_t, uint8_t *, int32_t, RustBuffer *);
-
+#endif // UNIFFI_SHARED_H
+
+
+#ifndef UNIFFI_FFIDEF_RUST_FUTURE_CONTINUATION_CALLBACK
+#define UNIFFI_FFIDEF_RUST_FUTURE_CONTINUATION_CALLBACK
+typedef void (*UniffiRustFutureContinuationCallback)(uint64_t data, int8_t poll_result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiRustFutureContinuationCallback(
+				UniffiRustFutureContinuationCallback cb, uint64_t data, int8_t poll_result)
+{
+	return cb(data, poll_result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_FREE
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_FREE
+typedef void (*UniffiForeignFutureFree)(uint64_t handle);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureFree(
+				UniffiForeignFutureFree cb, uint64_t handle)
+{
+	return cb(handle);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_CALLBACK_INTERFACE_FREE
+#define UNIFFI_FFIDEF_CALLBACK_INTERFACE_FREE
+typedef void (*UniffiCallbackInterfaceFree)(uint64_t handle);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiCallbackInterfaceFree(
+				UniffiCallbackInterfaceFree cb, uint64_t handle)
+{
+	return cb(handle);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE
+typedef struct UniffiForeignFuture {
+    uint64_t handle;
+    UniffiForeignFutureFree free;
+} UniffiForeignFuture;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_U8
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_U8
+typedef struct UniffiForeignFutureStructU8 {
+    uint8_t returnValue;
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructU8;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_U8
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_U8
+typedef void (*UniffiForeignFutureCompleteU8)(uint64_t callback_data, UniffiForeignFutureStructU8 result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompleteU8(
+				UniffiForeignFutureCompleteU8 cb, uint64_t callback_data, UniffiForeignFutureStructU8 result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_I8
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_I8
+typedef struct UniffiForeignFutureStructI8 {
+    int8_t returnValue;
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructI8;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_I8
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_I8
+typedef void (*UniffiForeignFutureCompleteI8)(uint64_t callback_data, UniffiForeignFutureStructI8 result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompleteI8(
+				UniffiForeignFutureCompleteI8 cb, uint64_t callback_data, UniffiForeignFutureStructI8 result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_U16
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_U16
+typedef struct UniffiForeignFutureStructU16 {
+    uint16_t returnValue;
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructU16;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_U16
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_U16
+typedef void (*UniffiForeignFutureCompleteU16)(uint64_t callback_data, UniffiForeignFutureStructU16 result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompleteU16(
+				UniffiForeignFutureCompleteU16 cb, uint64_t callback_data, UniffiForeignFutureStructU16 result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_I16
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_I16
+typedef struct UniffiForeignFutureStructI16 {
+    int16_t returnValue;
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructI16;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_I16
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_I16
+typedef void (*UniffiForeignFutureCompleteI16)(uint64_t callback_data, UniffiForeignFutureStructI16 result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompleteI16(
+				UniffiForeignFutureCompleteI16 cb, uint64_t callback_data, UniffiForeignFutureStructI16 result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_U32
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_U32
+typedef struct UniffiForeignFutureStructU32 {
+    uint32_t returnValue;
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructU32;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_U32
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_U32
+typedef void (*UniffiForeignFutureCompleteU32)(uint64_t callback_data, UniffiForeignFutureStructU32 result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompleteU32(
+				UniffiForeignFutureCompleteU32 cb, uint64_t callback_data, UniffiForeignFutureStructU32 result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_I32
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_I32
+typedef struct UniffiForeignFutureStructI32 {
+    int32_t returnValue;
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructI32;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_I32
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_I32
+typedef void (*UniffiForeignFutureCompleteI32)(uint64_t callback_data, UniffiForeignFutureStructI32 result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompleteI32(
+				UniffiForeignFutureCompleteI32 cb, uint64_t callback_data, UniffiForeignFutureStructI32 result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_U64
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_U64
+typedef struct UniffiForeignFutureStructU64 {
+    uint64_t returnValue;
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructU64;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_U64
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_U64
+typedef void (*UniffiForeignFutureCompleteU64)(uint64_t callback_data, UniffiForeignFutureStructU64 result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompleteU64(
+				UniffiForeignFutureCompleteU64 cb, uint64_t callback_data, UniffiForeignFutureStructU64 result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_I64
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_I64
+typedef struct UniffiForeignFutureStructI64 {
+    int64_t returnValue;
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructI64;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_I64
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_I64
+typedef void (*UniffiForeignFutureCompleteI64)(uint64_t callback_data, UniffiForeignFutureStructI64 result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompleteI64(
+				UniffiForeignFutureCompleteI64 cb, uint64_t callback_data, UniffiForeignFutureStructI64 result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_F32
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_F32
+typedef struct UniffiForeignFutureStructF32 {
+    float returnValue;
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructF32;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_F32
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_F32
+typedef void (*UniffiForeignFutureCompleteF32)(uint64_t callback_data, UniffiForeignFutureStructF32 result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompleteF32(
+				UniffiForeignFutureCompleteF32 cb, uint64_t callback_data, UniffiForeignFutureStructF32 result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_F64
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_F64
+typedef struct UniffiForeignFutureStructF64 {
+    double returnValue;
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructF64;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_F64
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_F64
+typedef void (*UniffiForeignFutureCompleteF64)(uint64_t callback_data, UniffiForeignFutureStructF64 result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompleteF64(
+				UniffiForeignFutureCompleteF64 cb, uint64_t callback_data, UniffiForeignFutureStructF64 result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_POINTER
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_POINTER
+typedef struct UniffiForeignFutureStructPointer {
+    void* returnValue;
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructPointer;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_POINTER
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_POINTER
+typedef void (*UniffiForeignFutureCompletePointer)(uint64_t callback_data, UniffiForeignFutureStructPointer result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompletePointer(
+				UniffiForeignFutureCompletePointer cb, uint64_t callback_data, UniffiForeignFutureStructPointer result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_RUST_BUFFER
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_RUST_BUFFER
+typedef struct UniffiForeignFutureStructRustBuffer {
+    RustBuffer returnValue;
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructRustBuffer;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_RUST_BUFFER
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_RUST_BUFFER
+typedef void (*UniffiForeignFutureCompleteRustBuffer)(uint64_t callback_data, UniffiForeignFutureStructRustBuffer result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompleteRustBuffer(
+				UniffiForeignFutureCompleteRustBuffer cb, uint64_t callback_data, UniffiForeignFutureStructRustBuffer result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_VOID
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_STRUCT_VOID
+typedef struct UniffiForeignFutureStructVoid {
+    RustCallStatus callStatus;
+} UniffiForeignFutureStructVoid;
+
+#endif
+#ifndef UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_VOID
+#define UNIFFI_FFIDEF_FOREIGN_FUTURE_COMPLETE_VOID
+typedef void (*UniffiForeignFutureCompleteVoid)(uint64_t callback_data, UniffiForeignFutureStructVoid result);
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiForeignFutureCompleteVoid(
+				UniffiForeignFutureCompleteVoid cb, uint64_t callback_data, UniffiForeignFutureStructVoid result)
+{
+	return cb(callback_data, result);
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_EVENT_CB_METHOD0
+#define UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_EVENT_CB_METHOD0
+typedef void (*UniffiCallbackInterfaceTelioEventCbMethod0)(uint64_t uniffi_handle, RustBuffer payload, void* uniffi_out_return, RustCallStatus* callStatus );
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiCallbackInterfaceTelioEventCbMethod0(
+				UniffiCallbackInterfaceTelioEventCbMethod0 cb, uint64_t uniffi_handle, RustBuffer payload, void* uniffi_out_return, RustCallStatus* callStatus )
+{
+	return cb(uniffi_handle, payload, uniffi_out_return, callStatus );
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_LOGGER_CB_METHOD0
+#define UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_LOGGER_CB_METHOD0
+typedef void (*UniffiCallbackInterfaceTelioLoggerCbMethod0)(uint64_t uniffi_handle, RustBuffer log_level, RustBuffer payload, void* uniffi_out_return, RustCallStatus* callStatus );
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiCallbackInterfaceTelioLoggerCbMethod0(
+				UniffiCallbackInterfaceTelioLoggerCbMethod0 cb, uint64_t uniffi_handle, RustBuffer log_level, RustBuffer payload, void* uniffi_out_return, RustCallStatus* callStatus )
+{
+	return cb(uniffi_handle, log_level, payload, uniffi_out_return, callStatus );
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_PROTECT_CB_METHOD0
+#define UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_PROTECT_CB_METHOD0
+typedef void (*UniffiCallbackInterfaceTelioProtectCbMethod0)(uint64_t uniffi_handle, int32_t socket_id, void* uniffi_out_return, RustCallStatus* callStatus );
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiCallbackInterfaceTelioProtectCbMethod0(
+				UniffiCallbackInterfaceTelioProtectCbMethod0 cb, uint64_t uniffi_handle, int32_t socket_id, void* uniffi_out_return, RustCallStatus* callStatus )
+{
+	return cb(uniffi_handle, socket_id, uniffi_out_return, callStatus );
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TELIO_EVENT_CB
+#define UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TELIO_EVENT_CB
+typedef struct UniffiVTableCallbackInterfaceTelioEventCb {
+    UniffiCallbackInterfaceTelioEventCbMethod0 event;
+    UniffiCallbackInterfaceFree uniffiFree;
+} UniffiVTableCallbackInterfaceTelioEventCb;
+
+#endif
+#ifndef UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TELIO_LOGGER_CB
+#define UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TELIO_LOGGER_CB
+typedef struct UniffiVTableCallbackInterfaceTelioLoggerCb {
+    UniffiCallbackInterfaceTelioLoggerCbMethod0 log;
+    UniffiCallbackInterfaceFree uniffiFree;
+} UniffiVTableCallbackInterfaceTelioLoggerCb;
+
+#endif
+#ifndef UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TELIO_PROTECT_CB
+#define UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TELIO_PROTECT_CB
+typedef struct UniffiVTableCallbackInterfaceTelioProtectCb {
+    UniffiCallbackInterfaceTelioProtectCbMethod0 protect;
+    UniffiCallbackInterfaceFree uniffiFree;
+} UniffiVTableCallbackInterfaceTelioProtectCb;
+
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_FEATURESDEFAULTSBUILDER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_FEATURESDEFAULTSBUILDER
+void* uniffi_telio_fn_clone_featuresdefaultsbuilder(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_FEATURESDEFAULTSBUILDER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_FEATURESDEFAULTSBUILDER
+void uniffi_telio_fn_free_featuresdefaultsbuilder(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CONSTRUCTOR_FEATURESDEFAULTSBUILDER_NEW
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CONSTRUCTOR_FEATURESDEFAULTSBUILDER_NEW
+void* uniffi_telio_fn_constructor_featuresdefaultsbuilder_new(RustCallStatus *out_status
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_BUILD
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_BUILD
+RustBuffer uniffi_telio_fn_method_featuresdefaultsbuilder_build(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_BATCHING
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_BATCHING
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_batching(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_BATTERY_SAVING_DEFAULTS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_BATTERY_SAVING_DEFAULTS
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_battery_saving_defaults(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_DIRECT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_DIRECT
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_direct(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_DYNAMIC_WG_NT_CONTROL
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_DYNAMIC_WG_NT_CONTROL
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_FIREWALL_CONNECTION_RESET
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_FIREWALL_CONNECTION_RESET
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_firewall_connection_reset(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_FLUSH_EVENTS_ON_STOP_TIMEOUT_SECONDS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_FLUSH_EVENTS_ON_STOP_TIMEOUT_SECONDS
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_flush_events_on_stop_timeout_seconds(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_IPV6
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_IPV6
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_ipv6(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_LANA
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_LANA
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_lana(void* ptr, RustBuffer event_path, int8_t is_prod, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_LINK_DETECTION
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_LINK_DETECTION
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_link_detection(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_MULTICAST
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_MULTICAST
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_multicast(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_NICKNAMES
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_NICKNAMES
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nicknames(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_NURSE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_NURSE
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nurse(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_PMTU_DISCOVERY
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_PMTU_DISCOVERY
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_pmtu_discovery(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_VALIDATE_KEYS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_VALIDATE_KEYS
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_validate_keys(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_SET_SKT_BUFFER_SIZE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_SET_SKT_BUFFER_SIZE
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_set_skt_buffer_size(void* ptr, uint32_t skt_buffer_size, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_TELIO
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_TELIO
+void* uniffi_telio_fn_clone_telio(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_TELIO
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_TELIO
+void uniffi_telio_fn_free_telio(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CONSTRUCTOR_TELIO_NEW
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CONSTRUCTOR_TELIO_NEW
+void* uniffi_telio_fn_constructor_telio_new(RustBuffer features, uint64_t events, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CONSTRUCTOR_TELIO_NEW_WITH_PROTECT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CONSTRUCTOR_TELIO_NEW_WITH_PROTECT
+void* uniffi_telio_fn_constructor_telio_new_with_protect(RustBuffer features, uint64_t events, uint64_t protect, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_CONNECT_TO_EXIT_NODE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_CONNECT_TO_EXIT_NODE
+void uniffi_telio_fn_method_telio_connect_to_exit_node(void* ptr, RustBuffer public_key, RustBuffer allowed_ips, RustBuffer endpoint, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_CONNECT_TO_EXIT_NODE_POSTQUANTUM
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_CONNECT_TO_EXIT_NODE_POSTQUANTUM
+void uniffi_telio_fn_method_telio_connect_to_exit_node_postquantum(void* ptr, RustBuffer identifier, RustBuffer public_key, RustBuffer allowed_ips, RustBuffer endpoint, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_CONNECT_TO_EXIT_NODE_WITH_ID
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_CONNECT_TO_EXIT_NODE_WITH_ID
+void uniffi_telio_fn_method_telio_connect_to_exit_node_with_id(void* ptr, RustBuffer identifier, RustBuffer public_key, RustBuffer allowed_ips, RustBuffer endpoint, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_DISABLE_MAGIC_DNS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_DISABLE_MAGIC_DNS
+void uniffi_telio_fn_method_telio_disable_magic_dns(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_DISCONNECT_FROM_EXIT_NODE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_DISCONNECT_FROM_EXIT_NODE
+void uniffi_telio_fn_method_telio_disconnect_from_exit_node(void* ptr, RustBuffer public_key, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_DISCONNECT_FROM_EXIT_NODES
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_DISCONNECT_FROM_EXIT_NODES
+void uniffi_telio_fn_method_telio_disconnect_from_exit_nodes(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_ENABLE_MAGIC_DNS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_ENABLE_MAGIC_DNS
+void uniffi_telio_fn_method_telio_enable_magic_dns(void* ptr, RustBuffer forward_servers, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GENERATE_STACK_PANIC
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GENERATE_STACK_PANIC
+void uniffi_telio_fn_method_telio_generate_stack_panic(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GENERATE_THREAD_PANIC
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GENERATE_THREAD_PANIC
+void uniffi_telio_fn_method_telio_generate_thread_panic(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_ADAPTER_LUID
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_ADAPTER_LUID
+uint64_t uniffi_telio_fn_method_telio_get_adapter_luid(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_LAST_ERROR
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_LAST_ERROR
+RustBuffer uniffi_telio_fn_method_telio_get_last_error(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_NAT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_NAT
+RustBuffer uniffi_telio_fn_method_telio_get_nat(void* ptr, RustBuffer ip, uint16_t port, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_SECRET_KEY
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_SECRET_KEY
+RustBuffer uniffi_telio_fn_method_telio_get_secret_key(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_STATUS_MAP
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_STATUS_MAP
+RustBuffer uniffi_telio_fn_method_telio_get_status_map(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_IS_RUNNING
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_IS_RUNNING
+int8_t uniffi_telio_fn_method_telio_is_running(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_NOTIFY_NETWORK_CHANGE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_NOTIFY_NETWORK_CHANGE
+void uniffi_telio_fn_method_telio_notify_network_change(void* ptr, RustBuffer network_info, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_NOTIFY_SLEEP
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_NOTIFY_SLEEP
+void uniffi_telio_fn_method_telio_notify_sleep(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_NOTIFY_WAKEUP
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_NOTIFY_WAKEUP
+void uniffi_telio_fn_method_telio_notify_wakeup(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_PROBE_PMTU
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_PROBE_PMTU
+uint32_t uniffi_telio_fn_method_telio_probe_pmtu(void* ptr, RustBuffer host, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_RECEIVE_PING
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_RECEIVE_PING
+RustBuffer uniffi_telio_fn_method_telio_receive_ping(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_FWMARK
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_FWMARK
+void uniffi_telio_fn_method_telio_set_fwmark(void* ptr, uint32_t fwmark, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_MESHNET
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_MESHNET
+void uniffi_telio_fn_method_telio_set_meshnet(void* ptr, RustBuffer cfg, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_MESHNET_OFF
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_MESHNET_OFF
+void uniffi_telio_fn_method_telio_set_meshnet_off(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_SECRET_KEY
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_SECRET_KEY
+void uniffi_telio_fn_method_telio_set_secret_key(void* ptr, RustBuffer secret_key, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SHUTDOWN
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SHUTDOWN
+void uniffi_telio_fn_method_telio_shutdown(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SHUTDOWN_HARD
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SHUTDOWN_HARD
+void uniffi_telio_fn_method_telio_shutdown_hard(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START
+void uniffi_telio_fn_method_telio_start(void* ptr, RustBuffer secret_key, RustBuffer adapter, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_NAMED
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_NAMED
+void uniffi_telio_fn_method_telio_start_named(void* ptr, RustBuffer secret_key, RustBuffer adapter, RustBuffer name, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_WITH_TUN
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_WITH_TUN
+void uniffi_telio_fn_method_telio_start_with_tun(void* ptr, RustBuffer secret_key, RustBuffer adapter, int32_t tun, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_STOP
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_STOP
+void uniffi_telio_fn_method_telio_stop(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_TRIGGER_ANALYTICS_EVENT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_TRIGGER_ANALYTICS_EVENT
+void uniffi_telio_fn_method_telio_trigger_analytics_event(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_TRIGGER_QOS_COLLECTION
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_TRIGGER_QOS_COLLECTION
+void uniffi_telio_fn_method_telio_trigger_qos_collection(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TELIOEVENTCB
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TELIOEVENTCB
+void uniffi_telio_fn_init_callback_vtable_telioeventcb(UniffiVTableCallbackInterfaceTelioEventCb* vtable
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TELIOLOGGERCB
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TELIOLOGGERCB
+void uniffi_telio_fn_init_callback_vtable_teliologgercb(UniffiVTableCallbackInterfaceTelioLoggerCb* vtable
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TELIOPROTECTCB
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TELIOPROTECTCB
+void uniffi_telio_fn_init_callback_vtable_telioprotectcb(UniffiVTableCallbackInterfaceTelioProtectCb* vtable
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_ADD_TIMESTAMPS_TO_LOGS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_ADD_TIMESTAMPS_TO_LOGS
+void uniffi_telio_fn_func_add_timestamps_to_logs(RustCallStatus *out_status
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_DESERIALIZE_FEATURE_CONFIG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_DESERIALIZE_FEATURE_CONFIG
+RustBuffer uniffi_telio_fn_func_deserialize_feature_config(RustBuffer fstr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_DESERIALIZE_MESHNET_CONFIG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_DESERIALIZE_MESHNET_CONFIG
+RustBuffer uniffi_telio_fn_func_deserialize_meshnet_config(RustBuffer cfg_str, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GENERATE_PUBLIC_KEY
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GENERATE_PUBLIC_KEY
+RustBuffer uniffi_telio_fn_func_generate_public_key(RustBuffer secret_key, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GENERATE_SECRET_KEY
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GENERATE_SECRET_KEY
+RustBuffer uniffi_telio_fn_func_generate_secret_key(RustCallStatus *out_status
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GET_COMMIT_SHA
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GET_COMMIT_SHA
+RustBuffer uniffi_telio_fn_func_get_commit_sha(RustCallStatus *out_status
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GET_DEFAULT_ADAPTER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GET_DEFAULT_ADAPTER
+RustBuffer uniffi_telio_fn_func_get_default_adapter(RustCallStatus *out_status
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GET_DEFAULT_FEATURE_CONFIG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GET_DEFAULT_FEATURE_CONFIG
+RustBuffer uniffi_telio_fn_func_get_default_feature_config(RustCallStatus *out_status
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GET_VERSION_TAG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GET_VERSION_TAG
+RustBuffer uniffi_telio_fn_func_get_version_tag(RustCallStatus *out_status
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_SET_GLOBAL_LOGGER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_SET_GLOBAL_LOGGER
+void uniffi_telio_fn_func_set_global_logger(RustBuffer log_level, uint64_t logger, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_UNSET_GLOBAL_LOGGER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_UNSET_GLOBAL_LOGGER
+void uniffi_telio_fn_func_unset_global_logger(RustCallStatus *out_status
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUSTBUFFER_ALLOC
+#define UNIFFI_FFIDEF_FFI_TELIO_RUSTBUFFER_ALLOC
+RustBuffer ffi_telio_rustbuffer_alloc(uint64_t size, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUSTBUFFER_FROM_BYTES
+#define UNIFFI_FFIDEF_FFI_TELIO_RUSTBUFFER_FROM_BYTES
+RustBuffer ffi_telio_rustbuffer_from_bytes(ForeignBytes bytes, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUSTBUFFER_FREE
+#define UNIFFI_FFIDEF_FFI_TELIO_RUSTBUFFER_FREE
+void ffi_telio_rustbuffer_free(RustBuffer buf, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUSTBUFFER_RESERVE
+#define UNIFFI_FFIDEF_FFI_TELIO_RUSTBUFFER_RESERVE
+RustBuffer ffi_telio_rustbuffer_reserve(RustBuffer buf, uint64_t additional, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_U8
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_U8
+void ffi_telio_rust_future_poll_u8(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_U8
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_U8
+void ffi_telio_rust_future_cancel_u8(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_U8
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_U8
+void ffi_telio_rust_future_free_u8(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_U8
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_U8
+uint8_t ffi_telio_rust_future_complete_u8(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_I8
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_I8
+void ffi_telio_rust_future_poll_i8(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_I8
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_I8
+void ffi_telio_rust_future_cancel_i8(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_I8
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_I8
+void ffi_telio_rust_future_free_i8(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_I8
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_I8
+int8_t ffi_telio_rust_future_complete_i8(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_U16
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_U16
+void ffi_telio_rust_future_poll_u16(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_U16
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_U16
+void ffi_telio_rust_future_cancel_u16(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_U16
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_U16
+void ffi_telio_rust_future_free_u16(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_U16
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_U16
+uint16_t ffi_telio_rust_future_complete_u16(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_I16
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_I16
+void ffi_telio_rust_future_poll_i16(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_I16
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_I16
+void ffi_telio_rust_future_cancel_i16(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_I16
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_I16
+void ffi_telio_rust_future_free_i16(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_I16
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_I16
+int16_t ffi_telio_rust_future_complete_i16(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_U32
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_U32
+void ffi_telio_rust_future_poll_u32(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_U32
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_U32
+void ffi_telio_rust_future_cancel_u32(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_U32
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_U32
+void ffi_telio_rust_future_free_u32(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_U32
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_U32
+uint32_t ffi_telio_rust_future_complete_u32(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_I32
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_I32
+void ffi_telio_rust_future_poll_i32(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_I32
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_I32
+void ffi_telio_rust_future_cancel_i32(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_I32
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_I32
+void ffi_telio_rust_future_free_i32(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_I32
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_I32
+int32_t ffi_telio_rust_future_complete_i32(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_U64
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_U64
+void ffi_telio_rust_future_poll_u64(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_U64
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_U64
+void ffi_telio_rust_future_cancel_u64(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_U64
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_U64
+void ffi_telio_rust_future_free_u64(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_U64
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_U64
+uint64_t ffi_telio_rust_future_complete_u64(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_I64
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_I64
+void ffi_telio_rust_future_poll_i64(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_I64
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_I64
+void ffi_telio_rust_future_cancel_i64(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_I64
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_I64
+void ffi_telio_rust_future_free_i64(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_I64
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_I64
+int64_t ffi_telio_rust_future_complete_i64(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_F32
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_F32
+void ffi_telio_rust_future_poll_f32(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_F32
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_F32
+void ffi_telio_rust_future_cancel_f32(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_F32
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_F32
+void ffi_telio_rust_future_free_f32(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_F32
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_F32
+float ffi_telio_rust_future_complete_f32(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_F64
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_F64
+void ffi_telio_rust_future_poll_f64(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_F64
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_F64
+void ffi_telio_rust_future_cancel_f64(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_F64
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_F64
+void ffi_telio_rust_future_free_f64(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_F64
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_F64
+double ffi_telio_rust_future_complete_f64(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_POINTER
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_POINTER
+void ffi_telio_rust_future_poll_pointer(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_POINTER
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_POINTER
+void ffi_telio_rust_future_cancel_pointer(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_POINTER
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_POINTER
+void ffi_telio_rust_future_free_pointer(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_POINTER
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_POINTER
+void* ffi_telio_rust_future_complete_pointer(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_RUST_BUFFER
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_RUST_BUFFER
+void ffi_telio_rust_future_poll_rust_buffer(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_RUST_BUFFER
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_RUST_BUFFER
+void ffi_telio_rust_future_cancel_rust_buffer(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_RUST_BUFFER
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_RUST_BUFFER
+void ffi_telio_rust_future_free_rust_buffer(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_RUST_BUFFER
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_RUST_BUFFER
+RustBuffer ffi_telio_rust_future_complete_rust_buffer(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_VOID
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_POLL_VOID
+void ffi_telio_rust_future_poll_void(uint64_t handle, UniffiRustFutureContinuationCallback callback, uint64_t callback_data
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_VOID
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_CANCEL_VOID
+void ffi_telio_rust_future_cancel_void(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_VOID
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_FREE_VOID
+void ffi_telio_rust_future_free_void(uint64_t handle
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_VOID
+#define UNIFFI_FFIDEF_FFI_TELIO_RUST_FUTURE_COMPLETE_VOID
+void ffi_telio_rust_future_complete_void(uint64_t handle, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_ADD_TIMESTAMPS_TO_LOGS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_ADD_TIMESTAMPS_TO_LOGS
+uint16_t uniffi_telio_checksum_func_add_timestamps_to_logs(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_DESERIALIZE_FEATURE_CONFIG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_DESERIALIZE_FEATURE_CONFIG
+uint16_t uniffi_telio_checksum_func_deserialize_feature_config(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_DESERIALIZE_MESHNET_CONFIG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_DESERIALIZE_MESHNET_CONFIG
+uint16_t uniffi_telio_checksum_func_deserialize_meshnet_config(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GENERATE_PUBLIC_KEY
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GENERATE_PUBLIC_KEY
+uint16_t uniffi_telio_checksum_func_generate_public_key(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GENERATE_SECRET_KEY
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GENERATE_SECRET_KEY
+uint16_t uniffi_telio_checksum_func_generate_secret_key(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GET_COMMIT_SHA
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GET_COMMIT_SHA
+uint16_t uniffi_telio_checksum_func_get_commit_sha(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GET_DEFAULT_ADAPTER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GET_DEFAULT_ADAPTER
+uint16_t uniffi_telio_checksum_func_get_default_adapter(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GET_DEFAULT_FEATURE_CONFIG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GET_DEFAULT_FEATURE_CONFIG
+uint16_t uniffi_telio_checksum_func_get_default_feature_config(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GET_VERSION_TAG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GET_VERSION_TAG
+uint16_t uniffi_telio_checksum_func_get_version_tag(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_SET_GLOBAL_LOGGER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_SET_GLOBAL_LOGGER
+uint16_t uniffi_telio_checksum_func_set_global_logger(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_UNSET_GLOBAL_LOGGER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_UNSET_GLOBAL_LOGGER
+uint16_t uniffi_telio_checksum_func_unset_global_logger(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_BUILD
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_BUILD
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_build(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_BATCHING
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_BATCHING
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_batching(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_BATTERY_SAVING_DEFAULTS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_BATTERY_SAVING_DEFAULTS
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_battery_saving_defaults(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_DIRECT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_DIRECT
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_direct(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_DYNAMIC_WG_NT_CONTROL
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_DYNAMIC_WG_NT_CONTROL
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_FIREWALL_CONNECTION_RESET
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_FIREWALL_CONNECTION_RESET
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall_connection_reset(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_FLUSH_EVENTS_ON_STOP_TIMEOUT_SECONDS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_FLUSH_EVENTS_ON_STOP_TIMEOUT_SECONDS
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_flush_events_on_stop_timeout_seconds(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_IPV6
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_IPV6
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_ipv6(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_LANA
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_LANA
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_lana(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_LINK_DETECTION
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_LINK_DETECTION
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_link_detection(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_MULTICAST
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_MULTICAST
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_multicast(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_NICKNAMES
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_NICKNAMES
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nicknames(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_NURSE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_NURSE
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nurse(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_PMTU_DISCOVERY
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_PMTU_DISCOVERY
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_pmtu_discovery(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_VALIDATE_KEYS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_VALIDATE_KEYS
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_validate_keys(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_SET_SKT_BUFFER_SIZE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_SET_SKT_BUFFER_SIZE
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_set_skt_buffer_size(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_CONNECT_TO_EXIT_NODE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_CONNECT_TO_EXIT_NODE
+uint16_t uniffi_telio_checksum_method_telio_connect_to_exit_node(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_CONNECT_TO_EXIT_NODE_POSTQUANTUM
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_CONNECT_TO_EXIT_NODE_POSTQUANTUM
+uint16_t uniffi_telio_checksum_method_telio_connect_to_exit_node_postquantum(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_CONNECT_TO_EXIT_NODE_WITH_ID
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_CONNECT_TO_EXIT_NODE_WITH_ID
+uint16_t uniffi_telio_checksum_method_telio_connect_to_exit_node_with_id(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_DISABLE_MAGIC_DNS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_DISABLE_MAGIC_DNS
+uint16_t uniffi_telio_checksum_method_telio_disable_magic_dns(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_DISCONNECT_FROM_EXIT_NODE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_DISCONNECT_FROM_EXIT_NODE
+uint16_t uniffi_telio_checksum_method_telio_disconnect_from_exit_node(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_DISCONNECT_FROM_EXIT_NODES
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_DISCONNECT_FROM_EXIT_NODES
+uint16_t uniffi_telio_checksum_method_telio_disconnect_from_exit_nodes(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_ENABLE_MAGIC_DNS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_ENABLE_MAGIC_DNS
+uint16_t uniffi_telio_checksum_method_telio_enable_magic_dns(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GENERATE_STACK_PANIC
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GENERATE_STACK_PANIC
+uint16_t uniffi_telio_checksum_method_telio_generate_stack_panic(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GENERATE_THREAD_PANIC
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GENERATE_THREAD_PANIC
+uint16_t uniffi_telio_checksum_method_telio_generate_thread_panic(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_ADAPTER_LUID
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_ADAPTER_LUID
+uint16_t uniffi_telio_checksum_method_telio_get_adapter_luid(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_LAST_ERROR
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_LAST_ERROR
+uint16_t uniffi_telio_checksum_method_telio_get_last_error(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_NAT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_NAT
+uint16_t uniffi_telio_checksum_method_telio_get_nat(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_SECRET_KEY
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_SECRET_KEY
+uint16_t uniffi_telio_checksum_method_telio_get_secret_key(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_STATUS_MAP
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_STATUS_MAP
+uint16_t uniffi_telio_checksum_method_telio_get_status_map(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_IS_RUNNING
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_IS_RUNNING
+uint16_t uniffi_telio_checksum_method_telio_is_running(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_NOTIFY_NETWORK_CHANGE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_NOTIFY_NETWORK_CHANGE
+uint16_t uniffi_telio_checksum_method_telio_notify_network_change(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_NOTIFY_SLEEP
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_NOTIFY_SLEEP
+uint16_t uniffi_telio_checksum_method_telio_notify_sleep(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_NOTIFY_WAKEUP
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_NOTIFY_WAKEUP
+uint16_t uniffi_telio_checksum_method_telio_notify_wakeup(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_PROBE_PMTU
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_PROBE_PMTU
+uint16_t uniffi_telio_checksum_method_telio_probe_pmtu(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_RECEIVE_PING
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_RECEIVE_PING
+uint16_t uniffi_telio_checksum_method_telio_receive_ping(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_FWMARK
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_FWMARK
+uint16_t uniffi_telio_checksum_method_telio_set_fwmark(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_MESHNET
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_MESHNET
+uint16_t uniffi_telio_checksum_method_telio_set_meshnet(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_MESHNET_OFF
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_MESHNET_OFF
+uint16_t uniffi_telio_checksum_method_telio_set_meshnet_off(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_SECRET_KEY
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_SECRET_KEY
+uint16_t uniffi_telio_checksum_method_telio_set_secret_key(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SHUTDOWN
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SHUTDOWN
+uint16_t uniffi_telio_checksum_method_telio_shutdown(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SHUTDOWN_HARD
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SHUTDOWN_HARD
+uint16_t uniffi_telio_checksum_method_telio_shutdown_hard(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START
+uint16_t uniffi_telio_checksum_method_telio_start(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START_NAMED
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START_NAMED
+uint16_t uniffi_telio_checksum_method_telio_start_named(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START_WITH_TUN
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START_WITH_TUN
+uint16_t uniffi_telio_checksum_method_telio_start_with_tun(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_STOP
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_STOP
+uint16_t uniffi_telio_checksum_method_telio_stop(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_TRIGGER_ANALYTICS_EVENT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_TRIGGER_ANALYTICS_EVENT
+uint16_t uniffi_telio_checksum_method_telio_trigger_analytics_event(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_TRIGGER_QOS_COLLECTION
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_TRIGGER_QOS_COLLECTION
+uint16_t uniffi_telio_checksum_method_telio_trigger_qos_collection(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_CONSTRUCTOR_FEATURESDEFAULTSBUILDER_NEW
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_CONSTRUCTOR_FEATURESDEFAULTSBUILDER_NEW
+uint16_t uniffi_telio_checksum_constructor_featuresdefaultsbuilder_new(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_CONSTRUCTOR_TELIO_NEW
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_CONSTRUCTOR_TELIO_NEW
+uint16_t uniffi_telio_checksum_constructor_telio_new(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_CONSTRUCTOR_TELIO_NEW_WITH_PROTECT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_CONSTRUCTOR_TELIO_NEW_WITH_PROTECT
+uint16_t uniffi_telio_checksum_constructor_telio_new_with_protect(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOEVENTCB_EVENT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOEVENTCB_EVENT
+uint16_t uniffi_telio_checksum_method_telioeventcb_event(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOLOGGERCB_LOG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOLOGGERCB_LOG
+uint16_t uniffi_telio_checksum_method_teliologgercb_log(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOPROTECTCB_PROTECT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOPROTECTCB_PROTECT
+uint16_t uniffi_telio_checksum_method_telioprotectcb_protect(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_FFI_TELIO_UNIFFI_CONTRACT_VERSION
+#define UNIFFI_FFIDEF_FFI_TELIO_UNIFFI_CONTRACT_VERSION
+uint32_t ffi_telio_uniffi_contract_version(void
+    
+);
+#endif
+
+ void telio_cgo_dispatchCallbackInterfaceTelioEventCbMethod0(uint64_t uniffi_handle, RustBuffer payload, void* uniffi_out_return, RustCallStatus* callStatus );
+ void telio_cgo_dispatchCallbackInterfaceTelioEventCbFree(uint64_t handle);
+ void telio_cgo_dispatchCallbackInterfaceTelioLoggerCbMethod0(uint64_t uniffi_handle, RustBuffer log_level, RustBuffer payload, void* uniffi_out_return, RustCallStatus* callStatus );
+ void telio_cgo_dispatchCallbackInterfaceTelioLoggerCbFree(uint64_t handle);
+ void telio_cgo_dispatchCallbackInterfaceTelioProtectCbMethod0(uint64_t uniffi_handle, int32_t socket_id, void* uniffi_out_return, RustCallStatus* callStatus );
+ void telio_cgo_dispatchCallbackInterfaceTelioProtectCbFree(uint64_t handle);
