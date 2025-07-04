@@ -525,11 +525,6 @@ void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nicknames(void* ptr,
 void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_nurse(void* ptr, RustCallStatus *out_status
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_PMTU_DISCOVERY
-#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_PMTU_DISCOVERY
-void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_pmtu_discovery(void* ptr, RustCallStatus *out_status
-);
-#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_VALIDATE_KEYS
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_VALIDATE_KEYS
 void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_validate_keys(void* ptr, RustCallStatus *out_status
@@ -650,11 +645,6 @@ void uniffi_telio_fn_method_telio_notify_sleep(void* ptr, RustCallStatus *out_st
 void uniffi_telio_fn_method_telio_notify_wakeup(void* ptr, RustCallStatus *out_status
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_PROBE_PMTU
-#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_PROBE_PMTU
-uint32_t uniffi_telio_fn_method_telio_probe_pmtu(void* ptr, RustBuffer host, RustCallStatus *out_status
-);
-#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_RECEIVE_PING
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_RECEIVE_PING
 RustBuffer uniffi_telio_fn_method_telio_receive_ping(void* ptr, RustCallStatus *out_status
@@ -678,6 +668,11 @@ void uniffi_telio_fn_method_telio_set_meshnet_off(void* ptr, RustCallStatus *out
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_SECRET_KEY
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_SECRET_KEY
 void uniffi_telio_fn_method_telio_set_secret_key(void* ptr, RustBuffer secret_key, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_TUN
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_TUN
+void uniffi_telio_fn_method_telio_set_tun(void* ptr, int32_t tun, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SHUTDOWN
@@ -784,6 +779,11 @@ RustBuffer uniffi_telio_fn_func_get_default_feature_config(RustCallStatus *out_s
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GET_VERSION_TAG
 RustBuffer uniffi_telio_fn_func_get_version_tag(RustCallStatus *out_status
     
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_SERIALIZE_FEATURE_CONFIG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_SERIALIZE_FEATURE_CONFIG
+RustBuffer uniffi_telio_fn_func_serialize_feature_config(RustBuffer features, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_SET_GLOBAL_LOGGER
@@ -1131,6 +1131,12 @@ uint16_t uniffi_telio_checksum_func_get_version_tag(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_SERIALIZE_FEATURE_CONFIG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_SERIALIZE_FEATURE_CONFIG
+uint16_t uniffi_telio_checksum_func_serialize_feature_config(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_SET_GLOBAL_LOGGER
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_SET_GLOBAL_LOGGER
 uint16_t uniffi_telio_checksum_func_set_global_logger(void
@@ -1218,12 +1224,6 @@ uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nicknames(v
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_NURSE
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_NURSE
 uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_nurse(void
-    
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_PMTU_DISCOVERY
-#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_PMTU_DISCOVERY
-uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_pmtu_discovery(void
     
 );
 #endif
@@ -1347,12 +1347,6 @@ uint16_t uniffi_telio_checksum_method_telio_notify_wakeup(void
     
 );
 #endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_PROBE_PMTU
-#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_PROBE_PMTU
-uint16_t uniffi_telio_checksum_method_telio_probe_pmtu(void
-    
-);
-#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_RECEIVE_PING
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_RECEIVE_PING
 uint16_t uniffi_telio_checksum_method_telio_receive_ping(void
@@ -1380,6 +1374,12 @@ uint16_t uniffi_telio_checksum_method_telio_set_meshnet_off(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_SECRET_KEY
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_SECRET_KEY
 uint16_t uniffi_telio_checksum_method_telio_set_secret_key(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_TUN
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_TUN
+uint16_t uniffi_telio_checksum_method_telio_set_tun(void
     
 );
 #endif
