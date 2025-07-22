@@ -597,6 +597,24 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_set_inter_thread_channel_size()
+	})
+	if checksum != 13344 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_set_inter_thread_channel_size: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_set_max_inter_thread_batched_pkts()
+	})
+	if checksum != 9508 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_set_max_inter_thread_batched_pkts: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_set_skt_buffer_size()
 	})
 	if checksum != 35161 {
@@ -1232,6 +1250,10 @@ type FeaturesDefaultsBuilderInterface interface {
 	// Enable key valiation in set_config call with defaults
 	EnableValidateKeys() *FeaturesDefaultsBuilder
 	// Enable custom socket buffer sizes for NepTUN
+	SetInterThreadChannelSize(interThreadChannelSize uint32) *FeaturesDefaultsBuilder
+	// Enable custom socket buffer sizes for NepTUN
+	SetMaxInterThreadBatchedPkts(maxInterThreadBatchedPkts uint32) *FeaturesDefaultsBuilder
+	// Enable custom socket buffer sizes for NepTUN
 	SetSktBufferSize(sktBufferSize uint32) *FeaturesDefaultsBuilder
 }
 // A [Features] builder that allows a simpler initialization of
@@ -1391,6 +1413,26 @@ func (_self *FeaturesDefaultsBuilder) EnableValidateKeys() *FeaturesDefaultsBuil
 	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
 		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_validate_keys(
 		_pointer,_uniffiStatus)
+	}))
+}
+
+// Enable custom socket buffer sizes for NepTUN
+func (_self *FeaturesDefaultsBuilder) SetInterThreadChannelSize(interThreadChannelSize uint32) *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_set_inter_thread_channel_size(
+		_pointer,FfiConverterUint32INSTANCE.Lower(interThreadChannelSize),_uniffiStatus)
+	}))
+}
+
+// Enable custom socket buffer sizes for NepTUN
+func (_self *FeaturesDefaultsBuilder) SetMaxInterThreadBatchedPkts(maxInterThreadBatchedPkts uint32) *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_set_max_inter_thread_batched_pkts(
+		_pointer,FfiConverterUint32INSTANCE.Lower(maxInterThreadBatchedPkts),_uniffiStatus)
 	}))
 }
 
@@ -3231,6 +3273,10 @@ type FeatureWireguard struct {
 	EnableDynamicWgNtControl bool
 	// Configurable socket buffer size for NepTUN
 	SktBufferSize *uint32
+	// Configurable socket buffer size for NepTUN
+	InterThreadChannelSize *uint32
+	// Configurable socket buffer size for NepTUN
+	MaxInterThreadBatchedPkts *uint32
 }
 
 func (r *FeatureWireguard) Destroy() {
@@ -3238,6 +3284,8 @@ func (r *FeatureWireguard) Destroy() {
 		FfiDestroyerFeaturePolling{}.Destroy(r.Polling);
 		FfiDestroyerBool{}.Destroy(r.EnableDynamicWgNtControl);
 		FfiDestroyerOptionalUint32{}.Destroy(r.SktBufferSize);
+		FfiDestroyerOptionalUint32{}.Destroy(r.InterThreadChannelSize);
+		FfiDestroyerOptionalUint32{}.Destroy(r.MaxInterThreadBatchedPkts);
 }
 
 type FfiConverterFeatureWireguard struct {}
@@ -3254,6 +3302,8 @@ func (c FfiConverterFeatureWireguard) Read(reader io.Reader) FeatureWireguard {
 			FfiConverterFeaturePollingINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterOptionalUint32INSTANCE.Read(reader),
+			FfiConverterOptionalUint32INSTANCE.Read(reader),
+			FfiConverterOptionalUint32INSTANCE.Read(reader),
 	}
 }
 
@@ -3266,6 +3316,8 @@ func (c FfiConverterFeatureWireguard) Write(writer io.Writer, value FeatureWireg
 		FfiConverterFeaturePollingINSTANCE.Write(writer, value.Polling);
 		FfiConverterBoolINSTANCE.Write(writer, value.EnableDynamicWgNtControl);
 		FfiConverterOptionalUint32INSTANCE.Write(writer, value.SktBufferSize);
+		FfiConverterOptionalUint32INSTANCE.Write(writer, value.InterThreadChannelSize);
+		FfiConverterOptionalUint32INSTANCE.Write(writer, value.MaxInterThreadBatchedPkts);
 }
 
 type FfiDestroyerFeatureWireguard struct {}
