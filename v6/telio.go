@@ -2679,10 +2679,13 @@ func (_ FfiDestroyerFeatureEndpointProvidersOptimization) Destroy(value FeatureE
 type FeatureErrorNotificationService struct {
 	// Size of the internal queue of received and to-be-published vpn error notifications
 	BufferSize uint32
+	// Allow only post-quantum safe key exchange algorithm for the ENS HTTPS connection
+	AllowOnlyPq bool
 }
 
 func (r *FeatureErrorNotificationService) Destroy() {
 		FfiDestroyerUint32{}.Destroy(r.BufferSize);
+		FfiDestroyerBool{}.Destroy(r.AllowOnlyPq);
 }
 
 type FfiConverterFeatureErrorNotificationService struct {}
@@ -2696,6 +2699,7 @@ func (c FfiConverterFeatureErrorNotificationService) Lift(rb RustBufferI) Featur
 func (c FfiConverterFeatureErrorNotificationService) Read(reader io.Reader) FeatureErrorNotificationService {
 	return FeatureErrorNotificationService {
 			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -2705,6 +2709,7 @@ func (c FfiConverterFeatureErrorNotificationService) Lower(value FeatureErrorNot
 
 func (c FfiConverterFeatureErrorNotificationService) Write(writer io.Writer, value FeatureErrorNotificationService) {
 		FfiConverterUint32INSTANCE.Write(writer, value.BufferSize);
+		FfiConverterBoolINSTANCE.Write(writer, value.AllowOnlyPq);
 }
 
 type FfiDestroyerFeatureErrorNotificationService struct {}
