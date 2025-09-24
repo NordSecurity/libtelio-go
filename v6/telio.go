@@ -4751,7 +4751,12 @@ const (
 	VpnConnectionErrorUnknown VpnConnectionError = 1
 	// Connection limit reached
 	VpnConnectionErrorConnectionLimitReached VpnConnectionError = 2
-	// Server will undergo maintenance in the near future
+	// Server will undergo maintenance in the near future.
+	// Will be sent only when server is going down for a longer time (rollout is ‘maintain’ free),
+	// so that we do not expect to get such a messages often from the same server. More than 2 such
+	// messages from the same server in less than 10 minutes is suspicious. Once app gets this message,
+	// it should pull server list from the API and use that new list. This is because SRE is removing
+	// maintained servers from the server list in advance of maintenance.
 	VpnConnectionErrorServerMaintenance VpnConnectionError = 3
 	// Authentication failed
 	VpnConnectionErrorUnauthenticated VpnConnectionError = 4
