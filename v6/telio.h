@@ -485,6 +485,11 @@ void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_direct(void* ptr, Ru
 void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control(void* ptr, RustCallStatus *out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_ERROR_NOTIFICATION_SERVICE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_ERROR_NOTIFICATION_SERVICE
+void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_error_notification_service(void* ptr, RustCallStatus *out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_FIREWALL_CONNECTION_RESET
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_FIREWALL_CONNECTION_RESET
 void* uniffi_telio_fn_method_featuresdefaultsbuilder_enable_firewall_connection_reset(void* ptr, RustCallStatus *out_status
@@ -618,11 +623,6 @@ uint64_t uniffi_telio_fn_method_telio_get_adapter_luid(void* ptr, RustCallStatus
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_LAST_ERROR
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_LAST_ERROR
 RustBuffer uniffi_telio_fn_method_telio_get_last_error(void* ptr, RustCallStatus *out_status
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_NAT
-#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_NAT
-RustBuffer uniffi_telio_fn_method_telio_get_nat(void* ptr, RustBuffer ip, uint16_t port, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GET_SECRET_KEY
@@ -1189,6 +1189,12 @@ uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_dynamic_wg_
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_ERROR_NOTIFICATION_SERVICE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_ERROR_NOTIFICATION_SERVICE
+uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_error_notification_service(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_FIREWALL_CONNECTION_RESET
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_ENABLE_FIREWALL_CONNECTION_RESET
 uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall_connection_reset(void
@@ -1324,12 +1330,6 @@ uint16_t uniffi_telio_checksum_method_telio_get_adapter_luid(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_LAST_ERROR
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_LAST_ERROR
 uint16_t uniffi_telio_checksum_method_telio_get_last_error(void
-    
-);
-#endif
-#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_NAT
-#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GET_NAT
-uint16_t uniffi_telio_checksum_method_telio_get_nat(void
     
 );
 #endif

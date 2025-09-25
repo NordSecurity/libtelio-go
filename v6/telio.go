@@ -516,6 +516,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_error_notification_service()
+	})
+	if checksum != 60879 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_error_notification_service: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_firewall_connection_reset()
 	})
 	if checksum != 63055 {
@@ -719,15 +728,6 @@ func uniffiCheckChecksums() {
 	if checksum != 1246 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_get_last_error: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_get_nat()
-	})
-	if checksum != 33808 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_get_nat: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1231,6 +1231,7 @@ type FeaturesDefaultsBuilderInterface interface {
 	EnableDirect() *FeaturesDefaultsBuilder
 	// Enable dynamic WireGuard-NT control as per RFC LLT-0089
 	EnableDynamicWgNtControl() *FeaturesDefaultsBuilder
+	EnableErrorNotificationService() *FeaturesDefaultsBuilder
 	// Enable firewall connection resets when NepTUN is used
 	EnableFirewallConnectionReset() *FeaturesDefaultsBuilder
 	// Enable blocking event flush with timout on stop with defaults
@@ -1322,6 +1323,15 @@ func (_self *FeaturesDefaultsBuilder) EnableDynamicWgNtControl() *FeaturesDefaul
 	defer _self.ffiObject.decrementPointer()
 	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
 		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_dynamic_wg_nt_control(
+		_pointer,_uniffiStatus)
+	}))
+}
+
+func (_self *FeaturesDefaultsBuilder) EnableErrorNotificationService() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_error_notification_service(
 		_pointer,_uniffiStatus)
 	}))
 }
@@ -1609,7 +1619,6 @@ type TelioInterface interface {
 	GetAdapterLuid() uint64
 	// Get last error's message length, including trailing null
 	GetLastError() string
-	GetNat(ip string, port uint16) (NatType, error)
 	GetSecretKey() SecretKey
 	GetStatusMap() []TelioNode
 	IsRunning() (bool, error)
@@ -1934,23 +1943,6 @@ func (_self *Telio) GetLastError() string {
 		_pointer,_uniffiStatus),
 	}
 	}))
-}
-
-func (_self *Telio) GetNat(ip string, port uint16) (NatType, error) {
-	_pointer := _self.ffiObject.incrementPointer("*Telio")
-	defer _self.ffiObject.decrementPointer()
-	_uniffiRV, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_telio_get_nat(
-		_pointer,FfiConverterStringINSTANCE.Lower(ip), FfiConverterUint16INSTANCE.Lower(port),_uniffiStatus),
-	}
-	})
-		if _uniffiErr != nil {
-			var _uniffiDefaultValue NatType
-			return _uniffiDefaultValue, _uniffiErr
-		} else {
-			return FfiConverterNatTypeINSTANCE.Lift(_uniffiRV), nil
-		}
 }
 
 func (_self *Telio) GetSecretKey() SecretKey {
@@ -2683,6 +2675,50 @@ func (_ FfiDestroyerFeatureEndpointProvidersOptimization) Destroy(value FeatureE
 }
 
 
+// Configuration for the Error Notification Service
+type FeatureErrorNotificationService struct {
+	// Size of the internal queue of received and to-be-published vpn error notifications
+	BufferSize uint32
+	// Allow only post-quantum safe key exchange algorithm for the ENS HTTPS connection
+	AllowOnlyPq bool
+}
+
+func (r *FeatureErrorNotificationService) Destroy() {
+		FfiDestroyerUint32{}.Destroy(r.BufferSize);
+		FfiDestroyerBool{}.Destroy(r.AllowOnlyPq);
+}
+
+type FfiConverterFeatureErrorNotificationService struct {}
+
+var FfiConverterFeatureErrorNotificationServiceINSTANCE = FfiConverterFeatureErrorNotificationService{}
+
+func (c FfiConverterFeatureErrorNotificationService) Lift(rb RustBufferI) FeatureErrorNotificationService {
+	return LiftFromRustBuffer[FeatureErrorNotificationService](c, rb)
+}
+
+func (c FfiConverterFeatureErrorNotificationService) Read(reader io.Reader) FeatureErrorNotificationService {
+	return FeatureErrorNotificationService {
+			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterFeatureErrorNotificationService) Lower(value FeatureErrorNotificationService) C.RustBuffer {
+	return LowerIntoRustBuffer[FeatureErrorNotificationService](c, value)
+}
+
+func (c FfiConverterFeatureErrorNotificationService) Write(writer io.Writer, value FeatureErrorNotificationService) {
+		FfiConverterUint32INSTANCE.Write(writer, value.BufferSize);
+		FfiConverterBoolINSTANCE.Write(writer, value.AllowOnlyPq);
+}
+
+type FfiDestroyerFeatureErrorNotificationService struct {}
+
+func (_ FfiDestroyerFeatureErrorNotificationService) Destroy(value FeatureErrorNotificationService) {
+	value.Destroy()
+}
+
+
 // Configurable features for exit Dns
 type FeatureExitDns struct {
 	// Controls if it is allowed to reconfigure DNS peer when exit node is
@@ -2878,8 +2914,6 @@ type FeatureNurse struct {
 	InitialHeartbeatInterval uint64
 	// QoS configuration for Nurse
 	Qos *FeatureQoS
-	// Enable/disable collecting nat type
-	EnableNatTypeCollection bool
 	// Enable/disable Relay connection data
 	EnableRelayConnData bool
 	// Enable/disable NAT-traversal connections data
@@ -2892,7 +2926,6 @@ func (r *FeatureNurse) Destroy() {
 		FfiDestroyerUint64{}.Destroy(r.HeartbeatInterval);
 		FfiDestroyerUint64{}.Destroy(r.InitialHeartbeatInterval);
 		FfiDestroyerOptionalFeatureQoS{}.Destroy(r.Qos);
-		FfiDestroyerBool{}.Destroy(r.EnableNatTypeCollection);
 		FfiDestroyerBool{}.Destroy(r.EnableRelayConnData);
 		FfiDestroyerBool{}.Destroy(r.EnableNatTraversalConnData);
 		FfiDestroyerUint64{}.Destroy(r.StateDurationCap);
@@ -2913,7 +2946,6 @@ func (c FfiConverterFeatureNurse) Read(reader io.Reader) FeatureNurse {
 			FfiConverterOptionalFeatureQoSINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterUint64INSTANCE.Read(reader),
 	}
 }
@@ -2926,7 +2958,6 @@ func (c FfiConverterFeatureNurse) Write(writer io.Writer, value FeatureNurse) {
 		FfiConverterUint64INSTANCE.Write(writer, value.HeartbeatInterval);
 		FfiConverterUint64INSTANCE.Write(writer, value.InitialHeartbeatInterval);
 		FfiConverterOptionalFeatureQoSINSTANCE.Write(writer, value.Qos);
-		FfiConverterBoolINSTANCE.Write(writer, value.EnableNatTypeCollection);
 		FfiConverterBoolINSTANCE.Write(writer, value.EnableRelayConnData);
 		FfiConverterBoolINSTANCE.Write(writer, value.EnableNatTraversalConnData);
 		FfiConverterUint64INSTANCE.Write(writer, value.StateDurationCap);
@@ -3367,6 +3398,7 @@ type Features struct {
 	Multicast bool
 	// Batching
 	Batching *FeatureBatching
+	ErrorNotificationService *FeatureErrorNotificationService
 }
 
 func (r *Features) Destroy() {
@@ -3389,6 +3421,7 @@ func (r *Features) Destroy() {
 		FfiDestroyerFeaturePostQuantumVpn{}.Destroy(r.PostQuantumVpn);
 		FfiDestroyerBool{}.Destroy(r.Multicast);
 		FfiDestroyerOptionalFeatureBatching{}.Destroy(r.Batching);
+		FfiDestroyerOptionalFeatureErrorNotificationService{}.Destroy(r.ErrorNotificationService);
 }
 
 type FfiConverterFeatures struct {}
@@ -3420,6 +3453,7 @@ func (c FfiConverterFeatures) Read(reader io.Reader) Features {
 			FfiConverterFeaturePostQuantumVpnINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterOptionalFeatureBatchingINSTANCE.Read(reader),
+			FfiConverterOptionalFeatureErrorNotificationServiceINSTANCE.Read(reader),
 	}
 }
 
@@ -3447,6 +3481,7 @@ func (c FfiConverterFeatures) Write(writer io.Writer, value Features) {
 		FfiConverterFeaturePostQuantumVpnINSTANCE.Write(writer, value.PostQuantumVpn);
 		FfiConverterBoolINSTANCE.Write(writer, value.Multicast);
 		FfiConverterOptionalFeatureBatchingINSTANCE.Write(writer, value.Batching);
+		FfiConverterOptionalFeatureErrorNotificationServiceINSTANCE.Write(writer, value.ErrorNotificationService);
 }
 
 type FfiDestroyerFeatures struct {}
@@ -3767,6 +3802,8 @@ type TelioNode struct {
 	AllowMulticast bool
 	// Flag to control whether the Node allows multicast messages from us
 	PeerAllowsMulticast bool
+	// Configuration for the Error Notification Service
+	VpnConnectionError *VpnConnectionError
 }
 
 func (r *TelioNode) Destroy() {
@@ -3788,6 +3825,7 @@ func (r *TelioNode) Destroy() {
 		FfiDestroyerPathType{}.Destroy(r.Path);
 		FfiDestroyerBool{}.Destroy(r.AllowMulticast);
 		FfiDestroyerBool{}.Destroy(r.PeerAllowsMulticast);
+		FfiDestroyerOptionalVpnConnectionError{}.Destroy(r.VpnConnectionError);
 }
 
 type FfiConverterTelioNode struct {}
@@ -3818,6 +3856,7 @@ func (c FfiConverterTelioNode) Read(reader io.Reader) TelioNode {
 			FfiConverterPathTypeINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterOptionalVpnConnectionErrorINSTANCE.Read(reader),
 	}
 }
 
@@ -3844,6 +3883,7 @@ func (c FfiConverterTelioNode) Write(writer io.Writer, value TelioNode) {
 		FfiConverterPathTypeINSTANCE.Write(writer, value.Path);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowMulticast);
 		FfiConverterBoolINSTANCE.Write(writer, value.PeerAllowsMulticast);
+		FfiConverterOptionalVpnConnectionErrorINSTANCE.Write(writer, value.VpnConnectionError);
 }
 
 type FfiDestroyerTelioNode struct {}
@@ -4702,6 +4742,55 @@ func (_ FfiDestroyerTelioLogLevel) Destroy(value TelioLogLevel) {
 
 
 
+
+// Possible VPN errors received from the Error Notification Service
+type VpnConnectionError uint
+
+const (
+	// Unknown error
+	VpnConnectionErrorUnknown VpnConnectionError = 1
+	// Connection limit reached
+	VpnConnectionErrorConnectionLimitReached VpnConnectionError = 2
+	// Server will undergo maintenance in the near future.
+	// Will be sent only when server is going down for a longer time (rollout is ‘maintain’ free),
+	// so that we do not expect to get such a messages often from the same server. More than 2 such
+	// messages from the same server in less than 10 minutes is suspicious. Once app gets this message,
+	// it should pull server list from the API and use that new list. This is because SRE is removing
+	// maintained servers from the server list in advance of maintenance.
+	VpnConnectionErrorServerMaintenance VpnConnectionError = 3
+	// Authentication failed
+	VpnConnectionErrorUnauthenticated VpnConnectionError = 4
+	// There is a newer connection to this VPN server
+	VpnConnectionErrorSuperseded VpnConnectionError = 5
+)
+
+type FfiConverterVpnConnectionError struct {}
+
+var FfiConverterVpnConnectionErrorINSTANCE = FfiConverterVpnConnectionError{}
+
+func (c FfiConverterVpnConnectionError) Lift(rb RustBufferI) VpnConnectionError {
+	return LiftFromRustBuffer[VpnConnectionError](c, rb)
+}
+
+func (c FfiConverterVpnConnectionError) Lower(value VpnConnectionError) C.RustBuffer {
+	return LowerIntoRustBuffer[VpnConnectionError](c, value)
+}
+func (FfiConverterVpnConnectionError) Read(reader io.Reader) VpnConnectionError {
+	id := readInt32(reader)
+	return VpnConnectionError(id)
+}
+
+func (FfiConverterVpnConnectionError) Write(writer io.Writer, value VpnConnectionError) {
+	writeInt32(writer, int32(value))
+}
+
+type FfiDestroyerVpnConnectionError struct {}
+
+func (_ FfiDestroyerVpnConnectionError) Destroy(value VpnConnectionError) {
+}
+
+
+
 type TelioEventCb interface {
 	
 	Event(payload Event) error
@@ -5385,6 +5474,45 @@ func (_ FfiDestroyerOptionalFeatureEndpointProvidersOptimization) Destroy(value 
 
 
 
+type FfiConverterOptionalFeatureErrorNotificationService struct{}
+
+var FfiConverterOptionalFeatureErrorNotificationServiceINSTANCE = FfiConverterOptionalFeatureErrorNotificationService{}
+
+func (c FfiConverterOptionalFeatureErrorNotificationService) Lift(rb RustBufferI) *FeatureErrorNotificationService {
+	return LiftFromRustBuffer[*FeatureErrorNotificationService](c, rb)
+}
+
+func (_ FfiConverterOptionalFeatureErrorNotificationService) Read(reader io.Reader) *FeatureErrorNotificationService {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterFeatureErrorNotificationServiceINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalFeatureErrorNotificationService) Lower(value *FeatureErrorNotificationService) C.RustBuffer {
+	return LowerIntoRustBuffer[*FeatureErrorNotificationService](c, value)
+}
+
+func (_ FfiConverterOptionalFeatureErrorNotificationService) Write(writer io.Writer, value *FeatureErrorNotificationService) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterFeatureErrorNotificationServiceINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalFeatureErrorNotificationService struct {}
+
+func (_ FfiDestroyerOptionalFeatureErrorNotificationService) Destroy(value *FeatureErrorNotificationService) {
+	if value != nil {
+		FfiDestroyerFeatureErrorNotificationService{}.Destroy(*value)
+	}
+}
+
+
+
 type FfiConverterOptionalFeatureExitDns struct{}
 
 var FfiConverterOptionalFeatureExitDnsINSTANCE = FfiConverterOptionalFeatureExitDns{}
@@ -5770,6 +5898,45 @@ type FfiDestroyerOptionalPathType struct {}
 func (_ FfiDestroyerOptionalPathType) Destroy(value *PathType) {
 	if value != nil {
 		FfiDestroyerPathType{}.Destroy(*value)
+	}
+}
+
+
+
+type FfiConverterOptionalVpnConnectionError struct{}
+
+var FfiConverterOptionalVpnConnectionErrorINSTANCE = FfiConverterOptionalVpnConnectionError{}
+
+func (c FfiConverterOptionalVpnConnectionError) Lift(rb RustBufferI) *VpnConnectionError {
+	return LiftFromRustBuffer[*VpnConnectionError](c, rb)
+}
+
+func (_ FfiConverterOptionalVpnConnectionError) Read(reader io.Reader) *VpnConnectionError {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterVpnConnectionErrorINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalVpnConnectionError) Lower(value *VpnConnectionError) C.RustBuffer {
+	return LowerIntoRustBuffer[*VpnConnectionError](c, value)
+}
+
+func (_ FfiConverterOptionalVpnConnectionError) Write(writer io.Writer, value *VpnConnectionError) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterVpnConnectionErrorINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalVpnConnectionError struct {}
+
+func (_ FfiDestroyerOptionalVpnConnectionError) Destroy(value *VpnConnectionError) {
+	if value != nil {
+		FfiDestroyerVpnConnectionError{}.Destroy(*value)
 	}
 }
 
