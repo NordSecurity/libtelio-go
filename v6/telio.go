@@ -2277,6 +2277,55 @@ func (_ FfiDestroyerTelio) Destroy(value *Telio) {
 
 
 
+// Exponential backoff bounds
+type Backoff struct {
+	// Initial bound
+	//
+	// Used as the first backoff value after ExponentialBackoff creation or reset [default 2s]
+	InitialS uint32
+	// Maximal bound
+	//
+	// A maximal backoff value which might be achieved during exponential backoff
+	// - if set to None/null there will be no upper bound for the penalty duration [default 120s]
+	MaximalS *uint32
+}
+
+func (r *Backoff) Destroy() {
+		FfiDestroyerUint32{}.Destroy(r.InitialS);
+		FfiDestroyerOptionalUint32{}.Destroy(r.MaximalS);
+}
+
+type FfiConverterBackoff struct {}
+
+var FfiConverterBackoffINSTANCE = FfiConverterBackoff{}
+
+func (c FfiConverterBackoff) Lift(rb RustBufferI) Backoff {
+	return LiftFromRustBuffer[Backoff](c, rb)
+}
+
+func (c FfiConverterBackoff) Read(reader io.Reader) Backoff {
+	return Backoff {
+			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterOptionalUint32INSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterBackoff) Lower(value Backoff) C.RustBuffer {
+	return LowerIntoRustBuffer[Backoff](c, value)
+}
+
+func (c FfiConverterBackoff) Write(writer io.Writer, value Backoff) {
+		FfiConverterUint32INSTANCE.Write(writer, value.InitialS);
+		FfiConverterOptionalUint32INSTANCE.Write(writer, value.MaximalS);
+}
+
+type FfiDestroyerBackoff struct {}
+
+func (_ FfiDestroyerBackoff) Destroy(value Backoff) {
+	value.Destroy()
+}
+
+
 // Rust representation of [meshnet map]
 // A network map of all the Peers and the servers
 type Config struct {
@@ -2681,11 +2730,14 @@ type FeatureErrorNotificationService struct {
 	BufferSize uint32
 	// Allow only post-quantum safe key exchange algorithm for the ENS HTTPS connection
 	AllowOnlyPq bool
+	// Configuration of the backoff algorithm used by ENS
+	Backoff Backoff
 }
 
 func (r *FeatureErrorNotificationService) Destroy() {
 		FfiDestroyerUint32{}.Destroy(r.BufferSize);
 		FfiDestroyerBool{}.Destroy(r.AllowOnlyPq);
+		FfiDestroyerBackoff{}.Destroy(r.Backoff);
 }
 
 type FfiConverterFeatureErrorNotificationService struct {}
@@ -2700,6 +2752,7 @@ func (c FfiConverterFeatureErrorNotificationService) Read(reader io.Reader) Feat
 	return FeatureErrorNotificationService {
 			FfiConverterUint32INSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterBackoffINSTANCE.Read(reader),
 	}
 }
 
@@ -2710,6 +2763,7 @@ func (c FfiConverterFeatureErrorNotificationService) Lower(value FeatureErrorNot
 func (c FfiConverterFeatureErrorNotificationService) Write(writer io.Writer, value FeatureErrorNotificationService) {
 		FfiConverterUint32INSTANCE.Write(writer, value.BufferSize);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowOnlyPq);
+		FfiConverterBackoffINSTANCE.Write(writer, value.Backoff);
 }
 
 type FfiDestroyerFeatureErrorNotificationService struct {}
