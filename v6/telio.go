@@ -1152,6 +1152,52 @@ type FfiDestroyerString struct {}
 func (FfiDestroyerString) Destroy(_ string) {}
 
 
+type FfiConverterBytes struct{}
+
+var FfiConverterBytesINSTANCE = FfiConverterBytes{}
+
+func (c FfiConverterBytes) Lower(value []byte) C.RustBuffer {
+	return LowerIntoRustBuffer[[]byte](c, value)
+}
+
+func (c FfiConverterBytes) Write(writer io.Writer, value []byte) {
+	if len(value) > math.MaxInt32 {
+		panic("[]byte is too large to fit into Int32")
+	}
+
+	writeInt32(writer, int32(len(value)))
+	write_length, err := writer.Write(value)
+	if err != nil {
+		panic(err)
+	}
+	if write_length != len(value) {
+		panic(fmt.Errorf("bad write length when writing []byte, expected %d, written %d", len(value), write_length))
+	}
+}
+
+func (c FfiConverterBytes) Lift(rb RustBufferI) []byte {
+	return LiftFromRustBuffer[[]byte](c, rb)
+}
+
+func (c FfiConverterBytes) Read(reader io.Reader) []byte {
+	length := readInt32(reader)
+	buffer := make([]byte, length)
+	read_length, err := reader.Read(buffer)
+	if err != nil && err != io.EOF {
+		panic(err)
+	}
+	if read_length != int(length) {
+		panic(fmt.Errorf("bad read length when reading []byte, expected %d, read %d", length, read_length))
+	}
+	return buffer
+}
+
+type FfiDestroyerBytes struct {}
+
+func (FfiDestroyerBytes) Destroy(_ []byte) {}
+
+
+
 
 // Below is an implementation of synchronization requirements outlined in the link.
 // https://github.com/mozilla/uniffi-rs/blob/0dc031132d9493ca812c3af6e7dd60ad2ea95bf0/uniffi_bindgen/src/bindings/kotlin/templates/ObjectRuntime.kt#L31
@@ -2732,12 +2778,16 @@ type FeatureErrorNotificationService struct {
 	AllowOnlyPq bool
 	// Configuration of the backoff algorithm used by ENS
 	Backoff Backoff
+	// DER encoded root certificate to be used for verification of all TLS connections
+	// to gRPC ENS endpoint in place of the hardcoded one
+	RootCertificateOverride *[]byte
 }
 
 func (r *FeatureErrorNotificationService) Destroy() {
 		FfiDestroyerUint32{}.Destroy(r.BufferSize);
 		FfiDestroyerBool{}.Destroy(r.AllowOnlyPq);
 		FfiDestroyerBackoff{}.Destroy(r.Backoff);
+		FfiDestroyerOptionalBytes{}.Destroy(r.RootCertificateOverride);
 }
 
 type FfiConverterFeatureErrorNotificationService struct {}
@@ -2753,6 +2803,7 @@ func (c FfiConverterFeatureErrorNotificationService) Read(reader io.Reader) Feat
 			FfiConverterUint32INSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBackoffINSTANCE.Read(reader),
+			FfiConverterOptionalBytesINSTANCE.Read(reader),
 	}
 }
 
@@ -2764,6 +2815,7 @@ func (c FfiConverterFeatureErrorNotificationService) Write(writer io.Writer, val
 		FfiConverterUint32INSTANCE.Write(writer, value.BufferSize);
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowOnlyPq);
 		FfiConverterBackoffINSTANCE.Write(writer, value.Backoff);
+		FfiConverterOptionalBytesINSTANCE.Write(writer, value.RootCertificateOverride);
 }
 
 type FfiDestroyerFeatureErrorNotificationService struct {}
@@ -5328,6 +5380,45 @@ type FfiDestroyerOptionalString struct {}
 func (_ FfiDestroyerOptionalString) Destroy(value *string) {
 	if value != nil {
 		FfiDestroyerString{}.Destroy(*value)
+	}
+}
+
+
+
+type FfiConverterOptionalBytes struct{}
+
+var FfiConverterOptionalBytesINSTANCE = FfiConverterOptionalBytes{}
+
+func (c FfiConverterOptionalBytes) Lift(rb RustBufferI) *[]byte {
+	return LiftFromRustBuffer[*[]byte](c, rb)
+}
+
+func (_ FfiConverterOptionalBytes) Read(reader io.Reader) *[]byte {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterBytesINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalBytes) Lower(value *[]byte) C.RustBuffer {
+	return LowerIntoRustBuffer[*[]byte](c, value)
+}
+
+func (_ FfiConverterOptionalBytes) Write(writer io.Writer, value *[]byte) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterBytesINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalBytes struct {}
+
+func (_ FfiDestroyerOptionalBytes) Destroy(value *[]byte) {
+	if value != nil {
+		FfiDestroyerBytes{}.Destroy(*value)
 	}
 }
 
