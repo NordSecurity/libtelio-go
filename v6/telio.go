@@ -1152,52 +1152,6 @@ type FfiDestroyerString struct {}
 func (FfiDestroyerString) Destroy(_ string) {}
 
 
-type FfiConverterBytes struct{}
-
-var FfiConverterBytesINSTANCE = FfiConverterBytes{}
-
-func (c FfiConverterBytes) Lower(value []byte) C.RustBuffer {
-	return LowerIntoRustBuffer[[]byte](c, value)
-}
-
-func (c FfiConverterBytes) Write(writer io.Writer, value []byte) {
-	if len(value) > math.MaxInt32 {
-		panic("[]byte is too large to fit into Int32")
-	}
-
-	writeInt32(writer, int32(len(value)))
-	write_length, err := writer.Write(value)
-	if err != nil {
-		panic(err)
-	}
-	if write_length != len(value) {
-		panic(fmt.Errorf("bad write length when writing []byte, expected %d, written %d", len(value), write_length))
-	}
-}
-
-func (c FfiConverterBytes) Lift(rb RustBufferI) []byte {
-	return LiftFromRustBuffer[[]byte](c, rb)
-}
-
-func (c FfiConverterBytes) Read(reader io.Reader) []byte {
-	length := readInt32(reader)
-	buffer := make([]byte, length)
-	read_length, err := reader.Read(buffer)
-	if err != nil && err != io.EOF {
-		panic(err)
-	}
-	if read_length != int(length) {
-		panic(fmt.Errorf("bad read length when reading []byte, expected %d, read %d", length, read_length))
-	}
-	return buffer
-}
-
-type FfiDestroyerBytes struct {}
-
-func (FfiDestroyerBytes) Destroy(_ []byte) {}
-
-
-
 
 // Below is an implementation of synchronization requirements outlined in the link.
 // https://github.com/mozilla/uniffi-rs/blob/0dc031132d9493ca812c3af6e7dd60ad2ea95bf0/uniffi_bindgen/src/bindings/kotlin/templates/ObjectRuntime.kt#L31
@@ -2323,55 +2277,6 @@ func (_ FfiDestroyerTelio) Destroy(value *Telio) {
 
 
 
-// Exponential backoff bounds
-type Backoff struct {
-	// Initial bound
-	//
-	// Used as the first backoff value after ExponentialBackoff creation or reset [default 2s]
-	InitialS uint32
-	// Maximal bound
-	//
-	// A maximal backoff value which might be achieved during exponential backoff
-	// - if set to None/null there will be no upper bound for the penalty duration [default 120s]
-	MaximalS *uint32
-}
-
-func (r *Backoff) Destroy() {
-		FfiDestroyerUint32{}.Destroy(r.InitialS);
-		FfiDestroyerOptionalUint32{}.Destroy(r.MaximalS);
-}
-
-type FfiConverterBackoff struct {}
-
-var FfiConverterBackoffINSTANCE = FfiConverterBackoff{}
-
-func (c FfiConverterBackoff) Lift(rb RustBufferI) Backoff {
-	return LiftFromRustBuffer[Backoff](c, rb)
-}
-
-func (c FfiConverterBackoff) Read(reader io.Reader) Backoff {
-	return Backoff {
-			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterOptionalUint32INSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterBackoff) Lower(value Backoff) C.RustBuffer {
-	return LowerIntoRustBuffer[Backoff](c, value)
-}
-
-func (c FfiConverterBackoff) Write(writer io.Writer, value Backoff) {
-		FfiConverterUint32INSTANCE.Write(writer, value.InitialS);
-		FfiConverterOptionalUint32INSTANCE.Write(writer, value.MaximalS);
-}
-
-type FfiDestroyerBackoff struct {}
-
-func (_ FfiDestroyerBackoff) Destroy(value Backoff) {
-	value.Destroy()
-}
-
-
 // Rust representation of [meshnet map]
 // A network map of all the Peers and the servers
 type Config struct {
@@ -2774,20 +2679,10 @@ func (_ FfiDestroyerFeatureEndpointProvidersOptimization) Destroy(value FeatureE
 type FeatureErrorNotificationService struct {
 	// Size of the internal queue of received and to-be-published vpn error notifications
 	BufferSize uint32
-	// Allow only post-quantum safe key exchange algorithm for the ENS HTTPS connection
-	AllowOnlyPq bool
-	// Configuration of the backoff algorithm used by ENS
-	Backoff Backoff
-	// DER encoded root certificate to be used for verification of all TLS connections
-	// to gRPC ENS endpoint in place of the hardcoded one
-	RootCertificateOverride *[]byte
 }
 
 func (r *FeatureErrorNotificationService) Destroy() {
 		FfiDestroyerUint32{}.Destroy(r.BufferSize);
-		FfiDestroyerBool{}.Destroy(r.AllowOnlyPq);
-		FfiDestroyerBackoff{}.Destroy(r.Backoff);
-		FfiDestroyerOptionalBytes{}.Destroy(r.RootCertificateOverride);
 }
 
 type FfiConverterFeatureErrorNotificationService struct {}
@@ -2801,9 +2696,6 @@ func (c FfiConverterFeatureErrorNotificationService) Lift(rb RustBufferI) Featur
 func (c FfiConverterFeatureErrorNotificationService) Read(reader io.Reader) FeatureErrorNotificationService {
 	return FeatureErrorNotificationService {
 			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterBackoffINSTANCE.Read(reader),
-			FfiConverterOptionalBytesINSTANCE.Read(reader),
 	}
 }
 
@@ -2813,9 +2705,6 @@ func (c FfiConverterFeatureErrorNotificationService) Lower(value FeatureErrorNot
 
 func (c FfiConverterFeatureErrorNotificationService) Write(writer io.Writer, value FeatureErrorNotificationService) {
 		FfiConverterUint32INSTANCE.Write(writer, value.BufferSize);
-		FfiConverterBoolINSTANCE.Write(writer, value.AllowOnlyPq);
-		FfiConverterBackoffINSTANCE.Write(writer, value.Backoff);
-		FfiConverterOptionalBytesINSTANCE.Write(writer, value.RootCertificateOverride);
 }
 
 type FfiDestroyerFeatureErrorNotificationService struct {}
@@ -4857,12 +4746,7 @@ const (
 	VpnConnectionErrorUnknown VpnConnectionError = 1
 	// Connection limit reached
 	VpnConnectionErrorConnectionLimitReached VpnConnectionError = 2
-	// Server will undergo maintenance in the near future.
-	// Will be sent only when server is going down for a longer time (rollout is ‘maintain’ free),
-	// so that we do not expect to get such a messages often from the same server. More than 2 such
-	// messages from the same server in less than 10 minutes is suspicious. Once app gets this message,
-	// it should pull server list from the API and use that new list. This is because SRE is removing
-	// maintained servers from the server list in advance of maintenance.
+	// Server will undergo maintenance in the near future
 	VpnConnectionErrorServerMaintenance VpnConnectionError = 3
 	// Authentication failed
 	VpnConnectionErrorUnauthenticated VpnConnectionError = 4
@@ -5380,45 +5264,6 @@ type FfiDestroyerOptionalString struct {}
 func (_ FfiDestroyerOptionalString) Destroy(value *string) {
 	if value != nil {
 		FfiDestroyerString{}.Destroy(*value)
-	}
-}
-
-
-
-type FfiConverterOptionalBytes struct{}
-
-var FfiConverterOptionalBytesINSTANCE = FfiConverterOptionalBytes{}
-
-func (c FfiConverterOptionalBytes) Lift(rb RustBufferI) *[]byte {
-	return LiftFromRustBuffer[*[]byte](c, rb)
-}
-
-func (_ FfiConverterOptionalBytes) Read(reader io.Reader) *[]byte {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterBytesINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalBytes) Lower(value *[]byte) C.RustBuffer {
-	return LowerIntoRustBuffer[*[]byte](c, value)
-}
-
-func (_ FfiConverterOptionalBytes) Write(writer io.Writer, value *[]byte) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterBytesINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalBytes struct {}
-
-func (_ FfiDestroyerOptionalBytes) Destroy(value *[]byte) {
-	if value != nil {
-		FfiDestroyerBytes{}.Destroy(*value)
 	}
 }
 
