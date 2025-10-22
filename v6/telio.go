@@ -795,6 +795,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_set_ext_if_filter()
+	})
+	if checksum != 8768 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_set_ext_if_filter: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_fwmark()
 	})
 	if checksum != 38777 {
@@ -872,6 +881,15 @@ func uniffiCheckChecksums() {
 	if checksum != 29016 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_start_named: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_start_named_ext_if_filter()
+	})
+	if checksum != 19301 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_start_named_ext_if_filter: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1679,6 +1697,8 @@ type TelioInterface interface {
 	// Notify telio when system wakes up.
 	NotifyWakeup() error
 	ReceivePing() (string, error)
+	// Set filtered interfaces list on adapter
+	SetExtIfFilter(extIfFilter []string) error
 	// Sets fmark for started device.
 	//
 	// # Parameters
@@ -1720,6 +1740,10 @@ type TelioInterface interface {
 	//
 	// Adapter will attempt to open its own tunnel.
 	StartNamed(secretKey SecretKey, adapter TelioAdapterType, name string) error
+	// Start telio with specified adapter type, adapter name and filtered default interface list.
+	//
+	// Adapter will attempt to open its own tunnel.
+	StartNamedExtIfFilter(secretKey SecretKey, adapter TelioAdapterType, name string, extIfFilter []string) error
 	// Start telio device with specified adapter and already open tunnel.
 	//
 	// Telio will take ownership of tunnel , and close it on stop.
@@ -2085,6 +2109,18 @@ func (_self *Telio) ReceivePing() (string, error) {
 		}
 }
 
+// Set filtered interfaces list on adapter
+func (_self *Telio) SetExtIfFilter(extIfFilter []string) error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_set_ext_if_filter(
+		_pointer,FfiConverterSequenceStringINSTANCE.Lower(extIfFilter),_uniffiStatus)
+		return false
+	})
+		return _uniffiErr.AsError()
+}
+
 // Sets fmark for started device.
 //
 // # Parameters
@@ -2211,6 +2247,20 @@ func (_self *Telio) StartNamed(secretKey SecretKey, adapter TelioAdapterType, na
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_start_named(
 		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey), FfiConverterTelioAdapterTypeINSTANCE.Lower(adapter), FfiConverterStringINSTANCE.Lower(name),_uniffiStatus)
+		return false
+	})
+		return _uniffiErr.AsError()
+}
+
+// Start telio with specified adapter type, adapter name and filtered default interface list.
+//
+// Adapter will attempt to open its own tunnel.
+func (_self *Telio) StartNamedExtIfFilter(secretKey SecretKey, adapter TelioAdapterType, name string, extIfFilter []string) error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_start_named_ext_if_filter(
+		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey), FfiConverterTelioAdapterTypeINSTANCE.Lower(adapter), FfiConverterStringINSTANCE.Lower(name), FfiConverterSequenceStringINSTANCE.Lower(extIfFilter),_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()
@@ -6394,6 +6444,51 @@ type FfiDestroyerOptionalTypeSocketAddr struct {}
 func (_ FfiDestroyerOptionalTypeSocketAddr) Destroy(value *SocketAddr) {
 	if value != nil {
 		FfiDestroyerTypeSocketAddr{}.Destroy(*value)
+	}
+}
+
+
+
+type FfiConverterSequenceString struct{}
+
+var FfiConverterSequenceStringINSTANCE = FfiConverterSequenceString{}
+
+func (c FfiConverterSequenceString) Lift(rb RustBufferI) []string {
+	return LiftFromRustBuffer[[]string](c, rb)
+}
+
+func (c FfiConverterSequenceString) Read(reader io.Reader) []string {
+	length := readInt32(reader)
+	if length == 0 {
+		return nil
+	}
+	result := make([]string, 0, length)
+	for i := int32(0); i < length; i++ {
+		result = append(result, FfiConverterStringINSTANCE.Read(reader))
+	}
+	return result
+}
+
+func (c FfiConverterSequenceString) Lower(value []string) C.RustBuffer {
+	return LowerIntoRustBuffer[[]string](c, value)
+}
+
+func (c FfiConverterSequenceString) Write(writer io.Writer, value []string) {
+	if len(value) > math.MaxInt32 {
+		panic("[]string is too large to fit into Int32")
+	}
+
+	writeInt32(writer, int32(len(value)))
+	for _, item := range value {
+		FfiConverterStringINSTANCE.Write(writer, item)
+	}
+}
+
+type FfiDestroyerSequenceString struct {}
+
+func (FfiDestroyerSequenceString) Destroy(sequence []string) {
+	for _, value := range sequence {
+		FfiDestroyerString{}.Destroy(value)	
 	}
 }
 
