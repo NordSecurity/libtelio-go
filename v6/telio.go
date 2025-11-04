@@ -795,15 +795,6 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_set_ext_if_filter()
-	})
-	if checksum != 8768 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_set_ext_if_filter: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_fwmark()
 	})
 	if checksum != 38777 {
@@ -881,15 +872,6 @@ func uniffiCheckChecksums() {
 	if checksum != 29016 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_start_named: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_start_named_ext_if_filter()
-	})
-	if checksum != 19301 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_start_named_ext_if_filter: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1168,52 +1150,6 @@ func (FfiConverterString) Write(writer io.Writer, value string) {
 type FfiDestroyerString struct {}
 
 func (FfiDestroyerString) Destroy(_ string) {}
-
-
-type FfiConverterBytes struct{}
-
-var FfiConverterBytesINSTANCE = FfiConverterBytes{}
-
-func (c FfiConverterBytes) Lower(value []byte) C.RustBuffer {
-	return LowerIntoRustBuffer[[]byte](c, value)
-}
-
-func (c FfiConverterBytes) Write(writer io.Writer, value []byte) {
-	if len(value) > math.MaxInt32 {
-		panic("[]byte is too large to fit into Int32")
-	}
-
-	writeInt32(writer, int32(len(value)))
-	write_length, err := writer.Write(value)
-	if err != nil {
-		panic(err)
-	}
-	if write_length != len(value) {
-		panic(fmt.Errorf("bad write length when writing []byte, expected %d, written %d", len(value), write_length))
-	}
-}
-
-func (c FfiConverterBytes) Lift(rb RustBufferI) []byte {
-	return LiftFromRustBuffer[[]byte](c, rb)
-}
-
-func (c FfiConverterBytes) Read(reader io.Reader) []byte {
-	length := readInt32(reader)
-	buffer := make([]byte, length)
-	read_length, err := reader.Read(buffer)
-	if err != nil && err != io.EOF {
-		panic(err)
-	}
-	if read_length != int(length) {
-		panic(fmt.Errorf("bad read length when reading []byte, expected %d, read %d", length, read_length))
-	}
-	return buffer
-}
-
-type FfiDestroyerBytes struct {}
-
-func (FfiDestroyerBytes) Destroy(_ []byte) {}
-
 
 
 
@@ -1697,8 +1633,6 @@ type TelioInterface interface {
 	// Notify telio when system wakes up.
 	NotifyWakeup() error
 	ReceivePing() (string, error)
-	// Set filtered interfaces list on adapter
-	SetExtIfFilter(extIfFilter []string) error
 	// Sets fmark for started device.
 	//
 	// # Parameters
@@ -1740,10 +1674,6 @@ type TelioInterface interface {
 	//
 	// Adapter will attempt to open its own tunnel.
 	StartNamed(secretKey SecretKey, adapter TelioAdapterType, name string) error
-	// Start telio with specified adapter type, adapter name and filtered default interface list.
-	//
-	// Adapter will attempt to open its own tunnel.
-	StartNamedExtIfFilter(secretKey SecretKey, adapter TelioAdapterType, name string, extIfFilter []string) error
 	// Start telio device with specified adapter and already open tunnel.
 	//
 	// Telio will take ownership of tunnel , and close it on stop.
@@ -2109,18 +2039,6 @@ func (_self *Telio) ReceivePing() (string, error) {
 		}
 }
 
-// Set filtered interfaces list on adapter
-func (_self *Telio) SetExtIfFilter(extIfFilter []string) error {
-	_pointer := _self.ffiObject.incrementPointer("*Telio")
-	defer _self.ffiObject.decrementPointer()
-	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_telio_set_ext_if_filter(
-		_pointer,FfiConverterSequenceStringINSTANCE.Lower(extIfFilter),_uniffiStatus)
-		return false
-	})
-		return _uniffiErr.AsError()
-}
-
 // Sets fmark for started device.
 //
 // # Parameters
@@ -2252,20 +2170,6 @@ func (_self *Telio) StartNamed(secretKey SecretKey, adapter TelioAdapterType, na
 		return _uniffiErr.AsError()
 }
 
-// Start telio with specified adapter type, adapter name and filtered default interface list.
-//
-// Adapter will attempt to open its own tunnel.
-func (_self *Telio) StartNamedExtIfFilter(secretKey SecretKey, adapter TelioAdapterType, name string, extIfFilter []string) error {
-	_pointer := _self.ffiObject.incrementPointer("*Telio")
-	defer _self.ffiObject.decrementPointer()
-	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_telio_start_named_ext_if_filter(
-		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey), FfiConverterTelioAdapterTypeINSTANCE.Lower(adapter), FfiConverterStringINSTANCE.Lower(name), FfiConverterSequenceStringINSTANCE.Lower(extIfFilter),_uniffiStatus)
-		return false
-	})
-		return _uniffiErr.AsError()
-}
-
 // Start telio device with specified adapter and already open tunnel.
 //
 // Telio will take ownership of tunnel , and close it on stop.
@@ -2371,55 +2275,6 @@ func (_ FfiDestroyerTelio) Destroy(value *Telio) {
 
 
 
-
-
-// Exponential backoff bounds
-type Backoff struct {
-	// Initial bound
-	//
-	// Used as the first backoff value after ExponentialBackoff creation or reset [default 2s]
-	InitialS uint32
-	// Maximal bound
-	//
-	// A maximal backoff value which might be achieved during exponential backoff
-	// - if set to None/null there will be no upper bound for the penalty duration [default 120s]
-	MaximalS *uint32
-}
-
-func (r *Backoff) Destroy() {
-		FfiDestroyerUint32{}.Destroy(r.InitialS);
-		FfiDestroyerOptionalUint32{}.Destroy(r.MaximalS);
-}
-
-type FfiConverterBackoff struct {}
-
-var FfiConverterBackoffINSTANCE = FfiConverterBackoff{}
-
-func (c FfiConverterBackoff) Lift(rb RustBufferI) Backoff {
-	return LiftFromRustBuffer[Backoff](c, rb)
-}
-
-func (c FfiConverterBackoff) Read(reader io.Reader) Backoff {
-	return Backoff {
-			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterOptionalUint32INSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterBackoff) Lower(value Backoff) C.RustBuffer {
-	return LowerIntoRustBuffer[Backoff](c, value)
-}
-
-func (c FfiConverterBackoff) Write(writer io.Writer, value Backoff) {
-		FfiConverterUint32INSTANCE.Write(writer, value.InitialS);
-		FfiConverterOptionalUint32INSTANCE.Write(writer, value.MaximalS);
-}
-
-type FfiDestroyerBackoff struct {}
-
-func (_ FfiDestroyerBackoff) Destroy(value Backoff) {
-	value.Destroy()
-}
 
 
 // Rust representation of [meshnet map]
@@ -2824,20 +2679,10 @@ func (_ FfiDestroyerFeatureEndpointProvidersOptimization) Destroy(value FeatureE
 type FeatureErrorNotificationService struct {
 	// Size of the internal queue of received and to-be-published vpn error notifications
 	BufferSize uint32
-	// Allow only post-quantum safe key exchange algorithm for the ENS HTTPS connection
-	AllowOnlyPq bool
-	// Configuration of the backoff algorithm used by ENS
-	Backoff Backoff
-	// DER encoded root certificate to be used for verification of all TLS connections
-	// to gRPC ENS endpoint in place of the hardcoded one
-	RootCertificateOverride *[]byte
 }
 
 func (r *FeatureErrorNotificationService) Destroy() {
 		FfiDestroyerUint32{}.Destroy(r.BufferSize);
-		FfiDestroyerBool{}.Destroy(r.AllowOnlyPq);
-		FfiDestroyerBackoff{}.Destroy(r.Backoff);
-		FfiDestroyerOptionalBytes{}.Destroy(r.RootCertificateOverride);
 }
 
 type FfiConverterFeatureErrorNotificationService struct {}
@@ -2851,9 +2696,6 @@ func (c FfiConverterFeatureErrorNotificationService) Lift(rb RustBufferI) Featur
 func (c FfiConverterFeatureErrorNotificationService) Read(reader io.Reader) FeatureErrorNotificationService {
 	return FeatureErrorNotificationService {
 			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterBackoffINSTANCE.Read(reader),
-			FfiConverterOptionalBytesINSTANCE.Read(reader),
 	}
 }
 
@@ -2863,9 +2705,6 @@ func (c FfiConverterFeatureErrorNotificationService) Lower(value FeatureErrorNot
 
 func (c FfiConverterFeatureErrorNotificationService) Write(writer io.Writer, value FeatureErrorNotificationService) {
 		FfiConverterUint32INSTANCE.Write(writer, value.BufferSize);
-		FfiConverterBoolINSTANCE.Write(writer, value.AllowOnlyPq);
-		FfiConverterBackoffINSTANCE.Write(writer, value.Backoff);
-		FfiConverterOptionalBytesINSTANCE.Write(writer, value.RootCertificateOverride);
 }
 
 type FfiDestroyerFeatureErrorNotificationService struct {}
@@ -4907,12 +4746,7 @@ const (
 	VpnConnectionErrorUnknown VpnConnectionError = 1
 	// Connection limit reached
 	VpnConnectionErrorConnectionLimitReached VpnConnectionError = 2
-	// Server will undergo maintenance in the near future.
-	// Will be sent only when server is going down for a longer time (rollout is ‘maintain’ free),
-	// so that we do not expect to get such a messages often from the same server. More than 2 such
-	// messages from the same server in less than 10 minutes is suspicious. Once app gets this message,
-	// it should pull server list from the API and use that new list. This is because SRE is removing
-	// maintained servers from the server list in advance of maintenance.
+	// Server will undergo maintenance in the near future
 	VpnConnectionErrorServerMaintenance VpnConnectionError = 3
 	// Authentication failed
 	VpnConnectionErrorUnauthenticated VpnConnectionError = 4
@@ -5430,45 +5264,6 @@ type FfiDestroyerOptionalString struct {}
 func (_ FfiDestroyerOptionalString) Destroy(value *string) {
 	if value != nil {
 		FfiDestroyerString{}.Destroy(*value)
-	}
-}
-
-
-
-type FfiConverterOptionalBytes struct{}
-
-var FfiConverterOptionalBytesINSTANCE = FfiConverterOptionalBytes{}
-
-func (c FfiConverterOptionalBytes) Lift(rb RustBufferI) *[]byte {
-	return LiftFromRustBuffer[*[]byte](c, rb)
-}
-
-func (_ FfiConverterOptionalBytes) Read(reader io.Reader) *[]byte {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterBytesINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalBytes) Lower(value *[]byte) C.RustBuffer {
-	return LowerIntoRustBuffer[*[]byte](c, value)
-}
-
-func (_ FfiConverterOptionalBytes) Write(writer io.Writer, value *[]byte) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterBytesINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalBytes struct {}
-
-func (_ FfiDestroyerOptionalBytes) Destroy(value *[]byte) {
-	if value != nil {
-		FfiDestroyerBytes{}.Destroy(*value)
 	}
 }
 
@@ -6444,51 +6239,6 @@ type FfiDestroyerOptionalTypeSocketAddr struct {}
 func (_ FfiDestroyerOptionalTypeSocketAddr) Destroy(value *SocketAddr) {
 	if value != nil {
 		FfiDestroyerTypeSocketAddr{}.Destroy(*value)
-	}
-}
-
-
-
-type FfiConverterSequenceString struct{}
-
-var FfiConverterSequenceStringINSTANCE = FfiConverterSequenceString{}
-
-func (c FfiConverterSequenceString) Lift(rb RustBufferI) []string {
-	return LiftFromRustBuffer[[]string](c, rb)
-}
-
-func (c FfiConverterSequenceString) Read(reader io.Reader) []string {
-	length := readInt32(reader)
-	if length == 0 {
-		return nil
-	}
-	result := make([]string, 0, length)
-	for i := int32(0); i < length; i++ {
-		result = append(result, FfiConverterStringINSTANCE.Read(reader))
-	}
-	return result
-}
-
-func (c FfiConverterSequenceString) Lower(value []string) C.RustBuffer {
-	return LowerIntoRustBuffer[[]string](c, value)
-}
-
-func (c FfiConverterSequenceString) Write(writer io.Writer, value []string) {
-	if len(value) > math.MaxInt32 {
-		panic("[]string is too large to fit into Int32")
-	}
-
-	writeInt32(writer, int32(len(value)))
-	for _, item := range value {
-		FfiConverterStringINSTANCE.Write(writer, item)
-	}
-}
-
-type FfiDestroyerSequenceString struct {}
-
-func (FfiDestroyerSequenceString) Destroy(sequence []string) {
-	for _, value := range sequence {
-		FfiDestroyerString{}.Destroy(value)	
 	}
 }
 
