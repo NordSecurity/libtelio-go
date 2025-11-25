@@ -660,6 +660,11 @@ void uniffi_telio_fn_method_telio_notify_wakeup(void* ptr, RustCallStatus *out_s
 RustBuffer uniffi_telio_fn_method_telio_receive_ping(void* ptr, RustCallStatus *out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_EXT_IF_FILTER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_EXT_IF_FILTER
+void uniffi_telio_fn_method_telio_set_ext_if_filter(void* ptr, RustBuffer ext_if_filter, RustCallStatus *out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_FWMARK
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_FWMARK
 void uniffi_telio_fn_method_telio_set_fwmark(void* ptr, uint32_t fwmark, RustCallStatus *out_status
@@ -703,6 +708,11 @@ void uniffi_telio_fn_method_telio_start(void* ptr, RustBuffer secret_key, RustBu
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_NAMED
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_NAMED
 void uniffi_telio_fn_method_telio_start_named(void* ptr, RustBuffer secret_key, RustBuffer adapter, RustBuffer name, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_NAMED_EXT_IF_FILTER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_NAMED_EXT_IF_FILTER
+void uniffi_telio_fn_method_telio_start_named_ext_if_filter(void* ptr, RustBuffer secret_key, RustBuffer adapter, RustBuffer name, RustBuffer ext_if_filter, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_WITH_TUN
@@ -1375,6 +1385,12 @@ uint16_t uniffi_telio_checksum_method_telio_receive_ping(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_EXT_IF_FILTER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_EXT_IF_FILTER
+uint16_t uniffi_telio_checksum_method_telio_set_ext_if_filter(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_FWMARK
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_FWMARK
 uint16_t uniffi_telio_checksum_method_telio_set_fwmark(void
@@ -1426,6 +1442,12 @@ uint16_t uniffi_telio_checksum_method_telio_start(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START_NAMED
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START_NAMED
 uint16_t uniffi_telio_checksum_method_telio_start_named(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START_NAMED_EXT_IF_FILTER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START_NAMED_EXT_IF_FILTER
+uint16_t uniffi_telio_checksum_method_telio_start_named_ext_if_filter(void
     
 );
 #endif
