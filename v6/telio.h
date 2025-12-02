@@ -420,6 +420,48 @@ static void call_UniffiCallbackInterfaceTelioProtectCbMethod0(
 
 
 #endif
+#ifndef UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_CUSTOM_ADAPTER_METHOD0
+#define UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_CUSTOM_ADAPTER_METHOD0
+typedef void (*UniffiCallbackInterfaceTelioCustomAdapterMethod0)(uint64_t uniffi_handle, RustBuffer cmd, RustBuffer* uniffi_out_return, RustCallStatus* callStatus );
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiCallbackInterfaceTelioCustomAdapterMethod0(
+				UniffiCallbackInterfaceTelioCustomAdapterMethod0 cb, uint64_t uniffi_handle, RustBuffer cmd, RustBuffer* uniffi_out_return, RustCallStatus* callStatus )
+{
+	return cb(uniffi_handle, cmd, uniffi_out_return, callStatus );
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_CUSTOM_ADAPTER_METHOD1
+#define UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_CUSTOM_ADAPTER_METHOD1
+typedef void (*UniffiCallbackInterfaceTelioCustomAdapterMethod1)(uint64_t uniffi_handle, void* uniffi_out_return, RustCallStatus* callStatus );
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiCallbackInterfaceTelioCustomAdapterMethod1(
+				UniffiCallbackInterfaceTelioCustomAdapterMethod1 cb, uint64_t uniffi_handle, void* uniffi_out_return, RustCallStatus* callStatus )
+{
+	return cb(uniffi_handle, uniffi_out_return, callStatus );
+}
+
+
+#endif
+#ifndef UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_CUSTOM_ADAPTER_METHOD2
+#define UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_CUSTOM_ADAPTER_METHOD2
+typedef void (*UniffiCallbackInterfaceTelioCustomAdapterMethod2)(uint64_t uniffi_handle, void* uniffi_out_return, RustCallStatus* callStatus );
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiCallbackInterfaceTelioCustomAdapterMethod2(
+				UniffiCallbackInterfaceTelioCustomAdapterMethod2 cb, uint64_t uniffi_handle, void* uniffi_out_return, RustCallStatus* callStatus )
+{
+	return cb(uniffi_handle, uniffi_out_return, callStatus );
+}
+
+
+#endif
 #ifndef UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TELIO_EVENT_CB
 #define UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TELIO_EVENT_CB
 typedef struct UniffiVTableCallbackInterfaceTelioEventCb {
@@ -442,6 +484,16 @@ typedef struct UniffiVTableCallbackInterfaceTelioProtectCb {
     UniffiCallbackInterfaceTelioProtectCbMethod0 protect;
     UniffiCallbackInterfaceFree uniffiFree;
 } UniffiVTableCallbackInterfaceTelioProtectCb;
+
+#endif
+#ifndef UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TELIO_CUSTOM_ADAPTER
+#define UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TELIO_CUSTOM_ADAPTER
+typedef struct UniffiVTableCallbackInterfaceTelioCustomAdapter {
+    UniffiCallbackInterfaceTelioCustomAdapterMethod0 sendUapiCmd;
+    UniffiCallbackInterfaceTelioCustomAdapterMethod1 start;
+    UniffiCallbackInterfaceTelioCustomAdapterMethod2 stop;
+    UniffiCallbackInterfaceFree uniffiFree;
+} UniffiVTableCallbackInterfaceTelioCustomAdapter;
 
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_FEATURESDEFAULTSBUILDER
@@ -705,6 +757,11 @@ void uniffi_telio_fn_method_telio_shutdown_hard(void* ptr, RustCallStatus *out_s
 void uniffi_telio_fn_method_telio_start(void* ptr, RustBuffer secret_key, RustBuffer adapter, RustCallStatus *out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_CUSTOM
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_CUSTOM
+void uniffi_telio_fn_method_telio_start_custom(void* ptr, RustBuffer secret_key, void* adapter, RustCallStatus *out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_NAMED
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_START_NAMED
 void uniffi_telio_fn_method_telio_start_named(void* ptr, RustBuffer secret_key, RustBuffer adapter, RustBuffer name, RustCallStatus *out_status
@@ -733,6 +790,36 @@ void uniffi_telio_fn_method_telio_trigger_analytics_event(void* ptr, RustCallSta
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_TRIGGER_QOS_COLLECTION
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_TRIGGER_QOS_COLLECTION
 void uniffi_telio_fn_method_telio_trigger_qos_collection(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_TELIOCUSTOMADAPTER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_TELIOCUSTOMADAPTER
+void* uniffi_telio_fn_clone_teliocustomadapter(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_TELIOCUSTOMADAPTER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_TELIOCUSTOMADAPTER
+void uniffi_telio_fn_free_teliocustomadapter(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TELIOCUSTOMADAPTER
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TELIOCUSTOMADAPTER
+void uniffi_telio_fn_init_callback_vtable_teliocustomadapter(UniffiVTableCallbackInterfaceTelioCustomAdapter* vtable
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOCUSTOMADAPTER_SEND_UAPI_CMD
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOCUSTOMADAPTER_SEND_UAPI_CMD
+RustBuffer uniffi_telio_fn_method_teliocustomadapter_send_uapi_cmd(void* ptr, RustBuffer cmd, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOCUSTOMADAPTER_START
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOCUSTOMADAPTER_START
+void uniffi_telio_fn_method_teliocustomadapter_start(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOCUSTOMADAPTER_STOP
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOCUSTOMADAPTER_STOP
+void uniffi_telio_fn_method_teliocustomadapter_stop(void* ptr, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TELIOEVENTCB
@@ -1439,6 +1526,12 @@ uint16_t uniffi_telio_checksum_method_telio_start(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START_CUSTOM
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START_CUSTOM
+uint16_t uniffi_telio_checksum_method_telio_start_custom(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START_NAMED
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_START_NAMED
 uint16_t uniffi_telio_checksum_method_telio_start_named(void
@@ -1472,6 +1565,24 @@ uint16_t uniffi_telio_checksum_method_telio_trigger_analytics_event(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_TRIGGER_QOS_COLLECTION
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_TRIGGER_QOS_COLLECTION
 uint16_t uniffi_telio_checksum_method_telio_trigger_qos_collection(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOCUSTOMADAPTER_SEND_UAPI_CMD
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOCUSTOMADAPTER_SEND_UAPI_CMD
+uint16_t uniffi_telio_checksum_method_teliocustomadapter_send_uapi_cmd(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOCUSTOMADAPTER_START
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOCUSTOMADAPTER_START
+uint16_t uniffi_telio_checksum_method_teliocustomadapter_start(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOCUSTOMADAPTER_STOP
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOCUSTOMADAPTER_STOP
+uint16_t uniffi_telio_checksum_method_teliocustomadapter_stop(void
     
 );
 #endif
@@ -1518,6 +1629,10 @@ uint32_t ffi_telio_uniffi_contract_version(void
 );
 #endif
 
+ void telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod0(uint64_t uniffi_handle, RustBuffer cmd, RustBuffer* uniffi_out_return, RustCallStatus* callStatus );
+ void telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod1(uint64_t uniffi_handle, void* uniffi_out_return, RustCallStatus* callStatus );
+ void telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod2(uint64_t uniffi_handle, void* uniffi_out_return, RustCallStatus* callStatus );
+ void telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterFree(uint64_t handle);
  void telio_cgo_dispatchCallbackInterfaceTelioEventCbMethod0(uint64_t uniffi_handle, RustBuffer payload, void* uniffi_out_return, RustCallStatus* callStatus );
  void telio_cgo_dispatchCallbackInterfaceTelioEventCbFree(uint64_t handle);
  void telio_cgo_dispatchCallbackInterfaceTelioLoggerCbMethod0(uint64_t uniffi_handle, RustBuffer log_level, RustBuffer payload, void* uniffi_out_return, RustCallStatus* callStatus );
