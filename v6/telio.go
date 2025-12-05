@@ -3311,15 +3311,12 @@ func (_ FfiDestroyerFeatureLana) Destroy(value FeatureLana) {
 type FeatureLinkDetection struct {
 	// Configurable rtt in seconds
 	RttSeconds uint64
-	// Check the link state before reporting it as down
-	NoOfPings uint32
 	// Use link detection for downgrade logic
 	UseForDowngrade bool
 }
 
 func (r *FeatureLinkDetection) Destroy() {
 		FfiDestroyerUint64{}.Destroy(r.RttSeconds);
-		FfiDestroyerUint32{}.Destroy(r.NoOfPings);
 		FfiDestroyerBool{}.Destroy(r.UseForDowngrade);
 }
 
@@ -3334,7 +3331,6 @@ func (c FfiConverterFeatureLinkDetection) Lift(rb RustBufferI) FeatureLinkDetect
 func (c FfiConverterFeatureLinkDetection) Read(reader io.Reader) FeatureLinkDetection {
 	return FeatureLinkDetection {
 			FfiConverterUint64INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
@@ -3345,7 +3341,6 @@ func (c FfiConverterFeatureLinkDetection) Lower(value FeatureLinkDetection) C.Ru
 
 func (c FfiConverterFeatureLinkDetection) Write(writer io.Writer, value FeatureLinkDetection) {
 		FfiConverterUint64INSTANCE.Write(writer, value.RttSeconds);
-		FfiConverterUint32INSTANCE.Write(writer, value.NoOfPings);
 		FfiConverterBoolINSTANCE.Write(writer, value.UseForDowngrade);
 }
 
