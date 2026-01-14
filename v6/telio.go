@@ -343,6 +343,7 @@ func readFloat64(reader io.Reader) float64 {
 
 func init() {
         
+        FfiConverterTelioCustomAdapterINSTANCE.register();
         FfiConverterCallbackInterfaceTelioEventCbINSTANCE.register();
         FfiConverterCallbackInterfaceTelioLoggerCbINSTANCE.register();
         FfiConverterCallbackInterfaceTelioProtectCbINSTANCE.register();
@@ -876,6 +877,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_start_custom()
+	})
+	if checksum != 37803 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_start_custom: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_start_named()
 	})
 	if checksum != 29016 {
@@ -926,6 +936,33 @@ func uniffiCheckChecksums() {
 	if checksum != 54684 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_trigger_qos_collection: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_teliocustomadapter_send_uapi_cmd()
+	})
+	if checksum != 64524 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_teliocustomadapter_send_uapi_cmd: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_teliocustomadapter_start()
+	})
+	if checksum != 42867 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_teliocustomadapter_start: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_teliocustomadapter_stop()
+	})
+	if checksum != 60946 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_teliocustomadapter_stop: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1736,6 +1773,10 @@ type TelioInterface interface {
 	//
 	// Adapter will attempt to open its own tunnel.
 	Start(secretKey SecretKey, adapter TelioAdapterType) error
+	// Start telio with specified adapter.
+	//
+	// Adapter will attempt to open its own tunnel.
+	StartCustom(secretKey SecretKey, adapter TelioCustomAdapter) error
 	// Start telio with specified adapter and name.
 	//
 	// Adapter will attempt to open its own tunnel.
@@ -2238,6 +2279,20 @@ func (_self *Telio) Start(secretKey SecretKey, adapter TelioAdapterType) error {
 		return _uniffiErr.AsError()
 }
 
+// Start telio with specified adapter.
+//
+// Adapter will attempt to open its own tunnel.
+func (_self *Telio) StartCustom(secretKey SecretKey, adapter TelioCustomAdapter) error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_start_custom(
+		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey), FfiConverterTelioCustomAdapterINSTANCE.Lower(adapter),_uniffiStatus)
+		return false
+	})
+		return _uniffiErr.AsError()
+}
+
 // Start telio with specified adapter and name.
 //
 // Adapter will attempt to open its own tunnel.
@@ -2369,6 +2424,245 @@ func (_ FfiDestroyerTelio) Destroy(value *Telio) {
 		value.Destroy()
 }
 
+
+
+
+
+type TelioCustomAdapter interface {
+	// Send an UAPI command
+	SendUapiCmd(cmd WgCmd) WgResponse
+	// Start the adapter
+	Start() 
+	// Stop the adapter
+	Stop() 
+}
+type TelioCustomAdapterImpl struct {
+	ffiObject FfiObject
+}
+
+
+
+
+// Send an UAPI command
+func (_self *TelioCustomAdapterImpl) SendUapiCmd(cmd WgCmd) WgResponse {
+	_pointer := _self.ffiObject.incrementPointer("TelioCustomAdapter")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterWgResponseINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
+		return GoRustBuffer {
+		inner: C.uniffi_telio_fn_method_teliocustomadapter_send_uapi_cmd(
+		_pointer,FfiConverterWgCmdINSTANCE.Lower(cmd),_uniffiStatus),
+	}
+	}))
+}
+
+// Start the adapter
+func (_self *TelioCustomAdapterImpl) Start()  {
+	_pointer := _self.ffiObject.incrementPointer("TelioCustomAdapter")
+	defer _self.ffiObject.decrementPointer()
+	rustCall(func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_teliocustomadapter_start(
+		_pointer,_uniffiStatus)
+		return false
+	})
+}
+
+// Stop the adapter
+func (_self *TelioCustomAdapterImpl) Stop()  {
+	_pointer := _self.ffiObject.incrementPointer("TelioCustomAdapter")
+	defer _self.ffiObject.decrementPointer()
+	rustCall(func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_teliocustomadapter_stop(
+		_pointer,_uniffiStatus)
+		return false
+	})
+}
+func (object *TelioCustomAdapterImpl) Destroy() {
+	runtime.SetFinalizer(object, nil)
+	object.ffiObject.destroy()
+}
+
+type FfiConverterTelioCustomAdapter struct {
+	handleMap *concurrentHandleMap[TelioCustomAdapter]
+	}
+
+var FfiConverterTelioCustomAdapterINSTANCE = FfiConverterTelioCustomAdapter{
+	handleMap: newConcurrentHandleMap[TelioCustomAdapter](),
+	}
+
+
+func (c FfiConverterTelioCustomAdapter) Lift(pointer unsafe.Pointer) TelioCustomAdapter {
+	result := &TelioCustomAdapterImpl {
+		newFfiObject(
+			pointer,
+			func(pointer unsafe.Pointer, status *C.RustCallStatus) unsafe.Pointer {
+				return C.uniffi_telio_fn_clone_teliocustomadapter(pointer, status)
+			},
+			func(pointer unsafe.Pointer, status *C.RustCallStatus) {
+				C.uniffi_telio_fn_free_teliocustomadapter(pointer, status)
+			},
+		),
+	}
+	runtime.SetFinalizer(result, (*TelioCustomAdapterImpl).Destroy)
+	return result
+}
+
+func (c FfiConverterTelioCustomAdapter) Read(reader io.Reader) TelioCustomAdapter {
+	return c.Lift(unsafe.Pointer(uintptr(readUint64(reader))))
+}
+
+func (c FfiConverterTelioCustomAdapter) Lower(value TelioCustomAdapter) unsafe.Pointer {
+	// TODO: this is bad - all synchronization from ObjectRuntime.go is discarded here,
+	// because the pointer will be decremented immediately after this function returns,
+	// and someone will be left holding onto a non-locked pointer.
+	pointer := unsafe.Pointer(uintptr(c.handleMap.insert(value)))
+	return pointer
+	
+}
+
+func (c FfiConverterTelioCustomAdapter) Write(writer io.Writer, value TelioCustomAdapter) {
+	writeUint64(writer, uint64(uintptr(c.Lower(value))))
+}
+
+type FfiDestroyerTelioCustomAdapter struct {}
+
+func (_ FfiDestroyerTelioCustomAdapter) Destroy(value TelioCustomAdapter) {
+	if val, ok := value.(*TelioCustomAdapterImpl); ok {
+		val.Destroy()
+	} else {
+		panic("Expected *TelioCustomAdapterImpl")
+	}
+}
+
+type uniffiCallbackResult C.int8_t
+
+const (
+	uniffiIdxCallbackFree               uniffiCallbackResult = 0
+	uniffiCallbackResultSuccess         uniffiCallbackResult = 0
+	uniffiCallbackResultError           uniffiCallbackResult = 1
+	uniffiCallbackUnexpectedResultError uniffiCallbackResult = 2
+	uniffiCallbackCancelled             uniffiCallbackResult = 3
+)
+
+
+type concurrentHandleMap[T any] struct {
+	handles       map[uint64]T
+	currentHandle uint64
+	lock          sync.RWMutex
+}
+
+func newConcurrentHandleMap[T any]() *concurrentHandleMap[T] {
+	return &concurrentHandleMap[T]{
+		handles:  map[uint64]T{},
+	}
+}
+
+func (cm *concurrentHandleMap[T]) insert(obj T) uint64 {
+	cm.lock.Lock()
+	defer cm.lock.Unlock()
+
+	cm.currentHandle = cm.currentHandle + 1
+	cm.handles[cm.currentHandle] = obj
+	return cm.currentHandle
+}
+
+func (cm *concurrentHandleMap[T]) remove(handle uint64) {
+	cm.lock.Lock()
+	defer cm.lock.Unlock()
+
+	delete(cm.handles, handle)
+}
+
+func (cm *concurrentHandleMap[T]) tryGet(handle uint64) (T, bool) {
+	cm.lock.RLock()
+	defer cm.lock.RUnlock()
+
+	val, ok := cm.handles[handle]
+	return val, ok
+}
+
+//export telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod0
+func telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod0(uniffiHandle C.uint64_t,cmd C.RustBuffer,uniffiOutReturn *C.RustBuffer,callStatus *C.RustCallStatus,) {
+	handle := uint64(uniffiHandle)
+	uniffiObj, ok := FfiConverterTelioCustomAdapterINSTANCE.handleMap.tryGet(handle)
+	if !ok {
+		panic(fmt.Errorf("no callback in handle map: %d", handle))
+	}
+	
+	
+
+	 res :=
+    uniffiObj.SendUapiCmd(
+        FfiConverterWgCmdINSTANCE.Lift(GoRustBuffer {
+		inner: cmd,
+	}),
+    )
+	
+    
+
+
+	*uniffiOutReturn = FfiConverterWgResponseINSTANCE.Lower(res)
+}
+
+
+
+//export telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod1
+func telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod1(uniffiHandle C.uint64_t,uniffiOutReturn *C.void,callStatus *C.RustCallStatus,) {
+	handle := uint64(uniffiHandle)
+	uniffiObj, ok := FfiConverterTelioCustomAdapterINSTANCE.handleMap.tryGet(handle)
+	if !ok {
+		panic(fmt.Errorf("no callback in handle map: %d", handle))
+	}
+	
+	
+
+	
+    uniffiObj.Start(
+    )
+	
+    
+
+
+	
+}
+
+
+
+//export telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod2
+func telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod2(uniffiHandle C.uint64_t,uniffiOutReturn *C.void,callStatus *C.RustCallStatus,) {
+	handle := uint64(uniffiHandle)
+	uniffiObj, ok := FfiConverterTelioCustomAdapterINSTANCE.handleMap.tryGet(handle)
+	if !ok {
+		panic(fmt.Errorf("no callback in handle map: %d", handle))
+	}
+	
+	
+
+	
+    uniffiObj.Stop(
+    )
+	
+    
+
+
+	
+}
+
+var UniffiVTableCallbackInterfaceTelioCustomAdapterINSTANCE = C.UniffiVTableCallbackInterfaceTelioCustomAdapter {
+	sendUapiCmd: (C.UniffiCallbackInterfaceTelioCustomAdapterMethod0)(C.telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod0),
+	start: (C.UniffiCallbackInterfaceTelioCustomAdapterMethod1)(C.telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod1),
+	stop: (C.UniffiCallbackInterfaceTelioCustomAdapterMethod2)(C.telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod2),
+
+	uniffiFree: (C.UniffiCallbackInterfaceFree)(C.telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterFree),
+}
+
+//export telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterFree
+func telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterFree(handle C.uint64_t) {
+	FfiConverterTelioCustomAdapterINSTANCE.handleMap.remove(uint64(handle))
+}
+
+func (c FfiConverterTelioCustomAdapter) register() {
+	C.uniffi_telio_fn_init_callback_vtable_teliocustomadapter(&UniffiVTableCallbackInterfaceTelioCustomAdapterINSTANCE)
+}
 
 
 
@@ -3017,15 +3311,12 @@ func (_ FfiDestroyerFeatureLana) Destroy(value FeatureLana) {
 type FeatureLinkDetection struct {
 	// Configurable rtt in seconds
 	RttSeconds uint64
-	// Check the link state before reporting it as down
-	NoOfPings uint32
 	// Use link detection for downgrade logic
 	UseForDowngrade bool
 }
 
 func (r *FeatureLinkDetection) Destroy() {
 		FfiDestroyerUint64{}.Destroy(r.RttSeconds);
-		FfiDestroyerUint32{}.Destroy(r.NoOfPings);
 		FfiDestroyerBool{}.Destroy(r.UseForDowngrade);
 }
 
@@ -3040,7 +3331,6 @@ func (c FfiConverterFeatureLinkDetection) Lift(rb RustBufferI) FeatureLinkDetect
 func (c FfiConverterFeatureLinkDetection) Read(reader io.Reader) FeatureLinkDetection {
 	return FeatureLinkDetection {
 			FfiConverterUint64INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
@@ -3051,7 +3341,6 @@ func (c FfiConverterFeatureLinkDetection) Lower(value FeatureLinkDetection) C.Ru
 
 func (c FfiConverterFeatureLinkDetection) Write(writer io.Writer, value FeatureLinkDetection) {
 		FfiConverterUint64INSTANCE.Write(writer, value.RttSeconds);
-		FfiConverterUint32INSTANCE.Write(writer, value.NoOfPings);
 		FfiConverterBoolINSTANCE.Write(writer, value.UseForDowngrade);
 }
 
@@ -4049,6 +4338,222 @@ func (_ FfiDestroyerTelioNode) Destroy(value TelioNode) {
 }
 
 
+type WgDevice struct {
+	PrivateKey *string
+	ListenPort *uint16
+	Fwmark *uint32
+	ReplacePeers *bool
+	Peers []WgPeer
+}
+
+func (r *WgDevice) Destroy() {
+		FfiDestroyerOptionalString{}.Destroy(r.PrivateKey);
+		FfiDestroyerOptionalUint16{}.Destroy(r.ListenPort);
+		FfiDestroyerOptionalUint32{}.Destroy(r.Fwmark);
+		FfiDestroyerOptionalBool{}.Destroy(r.ReplacePeers);
+		FfiDestroyerSequenceWgPeer{}.Destroy(r.Peers);
+}
+
+type FfiConverterWgDevice struct {}
+
+var FfiConverterWgDeviceINSTANCE = FfiConverterWgDevice{}
+
+func (c FfiConverterWgDevice) Lift(rb RustBufferI) WgDevice {
+	return LiftFromRustBuffer[WgDevice](c, rb)
+}
+
+func (c FfiConverterWgDevice) Read(reader io.Reader) WgDevice {
+	return WgDevice {
+			FfiConverterOptionalStringINSTANCE.Read(reader),
+			FfiConverterOptionalUint16INSTANCE.Read(reader),
+			FfiConverterOptionalUint32INSTANCE.Read(reader),
+			FfiConverterOptionalBoolINSTANCE.Read(reader),
+			FfiConverterSequenceWgPeerINSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterWgDevice) Lower(value WgDevice) C.RustBuffer {
+	return LowerIntoRustBuffer[WgDevice](c, value)
+}
+
+func (c FfiConverterWgDevice) Write(writer io.Writer, value WgDevice) {
+		FfiConverterOptionalStringINSTANCE.Write(writer, value.PrivateKey);
+		FfiConverterOptionalUint16INSTANCE.Write(writer, value.ListenPort);
+		FfiConverterOptionalUint32INSTANCE.Write(writer, value.Fwmark);
+		FfiConverterOptionalBoolINSTANCE.Write(writer, value.ReplacePeers);
+		FfiConverterSequenceWgPeerINSTANCE.Write(writer, value.Peers);
+}
+
+type FfiDestroyerWgDevice struct {}
+
+func (_ FfiDestroyerWgDevice) Destroy(value WgDevice) {
+	value.Destroy()
+}
+
+
+type WgInterface struct {
+	PrivateKey *string
+	ListenPort *uint16
+	Fwmark uint32
+	Peers map[string]WgPeer
+}
+
+func (r *WgInterface) Destroy() {
+		FfiDestroyerOptionalString{}.Destroy(r.PrivateKey);
+		FfiDestroyerOptionalUint16{}.Destroy(r.ListenPort);
+		FfiDestroyerUint32{}.Destroy(r.Fwmark);
+		FfiDestroyerMapStringWgPeer{}.Destroy(r.Peers);
+}
+
+type FfiConverterWgInterface struct {}
+
+var FfiConverterWgInterfaceINSTANCE = FfiConverterWgInterface{}
+
+func (c FfiConverterWgInterface) Lift(rb RustBufferI) WgInterface {
+	return LiftFromRustBuffer[WgInterface](c, rb)
+}
+
+func (c FfiConverterWgInterface) Read(reader io.Reader) WgInterface {
+	return WgInterface {
+			FfiConverterOptionalStringINSTANCE.Read(reader),
+			FfiConverterOptionalUint16INSTANCE.Read(reader),
+			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterMapStringWgPeerINSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterWgInterface) Lower(value WgInterface) C.RustBuffer {
+	return LowerIntoRustBuffer[WgInterface](c, value)
+}
+
+func (c FfiConverterWgInterface) Write(writer io.Writer, value WgInterface) {
+		FfiConverterOptionalStringINSTANCE.Write(writer, value.PrivateKey);
+		FfiConverterOptionalUint16INSTANCE.Write(writer, value.ListenPort);
+		FfiConverterUint32INSTANCE.Write(writer, value.Fwmark);
+		FfiConverterMapStringWgPeerINSTANCE.Write(writer, value.Peers);
+}
+
+type FfiDestroyerWgInterface struct {}
+
+func (_ FfiDestroyerWgInterface) Destroy(value WgInterface) {
+	value.Destroy()
+}
+
+
+type WgPeer struct {
+	PublicKey PublicKey
+	Endpoint *string
+	IpAddresses []IpAddr
+	PersistentKeepaliveInterval *uint32
+	AllowedIps []IpNet
+	RxBytes *uint64
+	TimeSinceLastRxMs *uint64
+	TxBytes *uint64
+	TimeSinceLastHandshakeMs *uint64
+	PresharedKey *string
+}
+
+func (r *WgPeer) Destroy() {
+		FfiDestroyerTypePublicKey{}.Destroy(r.PublicKey);
+		FfiDestroyerOptionalString{}.Destroy(r.Endpoint);
+		FfiDestroyerSequenceTypeIpAddr{}.Destroy(r.IpAddresses);
+		FfiDestroyerOptionalUint32{}.Destroy(r.PersistentKeepaliveInterval);
+		FfiDestroyerSequenceTypeIpNet{}.Destroy(r.AllowedIps);
+		FfiDestroyerOptionalUint64{}.Destroy(r.RxBytes);
+		FfiDestroyerOptionalUint64{}.Destroy(r.TimeSinceLastRxMs);
+		FfiDestroyerOptionalUint64{}.Destroy(r.TxBytes);
+		FfiDestroyerOptionalUint64{}.Destroy(r.TimeSinceLastHandshakeMs);
+		FfiDestroyerOptionalString{}.Destroy(r.PresharedKey);
+}
+
+type FfiConverterWgPeer struct {}
+
+var FfiConverterWgPeerINSTANCE = FfiConverterWgPeer{}
+
+func (c FfiConverterWgPeer) Lift(rb RustBufferI) WgPeer {
+	return LiftFromRustBuffer[WgPeer](c, rb)
+}
+
+func (c FfiConverterWgPeer) Read(reader io.Reader) WgPeer {
+	return WgPeer {
+			FfiConverterTypePublicKeyINSTANCE.Read(reader),
+			FfiConverterOptionalStringINSTANCE.Read(reader),
+			FfiConverterSequenceTypeIpAddrINSTANCE.Read(reader),
+			FfiConverterOptionalUint32INSTANCE.Read(reader),
+			FfiConverterSequenceTypeIpNetINSTANCE.Read(reader),
+			FfiConverterOptionalUint64INSTANCE.Read(reader),
+			FfiConverterOptionalUint64INSTANCE.Read(reader),
+			FfiConverterOptionalUint64INSTANCE.Read(reader),
+			FfiConverterOptionalUint64INSTANCE.Read(reader),
+			FfiConverterOptionalStringINSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterWgPeer) Lower(value WgPeer) C.RustBuffer {
+	return LowerIntoRustBuffer[WgPeer](c, value)
+}
+
+func (c FfiConverterWgPeer) Write(writer io.Writer, value WgPeer) {
+		FfiConverterTypePublicKeyINSTANCE.Write(writer, value.PublicKey);
+		FfiConverterOptionalStringINSTANCE.Write(writer, value.Endpoint);
+		FfiConverterSequenceTypeIpAddrINSTANCE.Write(writer, value.IpAddresses);
+		FfiConverterOptionalUint32INSTANCE.Write(writer, value.PersistentKeepaliveInterval);
+		FfiConverterSequenceTypeIpNetINSTANCE.Write(writer, value.AllowedIps);
+		FfiConverterOptionalUint64INSTANCE.Write(writer, value.RxBytes);
+		FfiConverterOptionalUint64INSTANCE.Write(writer, value.TimeSinceLastRxMs);
+		FfiConverterOptionalUint64INSTANCE.Write(writer, value.TxBytes);
+		FfiConverterOptionalUint64INSTANCE.Write(writer, value.TimeSinceLastHandshakeMs);
+		FfiConverterOptionalStringINSTANCE.Write(writer, value.PresharedKey);
+}
+
+type FfiDestroyerWgPeer struct {}
+
+func (_ FfiDestroyerWgPeer) Destroy(value WgPeer) {
+	value.Destroy()
+}
+
+
+type WgResponse struct {
+	Errno int32
+	Interface *WgInterface
+}
+
+func (r *WgResponse) Destroy() {
+		FfiDestroyerInt32{}.Destroy(r.Errno);
+		FfiDestroyerOptionalWgInterface{}.Destroy(r.Interface);
+}
+
+type FfiConverterWgResponse struct {}
+
+var FfiConverterWgResponseINSTANCE = FfiConverterWgResponse{}
+
+func (c FfiConverterWgResponse) Lift(rb RustBufferI) WgResponse {
+	return LiftFromRustBuffer[WgResponse](c, rb)
+}
+
+func (c FfiConverterWgResponse) Read(reader io.Reader) WgResponse {
+	return WgResponse {
+			FfiConverterInt32INSTANCE.Read(reader),
+			FfiConverterOptionalWgInterfaceINSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterWgResponse) Lower(value WgResponse) C.RustBuffer {
+	return LowerIntoRustBuffer[WgResponse](c, value)
+}
+
+func (c FfiConverterWgResponse) Write(writer io.Writer, value WgResponse) {
+		FfiConverterInt32INSTANCE.Write(writer, value.Errno);
+		FfiConverterOptionalWgInterfaceINSTANCE.Write(writer, value.Interface);
+}
+
+type FfiDestroyerWgResponse struct {}
+
+func (_ FfiDestroyerWgResponse) Destroy(value WgResponse) {
+	value.Destroy()
+}
+
+
 
 // Available Endpoint Providers for meshnet direct connections
 type EndpointProvider uint
@@ -4559,6 +5064,8 @@ const (
 	TelioAdapterTypeLinuxNativeTun TelioAdapterType = 3
 	// WindowsNativeWireguardNt implementation
 	TelioAdapterTypeWindowsNativeTun TelioAdapterType = 4
+	// Custom adapter type
+	TelioAdapterTypeCustom TelioAdapterType = 5
 )
 
 type FfiConverterTelioAdapterType struct {}
@@ -4947,6 +5454,70 @@ func (_ FfiDestroyerVpnConnectionError) Destroy(value VpnConnectionError) {
 
 
 
+
+type WgCmd interface {
+	Destroy()
+}
+type WgCmdGet struct {
+}
+
+func (e WgCmdGet) Destroy() {
+}
+type WgCmdSet struct {
+	Device WgDevice
+}
+
+func (e WgCmdSet) Destroy() {
+		FfiDestroyerWgDevice{}.Destroy(e.Device);
+}
+
+type FfiConverterWgCmd struct {}
+
+var FfiConverterWgCmdINSTANCE = FfiConverterWgCmd{}
+
+func (c FfiConverterWgCmd) Lift(rb RustBufferI) WgCmd {
+	return LiftFromRustBuffer[WgCmd](c, rb)
+}
+
+func (c FfiConverterWgCmd) Lower(value WgCmd) C.RustBuffer {
+	return LowerIntoRustBuffer[WgCmd](c, value)
+}
+func (FfiConverterWgCmd) Read(reader io.Reader) WgCmd {
+	id := readInt32(reader)
+	switch (id) {
+		case 1:
+			return WgCmdGet{
+			};
+		case 2:
+			return WgCmdSet{
+				FfiConverterWgDeviceINSTANCE.Read(reader),
+			};
+		default:
+			panic(fmt.Sprintf("invalid enum value %v in FfiConverterWgCmd.Read()", id));
+	}
+}
+
+func (FfiConverterWgCmd) Write(writer io.Writer, value WgCmd) {
+	switch variant_value := value.(type) {
+		case WgCmdGet:
+			writeInt32(writer, 1)
+		case WgCmdSet:
+			writeInt32(writer, 2)
+			FfiConverterWgDeviceINSTANCE.Write(writer, variant_value.Device)
+		default:
+			_ = variant_value
+			panic(fmt.Sprintf("invalid enum value `%v` in FfiConverterWgCmd.Write", value))
+	}
+}
+
+type FfiDestroyerWgCmd struct {}
+
+func (_ FfiDestroyerWgCmd) Destroy(value WgCmd) {
+	value.Destroy()
+}
+
+
+
 type TelioEventCb interface {
 	
 	Event(payload Event) error
@@ -4986,52 +5557,7 @@ type FfiDestroyerCallbackInterfaceTelioEventCb struct {}
 
 func (FfiDestroyerCallbackInterfaceTelioEventCb) Destroy(value TelioEventCb) {}
 
-type uniffiCallbackResult C.int8_t
 
-const (
-	uniffiIdxCallbackFree               uniffiCallbackResult = 0
-	uniffiCallbackResultSuccess         uniffiCallbackResult = 0
-	uniffiCallbackResultError           uniffiCallbackResult = 1
-	uniffiCallbackUnexpectedResultError uniffiCallbackResult = 2
-	uniffiCallbackCancelled             uniffiCallbackResult = 3
-)
-
-
-type concurrentHandleMap[T any] struct {
-	handles       map[uint64]T
-	currentHandle uint64
-	lock          sync.RWMutex
-}
-
-func newConcurrentHandleMap[T any]() *concurrentHandleMap[T] {
-	return &concurrentHandleMap[T]{
-		handles:  map[uint64]T{},
-	}
-}
-
-func (cm *concurrentHandleMap[T]) insert(obj T) uint64 {
-	cm.lock.Lock()
-	defer cm.lock.Unlock()
-
-	cm.currentHandle = cm.currentHandle + 1
-	cm.handles[cm.currentHandle] = obj
-	return cm.currentHandle
-}
-
-func (cm *concurrentHandleMap[T]) remove(handle uint64) {
-	cm.lock.Lock()
-	defer cm.lock.Unlock()
-
-	delete(cm.handles, handle)
-}
-
-func (cm *concurrentHandleMap[T]) tryGet(handle uint64) (T, bool) {
-	cm.lock.RLock()
-	defer cm.lock.RUnlock()
-
-	val, ok := cm.handles[handle]
-	return val, ok
-}
 
 //export telio_cgo_dispatchCallbackInterfaceTelioEventCbMethod0
 func telio_cgo_dispatchCallbackInterfaceTelioEventCbMethod0(uniffiHandle C.uint64_t,payload C.RustBuffer,uniffiOutReturn *C.void,callStatus *C.RustCallStatus,) {
@@ -5276,6 +5802,45 @@ func (c FfiConverterCallbackInterfaceTelioProtectCb) register() {
 	C.uniffi_telio_fn_init_callback_vtable_telioprotectcb(&UniffiVTableCallbackInterfaceTelioProtectCbINSTANCE)
 }
 
+
+
+
+type FfiConverterOptionalUint16 struct{}
+
+var FfiConverterOptionalUint16INSTANCE = FfiConverterOptionalUint16{}
+
+func (c FfiConverterOptionalUint16) Lift(rb RustBufferI) *uint16 {
+	return LiftFromRustBuffer[*uint16](c, rb)
+}
+
+func (_ FfiConverterOptionalUint16) Read(reader io.Reader) *uint16 {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterUint16INSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalUint16) Lower(value *uint16) C.RustBuffer {
+	return LowerIntoRustBuffer[*uint16](c, value)
+}
+
+func (_ FfiConverterOptionalUint16) Write(writer io.Writer, value *uint16) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterUint16INSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalUint16 struct {}
+
+func (_ FfiDestroyerOptionalUint16) Destroy(value *uint16) {
+	if value != nil {
+		FfiDestroyerUint16{}.Destroy(*value)
+	}
+}
 
 
 
@@ -6020,6 +6585,45 @@ func (_ FfiDestroyerOptionalFeatureUpnp) Destroy(value *FeatureUpnp) {
 
 
 
+type FfiConverterOptionalWgInterface struct{}
+
+var FfiConverterOptionalWgInterfaceINSTANCE = FfiConverterOptionalWgInterface{}
+
+func (c FfiConverterOptionalWgInterface) Lift(rb RustBufferI) *WgInterface {
+	return LiftFromRustBuffer[*WgInterface](c, rb)
+}
+
+func (_ FfiConverterOptionalWgInterface) Read(reader io.Reader) *WgInterface {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterWgInterfaceINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalWgInterface) Lower(value *WgInterface) C.RustBuffer {
+	return LowerIntoRustBuffer[*WgInterface](c, value)
+}
+
+func (_ FfiConverterOptionalWgInterface) Write(writer io.Writer, value *WgInterface) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterWgInterfaceINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalWgInterface struct {}
+
+func (_ FfiDestroyerOptionalWgInterface) Destroy(value *WgInterface) {
+	if value != nil {
+		FfiDestroyerWgInterface{}.Destroy(*value)
+	}
+}
+
+
+
 type FfiConverterOptionalLinkState struct{}
 
 var FfiConverterOptionalLinkStateINSTANCE = FfiConverterOptionalLinkState{}
@@ -6674,6 +7278,51 @@ func (FfiDestroyerSequenceTelioNode) Destroy(sequence []TelioNode) {
 
 
 
+type FfiConverterSequenceWgPeer struct{}
+
+var FfiConverterSequenceWgPeerINSTANCE = FfiConverterSequenceWgPeer{}
+
+func (c FfiConverterSequenceWgPeer) Lift(rb RustBufferI) []WgPeer {
+	return LiftFromRustBuffer[[]WgPeer](c, rb)
+}
+
+func (c FfiConverterSequenceWgPeer) Read(reader io.Reader) []WgPeer {
+	length := readInt32(reader)
+	if length == 0 {
+		return nil
+	}
+	result := make([]WgPeer, 0, length)
+	for i := int32(0); i < length; i++ {
+		result = append(result, FfiConverterWgPeerINSTANCE.Read(reader))
+	}
+	return result
+}
+
+func (c FfiConverterSequenceWgPeer) Lower(value []WgPeer) C.RustBuffer {
+	return LowerIntoRustBuffer[[]WgPeer](c, value)
+}
+
+func (c FfiConverterSequenceWgPeer) Write(writer io.Writer, value []WgPeer) {
+	if len(value) > math.MaxInt32 {
+		panic("[]WgPeer is too large to fit into Int32")
+	}
+
+	writeInt32(writer, int32(len(value)))
+	for _, item := range value {
+		FfiConverterWgPeerINSTANCE.Write(writer, item)
+	}
+}
+
+type FfiDestroyerSequenceWgPeer struct {}
+
+func (FfiDestroyerSequenceWgPeer) Destroy(sequence []WgPeer) {
+	for _, value := range sequence {
+		FfiDestroyerWgPeer{}.Destroy(value)	
+	}
+}
+
+
+
 type FfiConverterSequenceEndpointProvider struct{}
 
 var FfiConverterSequenceEndpointProviderINSTANCE = FfiConverterSequenceEndpointProvider{}
@@ -6894,6 +7543,52 @@ type FfiDestroyerSequenceTypeIpNet struct {}
 func (FfiDestroyerSequenceTypeIpNet) Destroy(sequence []IpNet) {
 	for _, value := range sequence {
 		FfiDestroyerTypeIpNet{}.Destroy(value)	
+	}
+}
+
+
+
+type FfiConverterMapStringWgPeer struct {}
+
+var FfiConverterMapStringWgPeerINSTANCE = FfiConverterMapStringWgPeer{}
+
+func (c FfiConverterMapStringWgPeer) Lift(rb RustBufferI) map[string]WgPeer {
+	return LiftFromRustBuffer[map[string]WgPeer](c, rb)
+}
+
+func (_ FfiConverterMapStringWgPeer) Read(reader io.Reader) map[string]WgPeer {
+	result := make(map[string]WgPeer)
+	length := readInt32(reader)
+	for i := int32(0); i < length; i++ {
+		key := FfiConverterStringINSTANCE.Read(reader)
+		value := FfiConverterWgPeerINSTANCE.Read(reader)
+		result[key] = value
+	}
+	return result
+}
+
+func (c FfiConverterMapStringWgPeer) Lower(value map[string]WgPeer) C.RustBuffer {
+	return LowerIntoRustBuffer[map[string]WgPeer](c, value)
+}
+
+func (_ FfiConverterMapStringWgPeer) Write(writer io.Writer, mapValue map[string]WgPeer) {
+	if len(mapValue) > math.MaxInt32 {
+		panic("map[string]WgPeer is too large to fit into Int32")
+	}
+
+	writeInt32(writer, int32(len(mapValue)))
+	for key, value := range mapValue {
+		FfiConverterStringINSTANCE.Write(writer, key)
+		FfiConverterWgPeerINSTANCE.Write(writer, value)
+	}
+}
+
+type FfiDestroyerMapStringWgPeer struct {}
+
+func (_ FfiDestroyerMapStringWgPeer) Destroy(mapValue map[string]WgPeer) {
+	for key, value := range mapValue {
+		FfiDestroyerString{}.Destroy(key)
+		FfiDestroyerWgPeer{}.Destroy(value)	
 	}
 }
 
