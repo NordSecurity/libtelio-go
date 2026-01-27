@@ -481,15 +481,6 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_batching()
-	})
-	if checksum != 27812 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_batching: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_battery_saving_defaults()
 	})
 	if checksum != 10214 {
@@ -1324,8 +1315,6 @@ func (ffiObject *FfiObject)freeRustArcPtr() {
 type FeaturesDefaultsBuilderInterface interface {
 	// Build final config
 	Build() Features
-	// Enable keepalive batching feature
-	EnableBatching() *FeaturesDefaultsBuilder
 	// Enable default wireguard timings, derp timings and other features for best battery performance
 	EnableBatterySavingDefaults() *FeaturesDefaultsBuilder
 	// Enable direct connections with defaults;
@@ -1385,16 +1374,6 @@ func (_self *FeaturesDefaultsBuilder) Build() Features {
 		inner: C.uniffi_telio_fn_method_featuresdefaultsbuilder_build(
 		_pointer,_uniffiStatus),
 	}
-	}))
-}
-
-// Enable keepalive batching feature
-func (_self *FeaturesDefaultsBuilder) EnableBatching() *FeaturesDefaultsBuilder {
-	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
-		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_batching(
-		_pointer,_uniffiStatus)
 	}))
 }
 
@@ -2859,54 +2838,6 @@ func (_ FfiDestroyerErrorEvent) Destroy(value ErrorEvent) {
 }
 
 
-type FeatureBatching struct {
-	// direct connection threshold for batching
-	DirectConnectionThreshold uint32
-	// effective trigger period
-	TriggerEffectiveDuration uint32
-	// / cooldown after trigger was used
-	TriggerCooldownDuration uint32
-}
-
-func (r *FeatureBatching) Destroy() {
-		FfiDestroyerUint32{}.Destroy(r.DirectConnectionThreshold);
-		FfiDestroyerUint32{}.Destroy(r.TriggerEffectiveDuration);
-		FfiDestroyerUint32{}.Destroy(r.TriggerCooldownDuration);
-}
-
-type FfiConverterFeatureBatching struct {}
-
-var FfiConverterFeatureBatchingINSTANCE = FfiConverterFeatureBatching{}
-
-func (c FfiConverterFeatureBatching) Lift(rb RustBufferI) FeatureBatching {
-	return LiftFromRustBuffer[FeatureBatching](c, rb)
-}
-
-func (c FfiConverterFeatureBatching) Read(reader io.Reader) FeatureBatching {
-	return FeatureBatching {
-			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterFeatureBatching) Lower(value FeatureBatching) C.RustBuffer {
-	return LowerIntoRustBuffer[FeatureBatching](c, value)
-}
-
-func (c FfiConverterFeatureBatching) Write(writer io.Writer, value FeatureBatching) {
-		FfiConverterUint32INSTANCE.Write(writer, value.DirectConnectionThreshold);
-		FfiConverterUint32INSTANCE.Write(writer, value.TriggerEffectiveDuration);
-		FfiConverterUint32INSTANCE.Write(writer, value.TriggerCooldownDuration);
-}
-
-type FfiDestroyerFeatureBatching struct {}
-
-func (_ FfiDestroyerFeatureBatching) Destroy(value FeatureBatching) {
-	value.Destroy()
-}
-
-
 // Configure derp behaviour
 type FeatureDerp struct {
 	// Tcp keepalive set on derp server's side [default 15s]
@@ -3841,8 +3772,6 @@ type Features struct {
 	PostQuantumVpn FeaturePostQuantumVpn
 	// Multicast support
 	Multicast bool
-	// Batching
-	Batching *FeatureBatching
 	ErrorNotificationService *FeatureErrorNotificationService
 }
 
@@ -3865,7 +3794,6 @@ func (r *Features) Destroy() {
 		FfiDestroyerFeatureDns{}.Destroy(r.Dns);
 		FfiDestroyerFeaturePostQuantumVpn{}.Destroy(r.PostQuantumVpn);
 		FfiDestroyerBool{}.Destroy(r.Multicast);
-		FfiDestroyerOptionalFeatureBatching{}.Destroy(r.Batching);
 		FfiDestroyerOptionalFeatureErrorNotificationService{}.Destroy(r.ErrorNotificationService);
 }
 
@@ -3897,7 +3825,6 @@ func (c FfiConverterFeatures) Read(reader io.Reader) Features {
 			FfiConverterFeatureDnsINSTANCE.Read(reader),
 			FfiConverterFeaturePostQuantumVpnINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterOptionalFeatureBatchingINSTANCE.Read(reader),
 			FfiConverterOptionalFeatureErrorNotificationServiceINSTANCE.Read(reader),
 	}
 }
@@ -3925,7 +3852,6 @@ func (c FfiConverterFeatures) Write(writer io.Writer, value Features) {
 		FfiConverterFeatureDnsINSTANCE.Write(writer, value.Dns);
 		FfiConverterFeaturePostQuantumVpnINSTANCE.Write(writer, value.PostQuantumVpn);
 		FfiConverterBoolINSTANCE.Write(writer, value.Multicast);
-		FfiConverterOptionalFeatureBatchingINSTANCE.Write(writer, value.Batching);
 		FfiConverterOptionalFeatureErrorNotificationServiceINSTANCE.Write(writer, value.ErrorNotificationService);
 }
 
@@ -6073,45 +5999,6 @@ type FfiDestroyerOptionalDnsConfig struct {}
 func (_ FfiDestroyerOptionalDnsConfig) Destroy(value *DnsConfig) {
 	if value != nil {
 		FfiDestroyerDnsConfig{}.Destroy(*value)
-	}
-}
-
-
-
-type FfiConverterOptionalFeatureBatching struct{}
-
-var FfiConverterOptionalFeatureBatchingINSTANCE = FfiConverterOptionalFeatureBatching{}
-
-func (c FfiConverterOptionalFeatureBatching) Lift(rb RustBufferI) *FeatureBatching {
-	return LiftFromRustBuffer[*FeatureBatching](c, rb)
-}
-
-func (_ FfiConverterOptionalFeatureBatching) Read(reader io.Reader) *FeatureBatching {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterFeatureBatchingINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalFeatureBatching) Lower(value *FeatureBatching) C.RustBuffer {
-	return LowerIntoRustBuffer[*FeatureBatching](c, value)
-}
-
-func (_ FfiConverterOptionalFeatureBatching) Write(writer io.Writer, value *FeatureBatching) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterFeatureBatchingINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalFeatureBatching struct {}
-
-func (_ FfiDestroyerOptionalFeatureBatching) Destroy(value *FeatureBatching) {
-	if value != nil {
-		FfiDestroyerFeatureBatching{}.Destroy(*value)
 	}
 }
 
