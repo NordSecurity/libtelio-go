@@ -347,6 +347,7 @@ func init() {
         FfiConverterCallbackInterfaceTelioEventCbINSTANCE.register();
         FfiConverterCallbackInterfaceTelioLoggerCbINSTANCE.register();
         FfiConverterCallbackInterfaceTelioProtectCbINSTANCE.register();
+        FfiConverterCallbackInterfaceTpLiteStatsCallbackINSTANCE.register();
         uniffiCheckChecksums()
 }
 
@@ -661,6 +662,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_disable_tp_lite_stats_collection()
+	})
+	if checksum != 7223 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_disable_tp_lite_stats_collection: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_disconnect_from_exit_node()
 	})
 	if checksum != 36107 {
@@ -684,6 +694,15 @@ func uniffiCheckChecksums() {
 	if checksum != 32172 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_enable_magic_dns: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_enable_tp_lite_stats_collection()
+	})
+	if checksum != 30074 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_enable_tp_lite_stats_collection: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1010,9 +1029,43 @@ func uniffiCheckChecksums() {
 		panic("telio: uniffi_telio_checksum_method_telioprotectcb_protect: UniFFI API checksum mismatch")
 	}
 	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_tplitestatscallback_collect()
+	})
+	if checksum != 5989 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_tplitestatscallback_collect: UniFFI API checksum mismatch")
+	}
+	}
 }
 
 
+
+
+type FfiConverterUint8 struct{}
+
+var FfiConverterUint8INSTANCE = FfiConverterUint8{}
+
+func (FfiConverterUint8) Lower(value uint8) C.uint8_t {
+	return C.uint8_t(value)
+}
+
+func (FfiConverterUint8) Write(writer io.Writer, value uint8) {
+	writeUint8(writer, value)
+}
+
+func (FfiConverterUint8) Lift(value C.uint8_t) uint8 {
+	return uint8(value)
+}
+
+func (FfiConverterUint8) Read(reader io.Reader) uint8 {
+	return readUint8(reader)
+}
+
+type FfiDestroyerUint8 struct {}
+
+func (FfiDestroyerUint8) Destroy(_ uint8) {}
 
 
 type FfiConverterUint16 struct{}
@@ -1666,6 +1719,7 @@ type TelioInterface interface {
 	ConnectToExitNodeWithId(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) error
 	// Disables magic DNS if it was enabled.
 	DisableMagicDns() error
+	DisableTpLiteStatsCollection() error
 	// Disconnects from specified exit node.
 	//
 	// # Parameters
@@ -1691,6 +1745,12 @@ type TelioInterface interface {
 	// telio.enable_magic_dns("[\"\"]");
 	// ```
 	EnableMagicDns(forwardServers []IpAddr) error
+	// Register callback to get metrics and domains blocked by TP-Lite
+	//
+	// Requires firewall to be enabled through VnicOptions::enable_firewall()
+	//
+	// Passing empty list of IPs will disable the collection of TP-Lite stats
+	EnableTpLiteStatsCollection(config TpLiteStatsOptions, collectStatsCb TpLiteStatsCallback) error
 	// For testing only.
 	GenerateStackPanic() error
 	// For testing only.
@@ -1934,6 +1994,17 @@ func (_self *Telio) DisableMagicDns() error {
 		return _uniffiErr.AsError()
 }
 
+func (_self *Telio) DisableTpLiteStatsCollection() error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_disable_tp_lite_stats_collection(
+		_pointer,_uniffiStatus)
+		return false
+	})
+		return _uniffiErr.AsError()
+}
+
 // Disconnects from specified exit node.
 //
 // # Parameters
@@ -1984,6 +2055,22 @@ func (_self *Telio) EnableMagicDns(forwardServers []IpAddr) error {
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_enable_magic_dns(
 		_pointer,FfiConverterSequenceTypeIpAddrINSTANCE.Lower(forwardServers),_uniffiStatus)
+		return false
+	})
+		return _uniffiErr.AsError()
+}
+
+// Register callback to get metrics and domains blocked by TP-Lite
+//
+// Requires firewall to be enabled through VnicOptions::enable_firewall()
+//
+// Passing empty list of IPs will disable the collection of TP-Lite stats
+func (_self *Telio) EnableTpLiteStatsCollection(config TpLiteStatsOptions, collectStatsCb TpLiteStatsCallback) error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_enable_tp_lite_stats_collection(
+		_pointer,FfiConverterTpLiteStatsOptionsINSTANCE.Lower(config), FfiConverterCallbackInterfaceTpLiteStatsCallbackINSTANCE.Lower(collectStatsCb),_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()
@@ -2695,6 +2782,60 @@ func (_ FfiDestroyerBackoff) Destroy(value Backoff) {
 }
 
 
+// Information about a domain blocked by TP-Lite
+type BlockedDomain struct {
+	// The domain name that was blocked 
+	DomainName string
+	// The DNS record type
+	RecordType uint16
+	// When the request occurred
+	Timestamp uint64
+	// The category, represented by the "authority" from the SOA record
+	Category string
+}
+
+func (r *BlockedDomain) Destroy() {
+		FfiDestroyerString{}.Destroy(r.DomainName);
+		FfiDestroyerUint16{}.Destroy(r.RecordType);
+		FfiDestroyerUint64{}.Destroy(r.Timestamp);
+		FfiDestroyerString{}.Destroy(r.Category);
+}
+
+type FfiConverterBlockedDomain struct {}
+
+var FfiConverterBlockedDomainINSTANCE = FfiConverterBlockedDomain{}
+
+func (c FfiConverterBlockedDomain) Lift(rb RustBufferI) BlockedDomain {
+	return LiftFromRustBuffer[BlockedDomain](c, rb)
+}
+
+func (c FfiConverterBlockedDomain) Read(reader io.Reader) BlockedDomain {
+	return BlockedDomain {
+			FfiConverterStringINSTANCE.Read(reader),
+			FfiConverterUint16INSTANCE.Read(reader),
+			FfiConverterUint64INSTANCE.Read(reader),
+			FfiConverterStringINSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterBlockedDomain) Lower(value BlockedDomain) C.RustBuffer {
+	return LowerIntoRustBuffer[BlockedDomain](c, value)
+}
+
+func (c FfiConverterBlockedDomain) Write(writer io.Writer, value BlockedDomain) {
+		FfiConverterStringINSTANCE.Write(writer, value.DomainName);
+		FfiConverterUint16INSTANCE.Write(writer, value.RecordType);
+		FfiConverterUint64INSTANCE.Write(writer, value.Timestamp);
+		FfiConverterStringINSTANCE.Write(writer, value.Category);
+}
+
+type FfiDestroyerBlockedDomain struct {}
+
+func (_ FfiDestroyerBlockedDomain) Destroy(value BlockedDomain) {
+	value.Destroy()
+}
+
+
 // Rust representation of [meshnet map]
 // A network map of all the Peers and the servers
 type Config struct {
@@ -2785,6 +2926,75 @@ func (c FfiConverterDnsConfig) Write(writer io.Writer, value DnsConfig) {
 type FfiDestroyerDnsConfig struct {}
 
 func (_ FfiDestroyerDnsConfig) Destroy(value DnsConfig) {
+	value.Destroy()
+}
+
+
+// Simple metrics about TP-Lite DNS activity
+type DnsMetrics struct {
+	// Number of DNS requests that have been made 
+	NumRequests uint32
+	// Number of received DNS responses
+	NumResponses uint32
+	// Number of requests that had some parsing issue
+	NumMalformedRequests uint32
+	// Number of responses that had some parsing issue
+	NumMalformedResponses uint32
+	// Number of DNS requests that were caught by libfirewall's cache of blocked domains
+	NumCacheHits uint32
+	// Number of requests per record type
+	RecordTypeDistribution map[uint16]uint32
+	// Number of responses per response type
+	ResponseTypeDistribution map[uint8]uint32
+}
+
+func (r *DnsMetrics) Destroy() {
+		FfiDestroyerUint32{}.Destroy(r.NumRequests);
+		FfiDestroyerUint32{}.Destroy(r.NumResponses);
+		FfiDestroyerUint32{}.Destroy(r.NumMalformedRequests);
+		FfiDestroyerUint32{}.Destroy(r.NumMalformedResponses);
+		FfiDestroyerUint32{}.Destroy(r.NumCacheHits);
+		FfiDestroyerMapUint16Uint32{}.Destroy(r.RecordTypeDistribution);
+		FfiDestroyerMapUint8Uint32{}.Destroy(r.ResponseTypeDistribution);
+}
+
+type FfiConverterDnsMetrics struct {}
+
+var FfiConverterDnsMetricsINSTANCE = FfiConverterDnsMetrics{}
+
+func (c FfiConverterDnsMetrics) Lift(rb RustBufferI) DnsMetrics {
+	return LiftFromRustBuffer[DnsMetrics](c, rb)
+}
+
+func (c FfiConverterDnsMetrics) Read(reader io.Reader) DnsMetrics {
+	return DnsMetrics {
+			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterMapUint16Uint32INSTANCE.Read(reader),
+			FfiConverterMapUint8Uint32INSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterDnsMetrics) Lower(value DnsMetrics) C.RustBuffer {
+	return LowerIntoRustBuffer[DnsMetrics](c, value)
+}
+
+func (c FfiConverterDnsMetrics) Write(writer io.Writer, value DnsMetrics) {
+		FfiConverterUint32INSTANCE.Write(writer, value.NumRequests);
+		FfiConverterUint32INSTANCE.Write(writer, value.NumResponses);
+		FfiConverterUint32INSTANCE.Write(writer, value.NumMalformedRequests);
+		FfiConverterUint32INSTANCE.Write(writer, value.NumMalformedResponses);
+		FfiConverterUint32INSTANCE.Write(writer, value.NumCacheHits);
+		FfiConverterMapUint16Uint32INSTANCE.Write(writer, value.RecordTypeDistribution);
+		FfiConverterMapUint8Uint32INSTANCE.Write(writer, value.ResponseTypeDistribution);
+}
+
+type FfiDestroyerDnsMetrics struct {}
+
+func (_ FfiDestroyerDnsMetrics) Destroy(value DnsMetrics) {
 	value.Destroy()
 }
 
@@ -4264,6 +4474,79 @@ func (_ FfiDestroyerTelioNode) Destroy(value TelioNode) {
 }
 
 
+// Config options for the collection of TP-Lite stats
+type TpLiteStatsOptions struct {
+	// The IP addresses of the TP-Lite DNS servers
+	DnsServerIps []IpAddr
+	// How many blocked domains libfirewall can store between passing them through the callback 
+	// If the buffer fills up and new blocked domains arrive, data will be lost 
+	//
+	// Default value: 100
+	BlockedDomainsBufferSize *uint64
+	// After how long stats will be passed to the callback, in seconds
+	//
+	// Default value: 5
+	CallbackIntervalS *uint64
+	// libfirewall disables OS/client-level caching of blocked domains when stats collection is enabled
+	// To not make extra DNS requests libfirewall has it's own DNS cache for blocked domains
+	//
+	// How many entries the libfirewall-specific DNS cache can hold
+	//
+	// Default value: 512
+	CacheSize *uint64
+	// When TP-Lite stats collection is enabled libfirewall keeps track of open DNS requests
+	//
+	// How many requests libfirewall can keep track of
+	//
+	// Default value: same as blocked_domains_buffer_size
+	MaxOpenRequests *uint64
+}
+
+func (r *TpLiteStatsOptions) Destroy() {
+		FfiDestroyerSequenceTypeIpAddr{}.Destroy(r.DnsServerIps);
+		FfiDestroyerOptionalUint64{}.Destroy(r.BlockedDomainsBufferSize);
+		FfiDestroyerOptionalUint64{}.Destroy(r.CallbackIntervalS);
+		FfiDestroyerOptionalUint64{}.Destroy(r.CacheSize);
+		FfiDestroyerOptionalUint64{}.Destroy(r.MaxOpenRequests);
+}
+
+type FfiConverterTpLiteStatsOptions struct {}
+
+var FfiConverterTpLiteStatsOptionsINSTANCE = FfiConverterTpLiteStatsOptions{}
+
+func (c FfiConverterTpLiteStatsOptions) Lift(rb RustBufferI) TpLiteStatsOptions {
+	return LiftFromRustBuffer[TpLiteStatsOptions](c, rb)
+}
+
+func (c FfiConverterTpLiteStatsOptions) Read(reader io.Reader) TpLiteStatsOptions {
+	return TpLiteStatsOptions {
+			FfiConverterSequenceTypeIpAddrINSTANCE.Read(reader),
+			FfiConverterOptionalUint64INSTANCE.Read(reader),
+			FfiConverterOptionalUint64INSTANCE.Read(reader),
+			FfiConverterOptionalUint64INSTANCE.Read(reader),
+			FfiConverterOptionalUint64INSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterTpLiteStatsOptions) Lower(value TpLiteStatsOptions) C.RustBuffer {
+	return LowerIntoRustBuffer[TpLiteStatsOptions](c, value)
+}
+
+func (c FfiConverterTpLiteStatsOptions) Write(writer io.Writer, value TpLiteStatsOptions) {
+		FfiConverterSequenceTypeIpAddrINSTANCE.Write(writer, value.DnsServerIps);
+		FfiConverterOptionalUint64INSTANCE.Write(writer, value.BlockedDomainsBufferSize);
+		FfiConverterOptionalUint64INSTANCE.Write(writer, value.CallbackIntervalS);
+		FfiConverterOptionalUint64INSTANCE.Write(writer, value.CacheSize);
+		FfiConverterOptionalUint64INSTANCE.Write(writer, value.MaxOpenRequests);
+}
+
+type FfiDestroyerTpLiteStatsOptions struct {}
+
+func (_ FfiDestroyerTpLiteStatsOptions) Destroy(value TpLiteStatsOptions) {
+	value.Destroy()
+}
+
+
 type WgDevice struct {
 	PrivateKey *string
 	ListenPort *uint16
@@ -5730,6 +6013,93 @@ func (c FfiConverterCallbackInterfaceTelioProtectCb) register() {
 
 
 
+// A callback for getting TP-Lite stats from libfirewall
+type TpLiteStatsCallback interface {
+	
+	// Get the blocked domains that have been buffered so far
+	// Blocking this callback can result in losing blocked domains from subsequent calls
+	Collect(domains []BlockedDomain, metrics DnsMetrics) 
+	
+}
+
+
+type FfiConverterCallbackInterfaceTpLiteStatsCallback struct {
+	handleMap *concurrentHandleMap[TpLiteStatsCallback]
+}
+
+var FfiConverterCallbackInterfaceTpLiteStatsCallbackINSTANCE = FfiConverterCallbackInterfaceTpLiteStatsCallback {
+	handleMap: newConcurrentHandleMap[TpLiteStatsCallback](),
+}
+
+func (c FfiConverterCallbackInterfaceTpLiteStatsCallback) Lift(handle uint64) TpLiteStatsCallback {
+	val, ok := c.handleMap.tryGet(handle)
+	if !ok {
+		panic(fmt.Errorf("no callback in handle map: %d", handle))
+	}
+	return val
+}
+
+func (c FfiConverterCallbackInterfaceTpLiteStatsCallback) Read(reader io.Reader) TpLiteStatsCallback {
+	return c.Lift(readUint64(reader))
+}
+
+func (c FfiConverterCallbackInterfaceTpLiteStatsCallback) Lower(value TpLiteStatsCallback) C.uint64_t {
+	return C.uint64_t(c.handleMap.insert(value))
+}
+
+func (c FfiConverterCallbackInterfaceTpLiteStatsCallback) Write(writer io.Writer, value TpLiteStatsCallback) {
+	writeUint64(writer, uint64(c.Lower(value)))
+}
+
+type FfiDestroyerCallbackInterfaceTpLiteStatsCallback struct {}
+
+func (FfiDestroyerCallbackInterfaceTpLiteStatsCallback) Destroy(value TpLiteStatsCallback) {}
+
+
+
+//export telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackMethod0
+func telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackMethod0(uniffiHandle C.uint64_t,domains C.RustBuffer,metrics C.RustBuffer,uniffiOutReturn *C.void,callStatus *C.RustCallStatus,) {
+	handle := uint64(uniffiHandle)
+	uniffiObj, ok := FfiConverterCallbackInterfaceTpLiteStatsCallbackINSTANCE.handleMap.tryGet(handle)
+	if !ok {
+		panic(fmt.Errorf("no callback in handle map: %d", handle))
+	}
+	
+	
+
+	
+    uniffiObj.Collect(
+        FfiConverterSequenceBlockedDomainINSTANCE.Lift(GoRustBuffer {
+		inner: domains,
+	}),
+        FfiConverterDnsMetricsINSTANCE.Lift(GoRustBuffer {
+		inner: metrics,
+	}),
+    )
+	
+    
+
+
+	
+}
+
+var UniffiVTableCallbackInterfaceTpLiteStatsCallbackINSTANCE = C.UniffiVTableCallbackInterfaceTpLiteStatsCallback {
+	collect: (C.UniffiCallbackInterfaceTpLiteStatsCallbackMethod0)(C.telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackMethod0),
+
+	uniffiFree: (C.UniffiCallbackInterfaceFree)(C.telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackFree),
+}
+
+//export telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackFree
+func telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackFree(handle C.uint64_t) {
+	FfiConverterCallbackInterfaceTpLiteStatsCallbackINSTANCE.handleMap.remove(uint64(handle))
+}
+
+func (c FfiConverterCallbackInterfaceTpLiteStatsCallback) register() {
+	C.uniffi_telio_fn_init_callback_vtable_tplitestatscallback(&UniffiVTableCallbackInterfaceTpLiteStatsCallbackINSTANCE)
+}
+
+
+
 
 type FfiConverterOptionalUint16 struct{}
 
@@ -6985,6 +7355,51 @@ func (FfiDestroyerSequenceString) Destroy(sequence []string) {
 
 
 
+type FfiConverterSequenceBlockedDomain struct{}
+
+var FfiConverterSequenceBlockedDomainINSTANCE = FfiConverterSequenceBlockedDomain{}
+
+func (c FfiConverterSequenceBlockedDomain) Lift(rb RustBufferI) []BlockedDomain {
+	return LiftFromRustBuffer[[]BlockedDomain](c, rb)
+}
+
+func (c FfiConverterSequenceBlockedDomain) Read(reader io.Reader) []BlockedDomain {
+	length := readInt32(reader)
+	if length == 0 {
+		return nil
+	}
+	result := make([]BlockedDomain, 0, length)
+	for i := int32(0); i < length; i++ {
+		result = append(result, FfiConverterBlockedDomainINSTANCE.Read(reader))
+	}
+	return result
+}
+
+func (c FfiConverterSequenceBlockedDomain) Lower(value []BlockedDomain) C.RustBuffer {
+	return LowerIntoRustBuffer[[]BlockedDomain](c, value)
+}
+
+func (c FfiConverterSequenceBlockedDomain) Write(writer io.Writer, value []BlockedDomain) {
+	if len(value) > math.MaxInt32 {
+		panic("[]BlockedDomain is too large to fit into Int32")
+	}
+
+	writeInt32(writer, int32(len(value)))
+	for _, item := range value {
+		FfiConverterBlockedDomainINSTANCE.Write(writer, item)
+	}
+}
+
+type FfiDestroyerSequenceBlockedDomain struct {}
+
+func (FfiDestroyerSequenceBlockedDomain) Destroy(sequence []BlockedDomain) {
+	for _, value := range sequence {
+		FfiDestroyerBlockedDomain{}.Destroy(value)	
+	}
+}
+
+
+
 type FfiConverterSequenceFirewallBlacklistTuple struct{}
 
 var FfiConverterSequenceFirewallBlacklistTupleINSTANCE = FfiConverterSequenceFirewallBlacklistTuple{}
@@ -7430,6 +7845,98 @@ type FfiDestroyerSequenceTypeIpNet struct {}
 func (FfiDestroyerSequenceTypeIpNet) Destroy(sequence []IpNet) {
 	for _, value := range sequence {
 		FfiDestroyerTypeIpNet{}.Destroy(value)	
+	}
+}
+
+
+
+type FfiConverterMapUint8Uint32 struct {}
+
+var FfiConverterMapUint8Uint32INSTANCE = FfiConverterMapUint8Uint32{}
+
+func (c FfiConverterMapUint8Uint32) Lift(rb RustBufferI) map[uint8]uint32 {
+	return LiftFromRustBuffer[map[uint8]uint32](c, rb)
+}
+
+func (_ FfiConverterMapUint8Uint32) Read(reader io.Reader) map[uint8]uint32 {
+	result := make(map[uint8]uint32)
+	length := readInt32(reader)
+	for i := int32(0); i < length; i++ {
+		key := FfiConverterUint8INSTANCE.Read(reader)
+		value := FfiConverterUint32INSTANCE.Read(reader)
+		result[key] = value
+	}
+	return result
+}
+
+func (c FfiConverterMapUint8Uint32) Lower(value map[uint8]uint32) C.RustBuffer {
+	return LowerIntoRustBuffer[map[uint8]uint32](c, value)
+}
+
+func (_ FfiConverterMapUint8Uint32) Write(writer io.Writer, mapValue map[uint8]uint32) {
+	if len(mapValue) > math.MaxInt32 {
+		panic("map[uint8]uint32 is too large to fit into Int32")
+	}
+
+	writeInt32(writer, int32(len(mapValue)))
+	for key, value := range mapValue {
+		FfiConverterUint8INSTANCE.Write(writer, key)
+		FfiConverterUint32INSTANCE.Write(writer, value)
+	}
+}
+
+type FfiDestroyerMapUint8Uint32 struct {}
+
+func (_ FfiDestroyerMapUint8Uint32) Destroy(mapValue map[uint8]uint32) {
+	for key, value := range mapValue {
+		FfiDestroyerUint8{}.Destroy(key)
+		FfiDestroyerUint32{}.Destroy(value)	
+	}
+}
+
+
+
+type FfiConverterMapUint16Uint32 struct {}
+
+var FfiConverterMapUint16Uint32INSTANCE = FfiConverterMapUint16Uint32{}
+
+func (c FfiConverterMapUint16Uint32) Lift(rb RustBufferI) map[uint16]uint32 {
+	return LiftFromRustBuffer[map[uint16]uint32](c, rb)
+}
+
+func (_ FfiConverterMapUint16Uint32) Read(reader io.Reader) map[uint16]uint32 {
+	result := make(map[uint16]uint32)
+	length := readInt32(reader)
+	for i := int32(0); i < length; i++ {
+		key := FfiConverterUint16INSTANCE.Read(reader)
+		value := FfiConverterUint32INSTANCE.Read(reader)
+		result[key] = value
+	}
+	return result
+}
+
+func (c FfiConverterMapUint16Uint32) Lower(value map[uint16]uint32) C.RustBuffer {
+	return LowerIntoRustBuffer[map[uint16]uint32](c, value)
+}
+
+func (_ FfiConverterMapUint16Uint32) Write(writer io.Writer, mapValue map[uint16]uint32) {
+	if len(mapValue) > math.MaxInt32 {
+		panic("map[uint16]uint32 is too large to fit into Int32")
+	}
+
+	writeInt32(writer, int32(len(mapValue)))
+	for key, value := range mapValue {
+		FfiConverterUint16INSTANCE.Write(writer, key)
+		FfiConverterUint32INSTANCE.Write(writer, value)
+	}
+}
+
+type FfiDestroyerMapUint16Uint32 struct {}
+
+func (_ FfiDestroyerMapUint16Uint32) Destroy(mapValue map[uint16]uint32) {
+	for key, value := range mapValue {
+		FfiDestroyerUint16{}.Destroy(key)
+		FfiDestroyerUint32{}.Destroy(value)	
 	}
 }
 

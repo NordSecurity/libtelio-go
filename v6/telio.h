@@ -420,6 +420,20 @@ static void call_UniffiCallbackInterfaceTelioProtectCbMethod0(
 
 
 #endif
+#ifndef UNIFFI_FFIDEF_CALLBACK_INTERFACE_TP_LITE_STATS_CALLBACK_METHOD0
+#define UNIFFI_FFIDEF_CALLBACK_INTERFACE_TP_LITE_STATS_CALLBACK_METHOD0
+typedef void (*UniffiCallbackInterfaceTpLiteStatsCallbackMethod0)(uint64_t uniffi_handle, RustBuffer domains, RustBuffer metrics, void* uniffi_out_return, RustCallStatus* callStatus );
+
+// Making function static works arround:
+// https://github.com/golang/go/issues/11263
+static void call_UniffiCallbackInterfaceTpLiteStatsCallbackMethod0(
+				UniffiCallbackInterfaceTpLiteStatsCallbackMethod0 cb, uint64_t uniffi_handle, RustBuffer domains, RustBuffer metrics, void* uniffi_out_return, RustCallStatus* callStatus )
+{
+	return cb(uniffi_handle, domains, metrics, uniffi_out_return, callStatus );
+}
+
+
+#endif
 #ifndef UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_CUSTOM_ADAPTER_METHOD0
 #define UNIFFI_FFIDEF_CALLBACK_INTERFACE_TELIO_CUSTOM_ADAPTER_METHOD0
 typedef void (*UniffiCallbackInterfaceTelioCustomAdapterMethod0)(uint64_t uniffi_handle, RustBuffer cmd, RustBuffer* uniffi_out_return, RustCallStatus* callStatus );
@@ -484,6 +498,14 @@ typedef struct UniffiVTableCallbackInterfaceTelioProtectCb {
     UniffiCallbackInterfaceTelioProtectCbMethod0 protect;
     UniffiCallbackInterfaceFree uniffiFree;
 } UniffiVTableCallbackInterfaceTelioProtectCb;
+
+#endif
+#ifndef UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TP_LITE_STATS_CALLBACK
+#define UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TP_LITE_STATS_CALLBACK
+typedef struct UniffiVTableCallbackInterfaceTpLiteStatsCallback {
+    UniffiCallbackInterfaceTpLiteStatsCallbackMethod0 collect;
+    UniffiCallbackInterfaceFree uniffiFree;
+} UniffiVTableCallbackInterfaceTpLiteStatsCallback;
 
 #endif
 #ifndef UNIFFI_FFIDEF_V_TABLE_CALLBACK_INTERFACE_TELIO_CUSTOM_ADAPTER
@@ -637,6 +659,11 @@ void uniffi_telio_fn_method_telio_connect_to_exit_node_with_id(void* ptr, RustBu
 void uniffi_telio_fn_method_telio_disable_magic_dns(void* ptr, RustCallStatus *out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_DISABLE_TP_LITE_STATS_COLLECTION
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_DISABLE_TP_LITE_STATS_COLLECTION
+void uniffi_telio_fn_method_telio_disable_tp_lite_stats_collection(void* ptr, RustCallStatus *out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_DISCONNECT_FROM_EXIT_NODE
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_DISCONNECT_FROM_EXIT_NODE
 void uniffi_telio_fn_method_telio_disconnect_from_exit_node(void* ptr, RustBuffer public_key, RustCallStatus *out_status
@@ -650,6 +677,11 @@ void uniffi_telio_fn_method_telio_disconnect_from_exit_nodes(void* ptr, RustCall
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_ENABLE_MAGIC_DNS
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_ENABLE_MAGIC_DNS
 void uniffi_telio_fn_method_telio_enable_magic_dns(void* ptr, RustBuffer forward_servers, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_ENABLE_TP_LITE_STATS_COLLECTION
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_ENABLE_TP_LITE_STATS_COLLECTION
+void uniffi_telio_fn_method_telio_enable_tp_lite_stats_collection(void* ptr, RustBuffer config, uint64_t collect_stats_cb, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GENERATE_STACK_PANIC
@@ -830,6 +862,11 @@ void uniffi_telio_fn_init_callback_vtable_teliologgercb(UniffiVTableCallbackInte
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TELIOPROTECTCB
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TELIOPROTECTCB
 void uniffi_telio_fn_init_callback_vtable_telioprotectcb(UniffiVTableCallbackInterfaceTelioProtectCb* vtable
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TPLITESTATSCALLBACK
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_INIT_CALLBACK_VTABLE_TPLITESTATSCALLBACK
+void uniffi_telio_fn_init_callback_vtable_tplitestatscallback(UniffiVTableCallbackInterfaceTpLiteStatsCallback* vtable
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_ADD_TIMESTAMPS_TO_LOGS
@@ -1377,6 +1414,12 @@ uint16_t uniffi_telio_checksum_method_telio_disable_magic_dns(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_DISABLE_TP_LITE_STATS_COLLECTION
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_DISABLE_TP_LITE_STATS_COLLECTION
+uint16_t uniffi_telio_checksum_method_telio_disable_tp_lite_stats_collection(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_DISCONNECT_FROM_EXIT_NODE
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_DISCONNECT_FROM_EXIT_NODE
 uint16_t uniffi_telio_checksum_method_telio_disconnect_from_exit_node(void
@@ -1392,6 +1435,12 @@ uint16_t uniffi_telio_checksum_method_telio_disconnect_from_exit_nodes(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_ENABLE_MAGIC_DNS
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_ENABLE_MAGIC_DNS
 uint16_t uniffi_telio_checksum_method_telio_enable_magic_dns(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_ENABLE_TP_LITE_STATS_COLLECTION
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_ENABLE_TP_LITE_STATS_COLLECTION
+uint16_t uniffi_telio_checksum_method_telio_enable_tp_lite_stats_collection(void
     
 );
 #endif
@@ -1611,6 +1660,12 @@ uint16_t uniffi_telio_checksum_method_telioprotectcb_protect(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TPLITESTATSCALLBACK_COLLECT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TPLITESTATSCALLBACK_COLLECT
+uint16_t uniffi_telio_checksum_method_tplitestatscallback_collect(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_FFI_TELIO_UNIFFI_CONTRACT_VERSION
 #define UNIFFI_FFIDEF_FFI_TELIO_UNIFFI_CONTRACT_VERSION
 uint32_t ffi_telio_uniffi_contract_version(void
@@ -1628,3 +1683,5 @@ uint32_t ffi_telio_uniffi_contract_version(void
  void telio_cgo_dispatchCallbackInterfaceTelioLoggerCbFree(uint64_t handle);
  void telio_cgo_dispatchCallbackInterfaceTelioProtectCbMethod0(uint64_t uniffi_handle, int32_t socket_id, void* uniffi_out_return, RustCallStatus* callStatus );
  void telio_cgo_dispatchCallbackInterfaceTelioProtectCbFree(uint64_t handle);
+ void telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackMethod0(uint64_t uniffi_handle, RustBuffer domains, RustBuffer metrics, void* uniffi_out_return, RustCallStatus* callStatus );
+ void telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackFree(uint64_t handle);
