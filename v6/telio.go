@@ -3970,8 +3970,8 @@ type Features struct {
 	Ipv6 bool
 	// Nicknames support
 	Nicknames bool
-	// Feature config for firewall
-	Firewall FeatureFirewall
+	// Feature config for firewall. When null, the firewall is disabled.
+	Firewall *FeatureFirewall
 	// If and for how long to flush events when stopping telio. Setting to Some(0) means waiting until all events have been flushed, regardless of how long it takes
 	FlushEventsOnStopTimeoutSeconds *uint64
 	// Link detection mechanism
@@ -3998,7 +3998,7 @@ func (r *Features) Destroy() {
 		FfiDestroyerTypeFeatureValidateKeys{}.Destroy(r.ValidateKeys);
 		FfiDestroyerBool{}.Destroy(r.Ipv6);
 		FfiDestroyerBool{}.Destroy(r.Nicknames);
-		FfiDestroyerFeatureFirewall{}.Destroy(r.Firewall);
+		FfiDestroyerOptionalFeatureFirewall{}.Destroy(r.Firewall);
 		FfiDestroyerOptionalUint64{}.Destroy(r.FlushEventsOnStopTimeoutSeconds);
 		FfiDestroyerOptionalFeatureLinkDetection{}.Destroy(r.LinkDetection);
 		FfiDestroyerFeatureDns{}.Destroy(r.Dns);
@@ -4029,7 +4029,7 @@ func (c FfiConverterFeatures) Read(reader io.Reader) Features {
 			FfiConverterTypeFeatureValidateKeysINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterFeatureFirewallINSTANCE.Read(reader),
+			FfiConverterOptionalFeatureFirewallINSTANCE.Read(reader),
 			FfiConverterOptionalUint64INSTANCE.Read(reader),
 			FfiConverterOptionalFeatureLinkDetectionINSTANCE.Read(reader),
 			FfiConverterFeatureDnsINSTANCE.Read(reader),
@@ -4056,7 +4056,7 @@ func (c FfiConverterFeatures) Write(writer io.Writer, value Features) {
 		FfiConverterTypeFeatureValidateKeysINSTANCE.Write(writer, value.ValidateKeys);
 		FfiConverterBoolINSTANCE.Write(writer, value.Ipv6);
 		FfiConverterBoolINSTANCE.Write(writer, value.Nicknames);
-		FfiConverterFeatureFirewallINSTANCE.Write(writer, value.Firewall);
+		FfiConverterOptionalFeatureFirewallINSTANCE.Write(writer, value.Firewall);
 		FfiConverterOptionalUint64INSTANCE.Write(writer, value.FlushEventsOnStopTimeoutSeconds);
 		FfiConverterOptionalFeatureLinkDetectionINSTANCE.Write(writer, value.LinkDetection);
 		FfiConverterFeatureDnsINSTANCE.Write(writer, value.Dns);
@@ -6564,6 +6564,45 @@ type FfiDestroyerOptionalFeatureExitDns struct {}
 func (_ FfiDestroyerOptionalFeatureExitDns) Destroy(value *FeatureExitDns) {
 	if value != nil {
 		FfiDestroyerFeatureExitDns{}.Destroy(*value)
+	}
+}
+
+
+
+type FfiConverterOptionalFeatureFirewall struct{}
+
+var FfiConverterOptionalFeatureFirewallINSTANCE = FfiConverterOptionalFeatureFirewall{}
+
+func (c FfiConverterOptionalFeatureFirewall) Lift(rb RustBufferI) *FeatureFirewall {
+	return LiftFromRustBuffer[*FeatureFirewall](c, rb)
+}
+
+func (_ FfiConverterOptionalFeatureFirewall) Read(reader io.Reader) *FeatureFirewall {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterFeatureFirewallINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalFeatureFirewall) Lower(value *FeatureFirewall) C.RustBuffer {
+	return LowerIntoRustBuffer[*FeatureFirewall](c, value)
+}
+
+func (_ FfiConverterOptionalFeatureFirewall) Write(writer io.Writer, value *FeatureFirewall) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterFeatureFirewallINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalFeatureFirewall struct {}
+
+func (_ FfiDestroyerOptionalFeatureFirewall) Destroy(value *FeatureFirewall) {
+	if value != nil {
+		FfiDestroyerFeatureFirewall{}.Destroy(*value)
 	}
 }
 
