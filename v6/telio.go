@@ -1747,7 +1747,8 @@ type TelioInterface interface {
 	EnableMagicDns(forwardServers []IpAddr) error
 	// Register callback to get metrics and domains blocked by TP-Lite
 	//
-	// Requires firewall to be enabled through VnicOptions::enable_firewall()
+	// Requires firewall to be enabled through setting firewall field of Features object 
+	// to a non-null value
 	//
 	// Passing empty list of IPs will disable the collection of TP-Lite stats
 	EnableTpLiteStatsCollection(config TpLiteStatsOptions, collectStatsCb TpLiteStatsCallback) error
@@ -2062,7 +2063,8 @@ func (_self *Telio) EnableMagicDns(forwardServers []IpAddr) error {
 
 // Register callback to get metrics and domains blocked by TP-Lite
 //
-// Requires firewall to be enabled through VnicOptions::enable_firewall()
+// Requires firewall to be enabled through setting firewall field of Features object 
+// to a non-null value
 //
 // Passing empty list of IPs will disable the collection of TP-Lite stats
 func (_self *Telio) EnableTpLiteStatsCollection(config TpLiteStatsOptions, collectStatsCb TpLiteStatsCallback) error {
