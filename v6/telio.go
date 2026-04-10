@@ -1043,31 +1043,6 @@ func uniffiCheckChecksums() {
 
 
 
-type FfiConverterUint8 struct{}
-
-var FfiConverterUint8INSTANCE = FfiConverterUint8{}
-
-func (FfiConverterUint8) Lower(value uint8) C.uint8_t {
-	return C.uint8_t(value)
-}
-
-func (FfiConverterUint8) Write(writer io.Writer, value uint8) {
-	writeUint8(writer, value)
-}
-
-func (FfiConverterUint8) Lift(value C.uint8_t) uint8 {
-	return uint8(value)
-}
-
-func (FfiConverterUint8) Read(reader io.Reader) uint8 {
-	return readUint8(reader)
-}
-
-type FfiDestroyerUint8 struct {}
-
-func (FfiDestroyerUint8) Destroy(_ uint8) {}
-
-
 type FfiConverterUint16 struct{}
 
 var FfiConverterUint16INSTANCE = FfiConverterUint16{}
@@ -2788,8 +2763,6 @@ func (_ FfiDestroyerBackoff) Destroy(value Backoff) {
 type BlockedDomain struct {
 	// The domain name that was blocked 
 	DomainName string
-	// The DNS record type
-	RecordType uint16
 	// When the request occurred
 	Timestamp uint64
 	// The category, represented by the "authority" from the SOA record
@@ -2798,7 +2771,6 @@ type BlockedDomain struct {
 
 func (r *BlockedDomain) Destroy() {
 		FfiDestroyerString{}.Destroy(r.DomainName);
-		FfiDestroyerUint16{}.Destroy(r.RecordType);
 		FfiDestroyerUint64{}.Destroy(r.Timestamp);
 		FfiDestroyerString{}.Destroy(r.Category);
 }
@@ -2814,7 +2786,6 @@ func (c FfiConverterBlockedDomain) Lift(rb RustBufferI) BlockedDomain {
 func (c FfiConverterBlockedDomain) Read(reader io.Reader) BlockedDomain {
 	return BlockedDomain {
 			FfiConverterStringINSTANCE.Read(reader),
-			FfiConverterUint16INSTANCE.Read(reader),
 			FfiConverterUint64INSTANCE.Read(reader),
 			FfiConverterStringINSTANCE.Read(reader),
 	}
@@ -2826,7 +2797,6 @@ func (c FfiConverterBlockedDomain) Lower(value BlockedDomain) C.RustBuffer {
 
 func (c FfiConverterBlockedDomain) Write(writer io.Writer, value BlockedDomain) {
 		FfiConverterStringINSTANCE.Write(writer, value.DomainName);
-		FfiConverterUint16INSTANCE.Write(writer, value.RecordType);
 		FfiConverterUint64INSTANCE.Write(writer, value.Timestamp);
 		FfiConverterStringINSTANCE.Write(writer, value.Category);
 }
@@ -2938,26 +2908,14 @@ type DnsMetrics struct {
 	NumRequests uint32
 	// Number of received DNS responses
 	NumResponses uint32
-	// Number of requests that had some parsing issue
-	NumMalformedRequests uint32
-	// Number of responses that had some parsing issue
-	NumMalformedResponses uint32
 	// Number of DNS requests that were caught by libfirewall's cache of blocked domains
 	NumCacheHits uint32
-	// Number of requests per record type
-	RecordTypeDistribution map[uint16]uint32
-	// Number of responses per response type
-	ResponseTypeDistribution map[uint8]uint32
 }
 
 func (r *DnsMetrics) Destroy() {
 		FfiDestroyerUint32{}.Destroy(r.NumRequests);
 		FfiDestroyerUint32{}.Destroy(r.NumResponses);
-		FfiDestroyerUint32{}.Destroy(r.NumMalformedRequests);
-		FfiDestroyerUint32{}.Destroy(r.NumMalformedResponses);
 		FfiDestroyerUint32{}.Destroy(r.NumCacheHits);
-		FfiDestroyerMapUint16Uint32{}.Destroy(r.RecordTypeDistribution);
-		FfiDestroyerMapUint8Uint32{}.Destroy(r.ResponseTypeDistribution);
 }
 
 type FfiConverterDnsMetrics struct {}
@@ -2973,10 +2931,6 @@ func (c FfiConverterDnsMetrics) Read(reader io.Reader) DnsMetrics {
 			FfiConverterUint32INSTANCE.Read(reader),
 			FfiConverterUint32INSTANCE.Read(reader),
 			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterMapUint16Uint32INSTANCE.Read(reader),
-			FfiConverterMapUint8Uint32INSTANCE.Read(reader),
 	}
 }
 
@@ -2987,11 +2941,7 @@ func (c FfiConverterDnsMetrics) Lower(value DnsMetrics) C.RustBuffer {
 func (c FfiConverterDnsMetrics) Write(writer io.Writer, value DnsMetrics) {
 		FfiConverterUint32INSTANCE.Write(writer, value.NumRequests);
 		FfiConverterUint32INSTANCE.Write(writer, value.NumResponses);
-		FfiConverterUint32INSTANCE.Write(writer, value.NumMalformedRequests);
-		FfiConverterUint32INSTANCE.Write(writer, value.NumMalformedResponses);
 		FfiConverterUint32INSTANCE.Write(writer, value.NumCacheHits);
-		FfiConverterMapUint16Uint32INSTANCE.Write(writer, value.RecordTypeDistribution);
-		FfiConverterMapUint8Uint32INSTANCE.Write(writer, value.ResponseTypeDistribution);
 }
 
 type FfiDestroyerDnsMetrics struct {}
@@ -7886,98 +7836,6 @@ type FfiDestroyerSequenceTypeIpNet struct {}
 func (FfiDestroyerSequenceTypeIpNet) Destroy(sequence []IpNet) {
 	for _, value := range sequence {
 		FfiDestroyerTypeIpNet{}.Destroy(value)	
-	}
-}
-
-
-
-type FfiConverterMapUint8Uint32 struct {}
-
-var FfiConverterMapUint8Uint32INSTANCE = FfiConverterMapUint8Uint32{}
-
-func (c FfiConverterMapUint8Uint32) Lift(rb RustBufferI) map[uint8]uint32 {
-	return LiftFromRustBuffer[map[uint8]uint32](c, rb)
-}
-
-func (_ FfiConverterMapUint8Uint32) Read(reader io.Reader) map[uint8]uint32 {
-	result := make(map[uint8]uint32)
-	length := readInt32(reader)
-	for i := int32(0); i < length; i++ {
-		key := FfiConverterUint8INSTANCE.Read(reader)
-		value := FfiConverterUint32INSTANCE.Read(reader)
-		result[key] = value
-	}
-	return result
-}
-
-func (c FfiConverterMapUint8Uint32) Lower(value map[uint8]uint32) C.RustBuffer {
-	return LowerIntoRustBuffer[map[uint8]uint32](c, value)
-}
-
-func (_ FfiConverterMapUint8Uint32) Write(writer io.Writer, mapValue map[uint8]uint32) {
-	if len(mapValue) > math.MaxInt32 {
-		panic("map[uint8]uint32 is too large to fit into Int32")
-	}
-
-	writeInt32(writer, int32(len(mapValue)))
-	for key, value := range mapValue {
-		FfiConverterUint8INSTANCE.Write(writer, key)
-		FfiConverterUint32INSTANCE.Write(writer, value)
-	}
-}
-
-type FfiDestroyerMapUint8Uint32 struct {}
-
-func (_ FfiDestroyerMapUint8Uint32) Destroy(mapValue map[uint8]uint32) {
-	for key, value := range mapValue {
-		FfiDestroyerUint8{}.Destroy(key)
-		FfiDestroyerUint32{}.Destroy(value)	
-	}
-}
-
-
-
-type FfiConverterMapUint16Uint32 struct {}
-
-var FfiConverterMapUint16Uint32INSTANCE = FfiConverterMapUint16Uint32{}
-
-func (c FfiConverterMapUint16Uint32) Lift(rb RustBufferI) map[uint16]uint32 {
-	return LiftFromRustBuffer[map[uint16]uint32](c, rb)
-}
-
-func (_ FfiConverterMapUint16Uint32) Read(reader io.Reader) map[uint16]uint32 {
-	result := make(map[uint16]uint32)
-	length := readInt32(reader)
-	for i := int32(0); i < length; i++ {
-		key := FfiConverterUint16INSTANCE.Read(reader)
-		value := FfiConverterUint32INSTANCE.Read(reader)
-		result[key] = value
-	}
-	return result
-}
-
-func (c FfiConverterMapUint16Uint32) Lower(value map[uint16]uint32) C.RustBuffer {
-	return LowerIntoRustBuffer[map[uint16]uint32](c, value)
-}
-
-func (_ FfiConverterMapUint16Uint32) Write(writer io.Writer, mapValue map[uint16]uint32) {
-	if len(mapValue) > math.MaxInt32 {
-		panic("map[uint16]uint32 is too large to fit into Int32")
-	}
-
-	writeInt32(writer, int32(len(mapValue)))
-	for key, value := range mapValue {
-		FfiConverterUint16INSTANCE.Write(writer, key)
-		FfiConverterUint32INSTANCE.Write(writer, value)
-	}
-}
-
-type FfiDestroyerMapUint16Uint32 struct {}
-
-func (_ FfiDestroyerMapUint16Uint32) Destroy(mapValue map[uint16]uint32) {
-	for key, value := range mapValue {
-		FfiDestroyerUint16{}.Destroy(key)
-		FfiDestroyerUint32{}.Destroy(value)	
 	}
 }
 
