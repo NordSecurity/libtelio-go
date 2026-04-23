@@ -343,11 +343,9 @@ func readFloat64(reader io.Reader) float64 {
 
 func init() {
         
-        FfiConverterTelioCustomAdapterINSTANCE.register();
         FfiConverterCallbackInterfaceTelioEventCbINSTANCE.register();
         FfiConverterCallbackInterfaceTelioLoggerCbINSTANCE.register();
         FfiConverterCallbackInterfaceTelioProtectCbINSTANCE.register();
-        FfiConverterCallbackInterfaceTpLiteStatsCallbackINSTANCE.register();
         uniffiCheckChecksums()
 }
 
@@ -478,6 +476,15 @@ func uniffiCheckChecksums() {
 	if checksum != 46753 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_build: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_batching()
+	})
+	if checksum != 27812 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_batching: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -662,15 +669,6 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_disable_tp_lite_stats_collection()
-	})
-	if checksum != 7223 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_disable_tp_lite_stats_collection: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_disconnect_from_exit_node()
 	})
 	if checksum != 36107 {
@@ -694,15 +692,6 @@ func uniffiCheckChecksums() {
 	if checksum != 32172 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_enable_magic_dns: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_enable_tp_lite_stats_collection()
-	})
-	if checksum != 30074 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_enable_tp_lite_stats_collection: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -887,15 +876,6 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_start_custom()
-	})
-	if checksum != 37803 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_start_custom: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_start_named()
 	})
 	if checksum != 29016 {
@@ -950,33 +930,6 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_teliocustomadapter_send_uapi_cmd()
-	})
-	if checksum != 64524 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_teliocustomadapter_send_uapi_cmd: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_teliocustomadapter_start()
-	})
-	if checksum != 42867 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_teliocustomadapter_start: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_teliocustomadapter_stop()
-	})
-	if checksum != 60946 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_teliocustomadapter_stop: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_constructor_featuresdefaultsbuilder_new()
 	})
 	if checksum != 33447 {
@@ -1027,15 +980,6 @@ func uniffiCheckChecksums() {
 	if checksum != 52662 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telioprotectcb_protect: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_tplitestatscallback_collect()
-	})
-	if checksum != 5989 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_tplitestatscallback_collect: UniFFI API checksum mismatch")
 	}
 	}
 }
@@ -1343,6 +1287,8 @@ func (ffiObject *FfiObject)freeRustArcPtr() {
 type FeaturesDefaultsBuilderInterface interface {
 	// Build final config
 	Build() Features
+	// Enable keepalive batching feature
+	EnableBatching() *FeaturesDefaultsBuilder
 	// Enable default wireguard timings, derp timings and other features for best battery performance
 	EnableBatterySavingDefaults() *FeaturesDefaultsBuilder
 	// Enable direct connections with defaults;
@@ -1402,6 +1348,16 @@ func (_self *FeaturesDefaultsBuilder) Build() Features {
 		inner: C.uniffi_telio_fn_method_featuresdefaultsbuilder_build(
 		_pointer,_uniffiStatus),
 	}
+	}))
+}
+
+// Enable keepalive batching feature
+func (_self *FeaturesDefaultsBuilder) EnableBatching() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_batching(
+		_pointer,_uniffiStatus)
 	}))
 }
 
@@ -1694,7 +1650,6 @@ type TelioInterface interface {
 	ConnectToExitNodeWithId(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) error
 	// Disables magic DNS if it was enabled.
 	DisableMagicDns() error
-	DisableTpLiteStatsCollection() error
 	// Disconnects from specified exit node.
 	//
 	// # Parameters
@@ -1720,13 +1675,6 @@ type TelioInterface interface {
 	// telio.enable_magic_dns("[\"\"]");
 	// ```
 	EnableMagicDns(forwardServers []IpAddr) error
-	// Register callback to get metrics and domains blocked by TP-Lite
-	//
-	// Requires firewall to be enabled through setting firewall field of Features object 
-	// to a non-null value
-	//
-	// Passing empty list of IPs will disable the collection of TP-Lite stats
-	EnableTpLiteStatsCollection(config TpLiteStatsOptions, collectStatsCb TpLiteStatsCallback) error
 	// For testing only.
 	GenerateStackPanic() error
 	// For testing only.
@@ -1788,10 +1736,6 @@ type TelioInterface interface {
 	//
 	// Adapter will attempt to open its own tunnel.
 	Start(secretKey SecretKey, adapter TelioAdapterType) error
-	// Start telio with specified adapter.
-	//
-	// Adapter will attempt to open its own tunnel.
-	StartCustom(secretKey SecretKey, adapter TelioCustomAdapter) error
 	// Start telio with specified adapter and name.
 	//
 	// Adapter will attempt to open its own tunnel.
@@ -1970,17 +1914,6 @@ func (_self *Telio) DisableMagicDns() error {
 		return _uniffiErr.AsError()
 }
 
-func (_self *Telio) DisableTpLiteStatsCollection() error {
-	_pointer := _self.ffiObject.incrementPointer("*Telio")
-	defer _self.ffiObject.decrementPointer()
-	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_telio_disable_tp_lite_stats_collection(
-		_pointer,_uniffiStatus)
-		return false
-	})
-		return _uniffiErr.AsError()
-}
-
 // Disconnects from specified exit node.
 //
 // # Parameters
@@ -2031,23 +1964,6 @@ func (_self *Telio) EnableMagicDns(forwardServers []IpAddr) error {
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_enable_magic_dns(
 		_pointer,FfiConverterSequenceTypeIpAddrINSTANCE.Lower(forwardServers),_uniffiStatus)
-		return false
-	})
-		return _uniffiErr.AsError()
-}
-
-// Register callback to get metrics and domains blocked by TP-Lite
-//
-// Requires firewall to be enabled through setting firewall field of Features object 
-// to a non-null value
-//
-// Passing empty list of IPs will disable the collection of TP-Lite stats
-func (_self *Telio) EnableTpLiteStatsCollection(config TpLiteStatsOptions, collectStatsCb TpLiteStatsCallback) error {
-	_pointer := _self.ffiObject.incrementPointer("*Telio")
-	defer _self.ffiObject.decrementPointer()
-	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_telio_enable_tp_lite_stats_collection(
-		_pointer,FfiConverterTpLiteStatsOptionsINSTANCE.Lower(config), FfiConverterCallbackInterfaceTpLiteStatsCallbackINSTANCE.Lower(collectStatsCb),_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()
@@ -2322,20 +2238,6 @@ func (_self *Telio) Start(secretKey SecretKey, adapter TelioAdapterType) error {
 		return _uniffiErr.AsError()
 }
 
-// Start telio with specified adapter.
-//
-// Adapter will attempt to open its own tunnel.
-func (_self *Telio) StartCustom(secretKey SecretKey, adapter TelioCustomAdapter) error {
-	_pointer := _self.ffiObject.incrementPointer("*Telio")
-	defer _self.ffiObject.decrementPointer()
-	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_telio_start_custom(
-		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey), FfiConverterTelioCustomAdapterINSTANCE.Lower(adapter),_uniffiStatus)
-		return false
-	})
-		return _uniffiErr.AsError()
-}
-
 // Start telio with specified adapter and name.
 //
 // Adapter will attempt to open its own tunnel.
@@ -2471,245 +2373,6 @@ func (_ FfiDestroyerTelio) Destroy(value *Telio) {
 
 
 
-type TelioCustomAdapter interface {
-	// Send an UAPI command
-	SendUapiCmd(cmd WgCmd) WgResponse
-	// Start the adapter
-	Start() 
-	// Stop the adapter
-	Stop() 
-}
-type TelioCustomAdapterImpl struct {
-	ffiObject FfiObject
-}
-
-
-
-
-// Send an UAPI command
-func (_self *TelioCustomAdapterImpl) SendUapiCmd(cmd WgCmd) WgResponse {
-	_pointer := _self.ffiObject.incrementPointer("TelioCustomAdapter")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterWgResponseINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_teliocustomadapter_send_uapi_cmd(
-		_pointer,FfiConverterWgCmdINSTANCE.Lower(cmd),_uniffiStatus),
-	}
-	}))
-}
-
-// Start the adapter
-func (_self *TelioCustomAdapterImpl) Start()  {
-	_pointer := _self.ffiObject.incrementPointer("TelioCustomAdapter")
-	defer _self.ffiObject.decrementPointer()
-	rustCall(func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_teliocustomadapter_start(
-		_pointer,_uniffiStatus)
-		return false
-	})
-}
-
-// Stop the adapter
-func (_self *TelioCustomAdapterImpl) Stop()  {
-	_pointer := _self.ffiObject.incrementPointer("TelioCustomAdapter")
-	defer _self.ffiObject.decrementPointer()
-	rustCall(func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_teliocustomadapter_stop(
-		_pointer,_uniffiStatus)
-		return false
-	})
-}
-func (object *TelioCustomAdapterImpl) Destroy() {
-	runtime.SetFinalizer(object, nil)
-	object.ffiObject.destroy()
-}
-
-type FfiConverterTelioCustomAdapter struct {
-	handleMap *concurrentHandleMap[TelioCustomAdapter]
-	}
-
-var FfiConverterTelioCustomAdapterINSTANCE = FfiConverterTelioCustomAdapter{
-	handleMap: newConcurrentHandleMap[TelioCustomAdapter](),
-	}
-
-
-func (c FfiConverterTelioCustomAdapter) Lift(pointer unsafe.Pointer) TelioCustomAdapter {
-	result := &TelioCustomAdapterImpl {
-		newFfiObject(
-			pointer,
-			func(pointer unsafe.Pointer, status *C.RustCallStatus) unsafe.Pointer {
-				return C.uniffi_telio_fn_clone_teliocustomadapter(pointer, status)
-			},
-			func(pointer unsafe.Pointer, status *C.RustCallStatus) {
-				C.uniffi_telio_fn_free_teliocustomadapter(pointer, status)
-			},
-		),
-	}
-	runtime.SetFinalizer(result, (*TelioCustomAdapterImpl).Destroy)
-	return result
-}
-
-func (c FfiConverterTelioCustomAdapter) Read(reader io.Reader) TelioCustomAdapter {
-	return c.Lift(unsafe.Pointer(uintptr(readUint64(reader))))
-}
-
-func (c FfiConverterTelioCustomAdapter) Lower(value TelioCustomAdapter) unsafe.Pointer {
-	// TODO: this is bad - all synchronization from ObjectRuntime.go is discarded here,
-	// because the pointer will be decremented immediately after this function returns,
-	// and someone will be left holding onto a non-locked pointer.
-	pointer := unsafe.Pointer(uintptr(c.handleMap.insert(value)))
-	return pointer
-	
-}
-
-func (c FfiConverterTelioCustomAdapter) Write(writer io.Writer, value TelioCustomAdapter) {
-	writeUint64(writer, uint64(uintptr(c.Lower(value))))
-}
-
-type FfiDestroyerTelioCustomAdapter struct {}
-
-func (_ FfiDestroyerTelioCustomAdapter) Destroy(value TelioCustomAdapter) {
-	if val, ok := value.(*TelioCustomAdapterImpl); ok {
-		val.Destroy()
-	} else {
-		panic("Expected *TelioCustomAdapterImpl")
-	}
-}
-
-type uniffiCallbackResult C.int8_t
-
-const (
-	uniffiIdxCallbackFree               uniffiCallbackResult = 0
-	uniffiCallbackResultSuccess         uniffiCallbackResult = 0
-	uniffiCallbackResultError           uniffiCallbackResult = 1
-	uniffiCallbackUnexpectedResultError uniffiCallbackResult = 2
-	uniffiCallbackCancelled             uniffiCallbackResult = 3
-)
-
-
-type concurrentHandleMap[T any] struct {
-	handles       map[uint64]T
-	currentHandle uint64
-	lock          sync.RWMutex
-}
-
-func newConcurrentHandleMap[T any]() *concurrentHandleMap[T] {
-	return &concurrentHandleMap[T]{
-		handles:  map[uint64]T{},
-	}
-}
-
-func (cm *concurrentHandleMap[T]) insert(obj T) uint64 {
-	cm.lock.Lock()
-	defer cm.lock.Unlock()
-
-	cm.currentHandle = cm.currentHandle + 1
-	cm.handles[cm.currentHandle] = obj
-	return cm.currentHandle
-}
-
-func (cm *concurrentHandleMap[T]) remove(handle uint64) {
-	cm.lock.Lock()
-	defer cm.lock.Unlock()
-
-	delete(cm.handles, handle)
-}
-
-func (cm *concurrentHandleMap[T]) tryGet(handle uint64) (T, bool) {
-	cm.lock.RLock()
-	defer cm.lock.RUnlock()
-
-	val, ok := cm.handles[handle]
-	return val, ok
-}
-
-//export telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod0
-func telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod0(uniffiHandle C.uint64_t,cmd C.RustBuffer,uniffiOutReturn *C.RustBuffer,callStatus *C.RustCallStatus,) {
-	handle := uint64(uniffiHandle)
-	uniffiObj, ok := FfiConverterTelioCustomAdapterINSTANCE.handleMap.tryGet(handle)
-	if !ok {
-		panic(fmt.Errorf("no callback in handle map: %d", handle))
-	}
-	
-	
-
-	 res :=
-    uniffiObj.SendUapiCmd(
-        FfiConverterWgCmdINSTANCE.Lift(GoRustBuffer {
-		inner: cmd,
-	}),
-    )
-	
-    
-
-
-	*uniffiOutReturn = FfiConverterWgResponseINSTANCE.Lower(res)
-}
-
-
-
-//export telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod1
-func telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod1(uniffiHandle C.uint64_t,uniffiOutReturn *C.void,callStatus *C.RustCallStatus,) {
-	handle := uint64(uniffiHandle)
-	uniffiObj, ok := FfiConverterTelioCustomAdapterINSTANCE.handleMap.tryGet(handle)
-	if !ok {
-		panic(fmt.Errorf("no callback in handle map: %d", handle))
-	}
-	
-	
-
-	
-    uniffiObj.Start(
-    )
-	
-    
-
-
-	
-}
-
-
-
-//export telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod2
-func telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod2(uniffiHandle C.uint64_t,uniffiOutReturn *C.void,callStatus *C.RustCallStatus,) {
-	handle := uint64(uniffiHandle)
-	uniffiObj, ok := FfiConverterTelioCustomAdapterINSTANCE.handleMap.tryGet(handle)
-	if !ok {
-		panic(fmt.Errorf("no callback in handle map: %d", handle))
-	}
-	
-	
-
-	
-    uniffiObj.Stop(
-    )
-	
-    
-
-
-	
-}
-
-var UniffiVTableCallbackInterfaceTelioCustomAdapterINSTANCE = C.UniffiVTableCallbackInterfaceTelioCustomAdapter {
-	sendUapiCmd: (C.UniffiCallbackInterfaceTelioCustomAdapterMethod0)(C.telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod0),
-	start: (C.UniffiCallbackInterfaceTelioCustomAdapterMethod1)(C.telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod1),
-	stop: (C.UniffiCallbackInterfaceTelioCustomAdapterMethod2)(C.telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterMethod2),
-
-	uniffiFree: (C.UniffiCallbackInterfaceFree)(C.telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterFree),
-}
-
-//export telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterFree
-func telio_cgo_dispatchCallbackInterfaceTelioCustomAdapterFree(handle C.uint64_t) {
-	FfiConverterTelioCustomAdapterINSTANCE.handleMap.remove(uint64(handle))
-}
-
-func (c FfiConverterTelioCustomAdapter) register() {
-	C.uniffi_telio_fn_init_callback_vtable_teliocustomadapter(&UniffiVTableCallbackInterfaceTelioCustomAdapterINSTANCE)
-}
-
-
-
-
 // Exponential backoff bounds
 type Backoff struct {
 	// Initial bound
@@ -2755,55 +2418,6 @@ func (c FfiConverterBackoff) Write(writer io.Writer, value Backoff) {
 type FfiDestroyerBackoff struct {}
 
 func (_ FfiDestroyerBackoff) Destroy(value Backoff) {
-	value.Destroy()
-}
-
-
-// Information about a domain blocked by TP-Lite
-type BlockedDomain struct {
-	// The domain name that was blocked 
-	DomainName string
-	// When the request occurred
-	Timestamp uint64
-	// The category, represented by the "authority" from the SOA record
-	Category string
-}
-
-func (r *BlockedDomain) Destroy() {
-		FfiDestroyerString{}.Destroy(r.DomainName);
-		FfiDestroyerUint64{}.Destroy(r.Timestamp);
-		FfiDestroyerString{}.Destroy(r.Category);
-}
-
-type FfiConverterBlockedDomain struct {}
-
-var FfiConverterBlockedDomainINSTANCE = FfiConverterBlockedDomain{}
-
-func (c FfiConverterBlockedDomain) Lift(rb RustBufferI) BlockedDomain {
-	return LiftFromRustBuffer[BlockedDomain](c, rb)
-}
-
-func (c FfiConverterBlockedDomain) Read(reader io.Reader) BlockedDomain {
-	return BlockedDomain {
-			FfiConverterStringINSTANCE.Read(reader),
-			FfiConverterUint64INSTANCE.Read(reader),
-			FfiConverterStringINSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterBlockedDomain) Lower(value BlockedDomain) C.RustBuffer {
-	return LowerIntoRustBuffer[BlockedDomain](c, value)
-}
-
-func (c FfiConverterBlockedDomain) Write(writer io.Writer, value BlockedDomain) {
-		FfiConverterStringINSTANCE.Write(writer, value.DomainName);
-		FfiConverterUint64INSTANCE.Write(writer, value.Timestamp);
-		FfiConverterStringINSTANCE.Write(writer, value.Category);
-}
-
-type FfiDestroyerBlockedDomain struct {}
-
-func (_ FfiDestroyerBlockedDomain) Destroy(value BlockedDomain) {
 	value.Destroy()
 }
 
@@ -2902,55 +2516,6 @@ func (_ FfiDestroyerDnsConfig) Destroy(value DnsConfig) {
 }
 
 
-// Simple metrics about TP-Lite DNS activity
-type DnsMetrics struct {
-	// Number of DNS requests that have been made 
-	NumRequests uint32
-	// Number of received DNS responses
-	NumResponses uint32
-	// Number of DNS requests that were caught by libfirewall's cache of blocked domains
-	NumCacheHits uint32
-}
-
-func (r *DnsMetrics) Destroy() {
-		FfiDestroyerUint32{}.Destroy(r.NumRequests);
-		FfiDestroyerUint32{}.Destroy(r.NumResponses);
-		FfiDestroyerUint32{}.Destroy(r.NumCacheHits);
-}
-
-type FfiConverterDnsMetrics struct {}
-
-var FfiConverterDnsMetricsINSTANCE = FfiConverterDnsMetrics{}
-
-func (c FfiConverterDnsMetrics) Lift(rb RustBufferI) DnsMetrics {
-	return LiftFromRustBuffer[DnsMetrics](c, rb)
-}
-
-func (c FfiConverterDnsMetrics) Read(reader io.Reader) DnsMetrics {
-	return DnsMetrics {
-			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterDnsMetrics) Lower(value DnsMetrics) C.RustBuffer {
-	return LowerIntoRustBuffer[DnsMetrics](c, value)
-}
-
-func (c FfiConverterDnsMetrics) Write(writer io.Writer, value DnsMetrics) {
-		FfiConverterUint32INSTANCE.Write(writer, value.NumRequests);
-		FfiConverterUint32INSTANCE.Write(writer, value.NumResponses);
-		FfiConverterUint32INSTANCE.Write(writer, value.NumCacheHits);
-}
-
-type FfiDestroyerDnsMetrics struct {}
-
-func (_ FfiDestroyerDnsMetrics) Destroy(value DnsMetrics) {
-	value.Destroy()
-}
-
-
 // Error event. Used to inform the upper layer about errors in `libtelio`.
 type ErrorEvent struct {
 	// The level of the error
@@ -2996,6 +2561,54 @@ func (c FfiConverterErrorEvent) Write(writer io.Writer, value ErrorEvent) {
 type FfiDestroyerErrorEvent struct {}
 
 func (_ FfiDestroyerErrorEvent) Destroy(value ErrorEvent) {
+	value.Destroy()
+}
+
+
+type FeatureBatching struct {
+	// direct connection threshold for batching
+	DirectConnectionThreshold uint32
+	// effective trigger period
+	TriggerEffectiveDuration uint32
+	// / cooldown after trigger was used
+	TriggerCooldownDuration uint32
+}
+
+func (r *FeatureBatching) Destroy() {
+		FfiDestroyerUint32{}.Destroy(r.DirectConnectionThreshold);
+		FfiDestroyerUint32{}.Destroy(r.TriggerEffectiveDuration);
+		FfiDestroyerUint32{}.Destroy(r.TriggerCooldownDuration);
+}
+
+type FfiConverterFeatureBatching struct {}
+
+var FfiConverterFeatureBatchingINSTANCE = FfiConverterFeatureBatching{}
+
+func (c FfiConverterFeatureBatching) Lift(rb RustBufferI) FeatureBatching {
+	return LiftFromRustBuffer[FeatureBatching](c, rb)
+}
+
+func (c FfiConverterFeatureBatching) Read(reader io.Reader) FeatureBatching {
+	return FeatureBatching {
+			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterUint32INSTANCE.Read(reader),
+			FfiConverterUint32INSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterFeatureBatching) Lower(value FeatureBatching) C.RustBuffer {
+	return LowerIntoRustBuffer[FeatureBatching](c, value)
+}
+
+func (c FfiConverterFeatureBatching) Write(writer io.Writer, value FeatureBatching) {
+		FfiConverterUint32INSTANCE.Write(writer, value.DirectConnectionThreshold);
+		FfiConverterUint32INSTANCE.Write(writer, value.TriggerEffectiveDuration);
+		FfiConverterUint32INSTANCE.Write(writer, value.TriggerCooldownDuration);
+}
+
+type FfiDestroyerFeatureBatching struct {}
+
+func (_ FfiDestroyerFeatureBatching) Destroy(value FeatureBatching) {
 	value.Destroy()
 }
 
@@ -3404,12 +3017,15 @@ func (_ FfiDestroyerFeatureLana) Destroy(value FeatureLana) {
 type FeatureLinkDetection struct {
 	// Configurable rtt in seconds
 	RttSeconds uint64
+	// Check the link state before reporting it as down
+	NoOfPings uint32
 	// Use link detection for downgrade logic
 	UseForDowngrade bool
 }
 
 func (r *FeatureLinkDetection) Destroy() {
 		FfiDestroyerUint64{}.Destroy(r.RttSeconds);
+		FfiDestroyerUint32{}.Destroy(r.NoOfPings);
 		FfiDestroyerBool{}.Destroy(r.UseForDowngrade);
 }
 
@@ -3424,6 +3040,7 @@ func (c FfiConverterFeatureLinkDetection) Lift(rb RustBufferI) FeatureLinkDetect
 func (c FfiConverterFeatureLinkDetection) Read(reader io.Reader) FeatureLinkDetection {
 	return FeatureLinkDetection {
 			FfiConverterUint64INSTANCE.Read(reader),
+			FfiConverterUint32INSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 	}
 }
@@ -3434,6 +3051,7 @@ func (c FfiConverterFeatureLinkDetection) Lower(value FeatureLinkDetection) C.Ru
 
 func (c FfiConverterFeatureLinkDetection) Write(writer io.Writer, value FeatureLinkDetection) {
 		FfiConverterUint64INSTANCE.Write(writer, value.RttSeconds);
+		FfiConverterUint32INSTANCE.Write(writer, value.NoOfPings);
 		FfiConverterBoolINSTANCE.Write(writer, value.UseForDowngrade);
 }
 
@@ -3922,8 +3540,8 @@ type Features struct {
 	Ipv6 bool
 	// Nicknames support
 	Nicknames bool
-	// Feature config for firewall. When null, the firewall is disabled.
-	Firewall *FeatureFirewall
+	// Feature config for firewall
+	Firewall FeatureFirewall
 	// If and for how long to flush events when stopping telio. Setting to Some(0) means waiting until all events have been flushed, regardless of how long it takes
 	FlushEventsOnStopTimeoutSeconds *uint64
 	// Link detection mechanism
@@ -3934,6 +3552,8 @@ type Features struct {
 	PostQuantumVpn FeaturePostQuantumVpn
 	// Multicast support
 	Multicast bool
+	// Batching
+	Batching *FeatureBatching
 	ErrorNotificationService *FeatureErrorNotificationService
 }
 
@@ -3950,12 +3570,13 @@ func (r *Features) Destroy() {
 		FfiDestroyerTypeFeatureValidateKeys{}.Destroy(r.ValidateKeys);
 		FfiDestroyerBool{}.Destroy(r.Ipv6);
 		FfiDestroyerBool{}.Destroy(r.Nicknames);
-		FfiDestroyerOptionalFeatureFirewall{}.Destroy(r.Firewall);
+		FfiDestroyerFeatureFirewall{}.Destroy(r.Firewall);
 		FfiDestroyerOptionalUint64{}.Destroy(r.FlushEventsOnStopTimeoutSeconds);
 		FfiDestroyerOptionalFeatureLinkDetection{}.Destroy(r.LinkDetection);
 		FfiDestroyerFeatureDns{}.Destroy(r.Dns);
 		FfiDestroyerFeaturePostQuantumVpn{}.Destroy(r.PostQuantumVpn);
 		FfiDestroyerBool{}.Destroy(r.Multicast);
+		FfiDestroyerOptionalFeatureBatching{}.Destroy(r.Batching);
 		FfiDestroyerOptionalFeatureErrorNotificationService{}.Destroy(r.ErrorNotificationService);
 }
 
@@ -3981,12 +3602,13 @@ func (c FfiConverterFeatures) Read(reader io.Reader) Features {
 			FfiConverterTypeFeatureValidateKeysINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterOptionalFeatureFirewallINSTANCE.Read(reader),
+			FfiConverterFeatureFirewallINSTANCE.Read(reader),
 			FfiConverterOptionalUint64INSTANCE.Read(reader),
 			FfiConverterOptionalFeatureLinkDetectionINSTANCE.Read(reader),
 			FfiConverterFeatureDnsINSTANCE.Read(reader),
 			FfiConverterFeaturePostQuantumVpnINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterOptionalFeatureBatchingINSTANCE.Read(reader),
 			FfiConverterOptionalFeatureErrorNotificationServiceINSTANCE.Read(reader),
 	}
 }
@@ -4008,12 +3630,13 @@ func (c FfiConverterFeatures) Write(writer io.Writer, value Features) {
 		FfiConverterTypeFeatureValidateKeysINSTANCE.Write(writer, value.ValidateKeys);
 		FfiConverterBoolINSTANCE.Write(writer, value.Ipv6);
 		FfiConverterBoolINSTANCE.Write(writer, value.Nicknames);
-		FfiConverterOptionalFeatureFirewallINSTANCE.Write(writer, value.Firewall);
+		FfiConverterFeatureFirewallINSTANCE.Write(writer, value.Firewall);
 		FfiConverterOptionalUint64INSTANCE.Write(writer, value.FlushEventsOnStopTimeoutSeconds);
 		FfiConverterOptionalFeatureLinkDetectionINSTANCE.Write(writer, value.LinkDetection);
 		FfiConverterFeatureDnsINSTANCE.Write(writer, value.Dns);
 		FfiConverterFeaturePostQuantumVpnINSTANCE.Write(writer, value.PostQuantumVpn);
 		FfiConverterBoolINSTANCE.Write(writer, value.Multicast);
+		FfiConverterOptionalFeatureBatchingINSTANCE.Write(writer, value.Batching);
 		FfiConverterOptionalFeatureErrorNotificationServiceINSTANCE.Write(writer, value.ErrorNotificationService);
 }
 
@@ -4422,295 +4045,6 @@ func (c FfiConverterTelioNode) Write(writer io.Writer, value TelioNode) {
 type FfiDestroyerTelioNode struct {}
 
 func (_ FfiDestroyerTelioNode) Destroy(value TelioNode) {
-	value.Destroy()
-}
-
-
-// Config options for the collection of TP-Lite stats
-type TpLiteStatsOptions struct {
-	// The IP addresses of the TP-Lite DNS servers
-	DnsServerIps []IpAddr
-	// How many blocked domains libfirewall can store between passing them through the callback 
-	// If the buffer fills up and new blocked domains arrive, data will be lost 
-	//
-	// Default value: 100
-	BlockedDomainsBufferSize *uint64
-	// After how long stats will be passed to the callback, in seconds
-	//
-	// Default value: 5
-	CallbackIntervalS *uint64
-	// libfirewall disables OS/client-level caching of blocked domains when stats collection is enabled
-	// To not make extra DNS requests libfirewall has it's own DNS cache for blocked domains
-	//
-	// How many entries the libfirewall-specific DNS cache can hold
-	//
-	// Default value: 512
-	CacheSize *uint64
-	// When TP-Lite stats collection is enabled libfirewall keeps track of open DNS requests
-	//
-	// How many requests libfirewall can keep track of
-	//
-	// Default value: same as blocked_domains_buffer_size
-	MaxOpenRequests *uint64
-}
-
-func (r *TpLiteStatsOptions) Destroy() {
-		FfiDestroyerSequenceTypeIpAddr{}.Destroy(r.DnsServerIps);
-		FfiDestroyerOptionalUint64{}.Destroy(r.BlockedDomainsBufferSize);
-		FfiDestroyerOptionalUint64{}.Destroy(r.CallbackIntervalS);
-		FfiDestroyerOptionalUint64{}.Destroy(r.CacheSize);
-		FfiDestroyerOptionalUint64{}.Destroy(r.MaxOpenRequests);
-}
-
-type FfiConverterTpLiteStatsOptions struct {}
-
-var FfiConverterTpLiteStatsOptionsINSTANCE = FfiConverterTpLiteStatsOptions{}
-
-func (c FfiConverterTpLiteStatsOptions) Lift(rb RustBufferI) TpLiteStatsOptions {
-	return LiftFromRustBuffer[TpLiteStatsOptions](c, rb)
-}
-
-func (c FfiConverterTpLiteStatsOptions) Read(reader io.Reader) TpLiteStatsOptions {
-	return TpLiteStatsOptions {
-			FfiConverterSequenceTypeIpAddrINSTANCE.Read(reader),
-			FfiConverterOptionalUint64INSTANCE.Read(reader),
-			FfiConverterOptionalUint64INSTANCE.Read(reader),
-			FfiConverterOptionalUint64INSTANCE.Read(reader),
-			FfiConverterOptionalUint64INSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterTpLiteStatsOptions) Lower(value TpLiteStatsOptions) C.RustBuffer {
-	return LowerIntoRustBuffer[TpLiteStatsOptions](c, value)
-}
-
-func (c FfiConverterTpLiteStatsOptions) Write(writer io.Writer, value TpLiteStatsOptions) {
-		FfiConverterSequenceTypeIpAddrINSTANCE.Write(writer, value.DnsServerIps);
-		FfiConverterOptionalUint64INSTANCE.Write(writer, value.BlockedDomainsBufferSize);
-		FfiConverterOptionalUint64INSTANCE.Write(writer, value.CallbackIntervalS);
-		FfiConverterOptionalUint64INSTANCE.Write(writer, value.CacheSize);
-		FfiConverterOptionalUint64INSTANCE.Write(writer, value.MaxOpenRequests);
-}
-
-type FfiDestroyerTpLiteStatsOptions struct {}
-
-func (_ FfiDestroyerTpLiteStatsOptions) Destroy(value TpLiteStatsOptions) {
-	value.Destroy()
-}
-
-
-type WgDevice struct {
-	PrivateKey *string
-	ListenPort *uint16
-	Fwmark *uint32
-	ReplacePeers *bool
-	Peers []WgPeer
-}
-
-func (r *WgDevice) Destroy() {
-		FfiDestroyerOptionalString{}.Destroy(r.PrivateKey);
-		FfiDestroyerOptionalUint16{}.Destroy(r.ListenPort);
-		FfiDestroyerOptionalUint32{}.Destroy(r.Fwmark);
-		FfiDestroyerOptionalBool{}.Destroy(r.ReplacePeers);
-		FfiDestroyerSequenceWgPeer{}.Destroy(r.Peers);
-}
-
-type FfiConverterWgDevice struct {}
-
-var FfiConverterWgDeviceINSTANCE = FfiConverterWgDevice{}
-
-func (c FfiConverterWgDevice) Lift(rb RustBufferI) WgDevice {
-	return LiftFromRustBuffer[WgDevice](c, rb)
-}
-
-func (c FfiConverterWgDevice) Read(reader io.Reader) WgDevice {
-	return WgDevice {
-			FfiConverterOptionalStringINSTANCE.Read(reader),
-			FfiConverterOptionalUint16INSTANCE.Read(reader),
-			FfiConverterOptionalUint32INSTANCE.Read(reader),
-			FfiConverterOptionalBoolINSTANCE.Read(reader),
-			FfiConverterSequenceWgPeerINSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterWgDevice) Lower(value WgDevice) C.RustBuffer {
-	return LowerIntoRustBuffer[WgDevice](c, value)
-}
-
-func (c FfiConverterWgDevice) Write(writer io.Writer, value WgDevice) {
-		FfiConverterOptionalStringINSTANCE.Write(writer, value.PrivateKey);
-		FfiConverterOptionalUint16INSTANCE.Write(writer, value.ListenPort);
-		FfiConverterOptionalUint32INSTANCE.Write(writer, value.Fwmark);
-		FfiConverterOptionalBoolINSTANCE.Write(writer, value.ReplacePeers);
-		FfiConverterSequenceWgPeerINSTANCE.Write(writer, value.Peers);
-}
-
-type FfiDestroyerWgDevice struct {}
-
-func (_ FfiDestroyerWgDevice) Destroy(value WgDevice) {
-	value.Destroy()
-}
-
-
-type WgInterface struct {
-	PrivateKey *string
-	ListenPort *uint16
-	Fwmark uint32
-	Peers map[string]WgPeer
-}
-
-func (r *WgInterface) Destroy() {
-		FfiDestroyerOptionalString{}.Destroy(r.PrivateKey);
-		FfiDestroyerOptionalUint16{}.Destroy(r.ListenPort);
-		FfiDestroyerUint32{}.Destroy(r.Fwmark);
-		FfiDestroyerMapStringWgPeer{}.Destroy(r.Peers);
-}
-
-type FfiConverterWgInterface struct {}
-
-var FfiConverterWgInterfaceINSTANCE = FfiConverterWgInterface{}
-
-func (c FfiConverterWgInterface) Lift(rb RustBufferI) WgInterface {
-	return LiftFromRustBuffer[WgInterface](c, rb)
-}
-
-func (c FfiConverterWgInterface) Read(reader io.Reader) WgInterface {
-	return WgInterface {
-			FfiConverterOptionalStringINSTANCE.Read(reader),
-			FfiConverterOptionalUint16INSTANCE.Read(reader),
-			FfiConverterUint32INSTANCE.Read(reader),
-			FfiConverterMapStringWgPeerINSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterWgInterface) Lower(value WgInterface) C.RustBuffer {
-	return LowerIntoRustBuffer[WgInterface](c, value)
-}
-
-func (c FfiConverterWgInterface) Write(writer io.Writer, value WgInterface) {
-		FfiConverterOptionalStringINSTANCE.Write(writer, value.PrivateKey);
-		FfiConverterOptionalUint16INSTANCE.Write(writer, value.ListenPort);
-		FfiConverterUint32INSTANCE.Write(writer, value.Fwmark);
-		FfiConverterMapStringWgPeerINSTANCE.Write(writer, value.Peers);
-}
-
-type FfiDestroyerWgInterface struct {}
-
-func (_ FfiDestroyerWgInterface) Destroy(value WgInterface) {
-	value.Destroy()
-}
-
-
-type WgPeer struct {
-	PublicKey PublicKey
-	Endpoint *string
-	IpAddresses []IpAddr
-	PersistentKeepaliveInterval *uint32
-	AllowedIps []IpNet
-	RxBytes *uint64
-	TimeSinceLastRxMs *uint64
-	TxBytes *uint64
-	TimeSinceLastHandshakeMs *uint64
-	PresharedKey *string
-}
-
-func (r *WgPeer) Destroy() {
-		FfiDestroyerTypePublicKey{}.Destroy(r.PublicKey);
-		FfiDestroyerOptionalString{}.Destroy(r.Endpoint);
-		FfiDestroyerSequenceTypeIpAddr{}.Destroy(r.IpAddresses);
-		FfiDestroyerOptionalUint32{}.Destroy(r.PersistentKeepaliveInterval);
-		FfiDestroyerSequenceTypeIpNet{}.Destroy(r.AllowedIps);
-		FfiDestroyerOptionalUint64{}.Destroy(r.RxBytes);
-		FfiDestroyerOptionalUint64{}.Destroy(r.TimeSinceLastRxMs);
-		FfiDestroyerOptionalUint64{}.Destroy(r.TxBytes);
-		FfiDestroyerOptionalUint64{}.Destroy(r.TimeSinceLastHandshakeMs);
-		FfiDestroyerOptionalString{}.Destroy(r.PresharedKey);
-}
-
-type FfiConverterWgPeer struct {}
-
-var FfiConverterWgPeerINSTANCE = FfiConverterWgPeer{}
-
-func (c FfiConverterWgPeer) Lift(rb RustBufferI) WgPeer {
-	return LiftFromRustBuffer[WgPeer](c, rb)
-}
-
-func (c FfiConverterWgPeer) Read(reader io.Reader) WgPeer {
-	return WgPeer {
-			FfiConverterTypePublicKeyINSTANCE.Read(reader),
-			FfiConverterOptionalStringINSTANCE.Read(reader),
-			FfiConverterSequenceTypeIpAddrINSTANCE.Read(reader),
-			FfiConverterOptionalUint32INSTANCE.Read(reader),
-			FfiConverterSequenceTypeIpNetINSTANCE.Read(reader),
-			FfiConverterOptionalUint64INSTANCE.Read(reader),
-			FfiConverterOptionalUint64INSTANCE.Read(reader),
-			FfiConverterOptionalUint64INSTANCE.Read(reader),
-			FfiConverterOptionalUint64INSTANCE.Read(reader),
-			FfiConverterOptionalStringINSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterWgPeer) Lower(value WgPeer) C.RustBuffer {
-	return LowerIntoRustBuffer[WgPeer](c, value)
-}
-
-func (c FfiConverterWgPeer) Write(writer io.Writer, value WgPeer) {
-		FfiConverterTypePublicKeyINSTANCE.Write(writer, value.PublicKey);
-		FfiConverterOptionalStringINSTANCE.Write(writer, value.Endpoint);
-		FfiConverterSequenceTypeIpAddrINSTANCE.Write(writer, value.IpAddresses);
-		FfiConverterOptionalUint32INSTANCE.Write(writer, value.PersistentKeepaliveInterval);
-		FfiConverterSequenceTypeIpNetINSTANCE.Write(writer, value.AllowedIps);
-		FfiConverterOptionalUint64INSTANCE.Write(writer, value.RxBytes);
-		FfiConverterOptionalUint64INSTANCE.Write(writer, value.TimeSinceLastRxMs);
-		FfiConverterOptionalUint64INSTANCE.Write(writer, value.TxBytes);
-		FfiConverterOptionalUint64INSTANCE.Write(writer, value.TimeSinceLastHandshakeMs);
-		FfiConverterOptionalStringINSTANCE.Write(writer, value.PresharedKey);
-}
-
-type FfiDestroyerWgPeer struct {}
-
-func (_ FfiDestroyerWgPeer) Destroy(value WgPeer) {
-	value.Destroy()
-}
-
-
-type WgResponse struct {
-	Errno int32
-	Interface *WgInterface
-}
-
-func (r *WgResponse) Destroy() {
-		FfiDestroyerInt32{}.Destroy(r.Errno);
-		FfiDestroyerOptionalWgInterface{}.Destroy(r.Interface);
-}
-
-type FfiConverterWgResponse struct {}
-
-var FfiConverterWgResponseINSTANCE = FfiConverterWgResponse{}
-
-func (c FfiConverterWgResponse) Lift(rb RustBufferI) WgResponse {
-	return LiftFromRustBuffer[WgResponse](c, rb)
-}
-
-func (c FfiConverterWgResponse) Read(reader io.Reader) WgResponse {
-	return WgResponse {
-			FfiConverterInt32INSTANCE.Read(reader),
-			FfiConverterOptionalWgInterfaceINSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterWgResponse) Lower(value WgResponse) C.RustBuffer {
-	return LowerIntoRustBuffer[WgResponse](c, value)
-}
-
-func (c FfiConverterWgResponse) Write(writer io.Writer, value WgResponse) {
-		FfiConverterInt32INSTANCE.Write(writer, value.Errno);
-		FfiConverterOptionalWgInterfaceINSTANCE.Write(writer, value.Interface);
-}
-
-type FfiDestroyerWgResponse struct {}
-
-func (_ FfiDestroyerWgResponse) Destroy(value WgResponse) {
 	value.Destroy()
 }
 
@@ -5225,8 +4559,6 @@ const (
 	TelioAdapterTypeLinuxNativeTun TelioAdapterType = 3
 	// WindowsNativeWireguardNt implementation
 	TelioAdapterTypeWindowsNativeTun TelioAdapterType = 4
-	// Custom adapter type
-	TelioAdapterTypeCustom TelioAdapterType = 5
 )
 
 type FfiConverterTelioAdapterType struct {}
@@ -5615,70 +4947,6 @@ func (_ FfiDestroyerVpnConnectionError) Destroy(value VpnConnectionError) {
 
 
 
-
-type WgCmd interface {
-	Destroy()
-}
-type WgCmdGet struct {
-}
-
-func (e WgCmdGet) Destroy() {
-}
-type WgCmdSet struct {
-	Device WgDevice
-}
-
-func (e WgCmdSet) Destroy() {
-		FfiDestroyerWgDevice{}.Destroy(e.Device);
-}
-
-type FfiConverterWgCmd struct {}
-
-var FfiConverterWgCmdINSTANCE = FfiConverterWgCmd{}
-
-func (c FfiConverterWgCmd) Lift(rb RustBufferI) WgCmd {
-	return LiftFromRustBuffer[WgCmd](c, rb)
-}
-
-func (c FfiConverterWgCmd) Lower(value WgCmd) C.RustBuffer {
-	return LowerIntoRustBuffer[WgCmd](c, value)
-}
-func (FfiConverterWgCmd) Read(reader io.Reader) WgCmd {
-	id := readInt32(reader)
-	switch (id) {
-		case 1:
-			return WgCmdGet{
-			};
-		case 2:
-			return WgCmdSet{
-				FfiConverterWgDeviceINSTANCE.Read(reader),
-			};
-		default:
-			panic(fmt.Sprintf("invalid enum value %v in FfiConverterWgCmd.Read()", id));
-	}
-}
-
-func (FfiConverterWgCmd) Write(writer io.Writer, value WgCmd) {
-	switch variant_value := value.(type) {
-		case WgCmdGet:
-			writeInt32(writer, 1)
-		case WgCmdSet:
-			writeInt32(writer, 2)
-			FfiConverterWgDeviceINSTANCE.Write(writer, variant_value.Device)
-		default:
-			_ = variant_value
-			panic(fmt.Sprintf("invalid enum value `%v` in FfiConverterWgCmd.Write", value))
-	}
-}
-
-type FfiDestroyerWgCmd struct {}
-
-func (_ FfiDestroyerWgCmd) Destroy(value WgCmd) {
-	value.Destroy()
-}
-
-
-
 type TelioEventCb interface {
 	
 	Event(payload Event) error
@@ -5718,7 +4986,52 @@ type FfiDestroyerCallbackInterfaceTelioEventCb struct {}
 
 func (FfiDestroyerCallbackInterfaceTelioEventCb) Destroy(value TelioEventCb) {}
 
+type uniffiCallbackResult C.int8_t
 
+const (
+	uniffiIdxCallbackFree               uniffiCallbackResult = 0
+	uniffiCallbackResultSuccess         uniffiCallbackResult = 0
+	uniffiCallbackResultError           uniffiCallbackResult = 1
+	uniffiCallbackUnexpectedResultError uniffiCallbackResult = 2
+	uniffiCallbackCancelled             uniffiCallbackResult = 3
+)
+
+
+type concurrentHandleMap[T any] struct {
+	handles       map[uint64]T
+	currentHandle uint64
+	lock          sync.RWMutex
+}
+
+func newConcurrentHandleMap[T any]() *concurrentHandleMap[T] {
+	return &concurrentHandleMap[T]{
+		handles:  map[uint64]T{},
+	}
+}
+
+func (cm *concurrentHandleMap[T]) insert(obj T) uint64 {
+	cm.lock.Lock()
+	defer cm.lock.Unlock()
+
+	cm.currentHandle = cm.currentHandle + 1
+	cm.handles[cm.currentHandle] = obj
+	return cm.currentHandle
+}
+
+func (cm *concurrentHandleMap[T]) remove(handle uint64) {
+	cm.lock.Lock()
+	defer cm.lock.Unlock()
+
+	delete(cm.handles, handle)
+}
+
+func (cm *concurrentHandleMap[T]) tryGet(handle uint64) (T, bool) {
+	cm.lock.RLock()
+	defer cm.lock.RUnlock()
+
+	val, ok := cm.handles[handle]
+	return val, ok
+}
 
 //export telio_cgo_dispatchCallbackInterfaceTelioEventCbMethod0
 func telio_cgo_dispatchCallbackInterfaceTelioEventCbMethod0(uniffiHandle C.uint64_t,payload C.RustBuffer,uniffiOutReturn *C.void,callStatus *C.RustCallStatus,) {
@@ -5965,132 +5278,6 @@ func (c FfiConverterCallbackInterfaceTelioProtectCb) register() {
 
 
 
-// A callback for getting TP-Lite stats from libfirewall
-type TpLiteStatsCallback interface {
-	
-	// Get the blocked domains that have been buffered so far
-	// Blocking this callback can result in losing blocked domains from subsequent calls
-	Collect(domains []BlockedDomain, metrics DnsMetrics) 
-	
-}
-
-
-type FfiConverterCallbackInterfaceTpLiteStatsCallback struct {
-	handleMap *concurrentHandleMap[TpLiteStatsCallback]
-}
-
-var FfiConverterCallbackInterfaceTpLiteStatsCallbackINSTANCE = FfiConverterCallbackInterfaceTpLiteStatsCallback {
-	handleMap: newConcurrentHandleMap[TpLiteStatsCallback](),
-}
-
-func (c FfiConverterCallbackInterfaceTpLiteStatsCallback) Lift(handle uint64) TpLiteStatsCallback {
-	val, ok := c.handleMap.tryGet(handle)
-	if !ok {
-		panic(fmt.Errorf("no callback in handle map: %d", handle))
-	}
-	return val
-}
-
-func (c FfiConverterCallbackInterfaceTpLiteStatsCallback) Read(reader io.Reader) TpLiteStatsCallback {
-	return c.Lift(readUint64(reader))
-}
-
-func (c FfiConverterCallbackInterfaceTpLiteStatsCallback) Lower(value TpLiteStatsCallback) C.uint64_t {
-	return C.uint64_t(c.handleMap.insert(value))
-}
-
-func (c FfiConverterCallbackInterfaceTpLiteStatsCallback) Write(writer io.Writer, value TpLiteStatsCallback) {
-	writeUint64(writer, uint64(c.Lower(value)))
-}
-
-type FfiDestroyerCallbackInterfaceTpLiteStatsCallback struct {}
-
-func (FfiDestroyerCallbackInterfaceTpLiteStatsCallback) Destroy(value TpLiteStatsCallback) {}
-
-
-
-//export telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackMethod0
-func telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackMethod0(uniffiHandle C.uint64_t,domains C.RustBuffer,metrics C.RustBuffer,uniffiOutReturn *C.void,callStatus *C.RustCallStatus,) {
-	handle := uint64(uniffiHandle)
-	uniffiObj, ok := FfiConverterCallbackInterfaceTpLiteStatsCallbackINSTANCE.handleMap.tryGet(handle)
-	if !ok {
-		panic(fmt.Errorf("no callback in handle map: %d", handle))
-	}
-	
-	
-
-	
-    uniffiObj.Collect(
-        FfiConverterSequenceBlockedDomainINSTANCE.Lift(GoRustBuffer {
-		inner: domains,
-	}),
-        FfiConverterDnsMetricsINSTANCE.Lift(GoRustBuffer {
-		inner: metrics,
-	}),
-    )
-	
-    
-
-
-	
-}
-
-var UniffiVTableCallbackInterfaceTpLiteStatsCallbackINSTANCE = C.UniffiVTableCallbackInterfaceTpLiteStatsCallback {
-	collect: (C.UniffiCallbackInterfaceTpLiteStatsCallbackMethod0)(C.telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackMethod0),
-
-	uniffiFree: (C.UniffiCallbackInterfaceFree)(C.telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackFree),
-}
-
-//export telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackFree
-func telio_cgo_dispatchCallbackInterfaceTpLiteStatsCallbackFree(handle C.uint64_t) {
-	FfiConverterCallbackInterfaceTpLiteStatsCallbackINSTANCE.handleMap.remove(uint64(handle))
-}
-
-func (c FfiConverterCallbackInterfaceTpLiteStatsCallback) register() {
-	C.uniffi_telio_fn_init_callback_vtable_tplitestatscallback(&UniffiVTableCallbackInterfaceTpLiteStatsCallbackINSTANCE)
-}
-
-
-
-
-type FfiConverterOptionalUint16 struct{}
-
-var FfiConverterOptionalUint16INSTANCE = FfiConverterOptionalUint16{}
-
-func (c FfiConverterOptionalUint16) Lift(rb RustBufferI) *uint16 {
-	return LiftFromRustBuffer[*uint16](c, rb)
-}
-
-func (_ FfiConverterOptionalUint16) Read(reader io.Reader) *uint16 {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterUint16INSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalUint16) Lower(value *uint16) C.RustBuffer {
-	return LowerIntoRustBuffer[*uint16](c, value)
-}
-
-func (_ FfiConverterOptionalUint16) Write(writer io.Writer, value *uint16) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterUint16INSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalUint16 struct {}
-
-func (_ FfiDestroyerOptionalUint16) Destroy(value *uint16) {
-	if value != nil {
-		FfiDestroyerUint16{}.Destroy(*value)
-	}
-}
-
-
 
 type FfiConverterOptionalUint32 struct{}
 
@@ -6326,6 +5513,45 @@ func (_ FfiDestroyerOptionalDnsConfig) Destroy(value *DnsConfig) {
 
 
 
+type FfiConverterOptionalFeatureBatching struct{}
+
+var FfiConverterOptionalFeatureBatchingINSTANCE = FfiConverterOptionalFeatureBatching{}
+
+func (c FfiConverterOptionalFeatureBatching) Lift(rb RustBufferI) *FeatureBatching {
+	return LiftFromRustBuffer[*FeatureBatching](c, rb)
+}
+
+func (_ FfiConverterOptionalFeatureBatching) Read(reader io.Reader) *FeatureBatching {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterFeatureBatchingINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalFeatureBatching) Lower(value *FeatureBatching) C.RustBuffer {
+	return LowerIntoRustBuffer[*FeatureBatching](c, value)
+}
+
+func (_ FfiConverterOptionalFeatureBatching) Write(writer io.Writer, value *FeatureBatching) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterFeatureBatchingINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalFeatureBatching struct {}
+
+func (_ FfiDestroyerOptionalFeatureBatching) Destroy(value *FeatureBatching) {
+	if value != nil {
+		FfiDestroyerFeatureBatching{}.Destroy(*value)
+	}
+}
+
+
+
 type FfiConverterOptionalFeatureDerp struct{}
 
 var FfiConverterOptionalFeatureDerpINSTANCE = FfiConverterOptionalFeatureDerp{}
@@ -6516,45 +5742,6 @@ type FfiDestroyerOptionalFeatureExitDns struct {}
 func (_ FfiDestroyerOptionalFeatureExitDns) Destroy(value *FeatureExitDns) {
 	if value != nil {
 		FfiDestroyerFeatureExitDns{}.Destroy(*value)
-	}
-}
-
-
-
-type FfiConverterOptionalFeatureFirewall struct{}
-
-var FfiConverterOptionalFeatureFirewallINSTANCE = FfiConverterOptionalFeatureFirewall{}
-
-func (c FfiConverterOptionalFeatureFirewall) Lift(rb RustBufferI) *FeatureFirewall {
-	return LiftFromRustBuffer[*FeatureFirewall](c, rb)
-}
-
-func (_ FfiConverterOptionalFeatureFirewall) Read(reader io.Reader) *FeatureFirewall {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterFeatureFirewallINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalFeatureFirewall) Lower(value *FeatureFirewall) C.RustBuffer {
-	return LowerIntoRustBuffer[*FeatureFirewall](c, value)
-}
-
-func (_ FfiConverterOptionalFeatureFirewall) Write(writer io.Writer, value *FeatureFirewall) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterFeatureFirewallINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalFeatureFirewall struct {}
-
-func (_ FfiDestroyerOptionalFeatureFirewall) Destroy(value *FeatureFirewall) {
-	if value != nil {
-		FfiDestroyerFeatureFirewall{}.Destroy(*value)
 	}
 }
 
@@ -6828,45 +6015,6 @@ type FfiDestroyerOptionalFeatureUpnp struct {}
 func (_ FfiDestroyerOptionalFeatureUpnp) Destroy(value *FeatureUpnp) {
 	if value != nil {
 		FfiDestroyerFeatureUpnp{}.Destroy(*value)
-	}
-}
-
-
-
-type FfiConverterOptionalWgInterface struct{}
-
-var FfiConverterOptionalWgInterfaceINSTANCE = FfiConverterOptionalWgInterface{}
-
-func (c FfiConverterOptionalWgInterface) Lift(rb RustBufferI) *WgInterface {
-	return LiftFromRustBuffer[*WgInterface](c, rb)
-}
-
-func (_ FfiConverterOptionalWgInterface) Read(reader io.Reader) *WgInterface {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterWgInterfaceINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalWgInterface) Lower(value *WgInterface) C.RustBuffer {
-	return LowerIntoRustBuffer[*WgInterface](c, value)
-}
-
-func (_ FfiConverterOptionalWgInterface) Write(writer io.Writer, value *WgInterface) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterWgInterfaceINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalWgInterface struct {}
-
-func (_ FfiDestroyerOptionalWgInterface) Destroy(value *WgInterface) {
-	if value != nil {
-		FfiDestroyerWgInterface{}.Destroy(*value)
 	}
 }
 
@@ -7346,51 +6494,6 @@ func (FfiDestroyerSequenceString) Destroy(sequence []string) {
 
 
 
-type FfiConverterSequenceBlockedDomain struct{}
-
-var FfiConverterSequenceBlockedDomainINSTANCE = FfiConverterSequenceBlockedDomain{}
-
-func (c FfiConverterSequenceBlockedDomain) Lift(rb RustBufferI) []BlockedDomain {
-	return LiftFromRustBuffer[[]BlockedDomain](c, rb)
-}
-
-func (c FfiConverterSequenceBlockedDomain) Read(reader io.Reader) []BlockedDomain {
-	length := readInt32(reader)
-	if length == 0 {
-		return nil
-	}
-	result := make([]BlockedDomain, 0, length)
-	for i := int32(0); i < length; i++ {
-		result = append(result, FfiConverterBlockedDomainINSTANCE.Read(reader))
-	}
-	return result
-}
-
-func (c FfiConverterSequenceBlockedDomain) Lower(value []BlockedDomain) C.RustBuffer {
-	return LowerIntoRustBuffer[[]BlockedDomain](c, value)
-}
-
-func (c FfiConverterSequenceBlockedDomain) Write(writer io.Writer, value []BlockedDomain) {
-	if len(value) > math.MaxInt32 {
-		panic("[]BlockedDomain is too large to fit into Int32")
-	}
-
-	writeInt32(writer, int32(len(value)))
-	for _, item := range value {
-		FfiConverterBlockedDomainINSTANCE.Write(writer, item)
-	}
-}
-
-type FfiDestroyerSequenceBlockedDomain struct {}
-
-func (FfiDestroyerSequenceBlockedDomain) Destroy(sequence []BlockedDomain) {
-	for _, value := range sequence {
-		FfiDestroyerBlockedDomain{}.Destroy(value)	
-	}
-}
-
-
-
 type FfiConverterSequenceFirewallBlacklistTuple struct{}
 
 var FfiConverterSequenceFirewallBlacklistTupleINSTANCE = FfiConverterSequenceFirewallBlacklistTuple{}
@@ -7566,51 +6669,6 @@ type FfiDestroyerSequenceTelioNode struct {}
 func (FfiDestroyerSequenceTelioNode) Destroy(sequence []TelioNode) {
 	for _, value := range sequence {
 		FfiDestroyerTelioNode{}.Destroy(value)	
-	}
-}
-
-
-
-type FfiConverterSequenceWgPeer struct{}
-
-var FfiConverterSequenceWgPeerINSTANCE = FfiConverterSequenceWgPeer{}
-
-func (c FfiConverterSequenceWgPeer) Lift(rb RustBufferI) []WgPeer {
-	return LiftFromRustBuffer[[]WgPeer](c, rb)
-}
-
-func (c FfiConverterSequenceWgPeer) Read(reader io.Reader) []WgPeer {
-	length := readInt32(reader)
-	if length == 0 {
-		return nil
-	}
-	result := make([]WgPeer, 0, length)
-	for i := int32(0); i < length; i++ {
-		result = append(result, FfiConverterWgPeerINSTANCE.Read(reader))
-	}
-	return result
-}
-
-func (c FfiConverterSequenceWgPeer) Lower(value []WgPeer) C.RustBuffer {
-	return LowerIntoRustBuffer[[]WgPeer](c, value)
-}
-
-func (c FfiConverterSequenceWgPeer) Write(writer io.Writer, value []WgPeer) {
-	if len(value) > math.MaxInt32 {
-		panic("[]WgPeer is too large to fit into Int32")
-	}
-
-	writeInt32(writer, int32(len(value)))
-	for _, item := range value {
-		FfiConverterWgPeerINSTANCE.Write(writer, item)
-	}
-}
-
-type FfiDestroyerSequenceWgPeer struct {}
-
-func (FfiDestroyerSequenceWgPeer) Destroy(sequence []WgPeer) {
-	for _, value := range sequence {
-		FfiDestroyerWgPeer{}.Destroy(value)	
 	}
 }
 
@@ -7836,52 +6894,6 @@ type FfiDestroyerSequenceTypeIpNet struct {}
 func (FfiDestroyerSequenceTypeIpNet) Destroy(sequence []IpNet) {
 	for _, value := range sequence {
 		FfiDestroyerTypeIpNet{}.Destroy(value)	
-	}
-}
-
-
-
-type FfiConverterMapStringWgPeer struct {}
-
-var FfiConverterMapStringWgPeerINSTANCE = FfiConverterMapStringWgPeer{}
-
-func (c FfiConverterMapStringWgPeer) Lift(rb RustBufferI) map[string]WgPeer {
-	return LiftFromRustBuffer[map[string]WgPeer](c, rb)
-}
-
-func (_ FfiConverterMapStringWgPeer) Read(reader io.Reader) map[string]WgPeer {
-	result := make(map[string]WgPeer)
-	length := readInt32(reader)
-	for i := int32(0); i < length; i++ {
-		key := FfiConverterStringINSTANCE.Read(reader)
-		value := FfiConverterWgPeerINSTANCE.Read(reader)
-		result[key] = value
-	}
-	return result
-}
-
-func (c FfiConverterMapStringWgPeer) Lower(value map[string]WgPeer) C.RustBuffer {
-	return LowerIntoRustBuffer[map[string]WgPeer](c, value)
-}
-
-func (_ FfiConverterMapStringWgPeer) Write(writer io.Writer, mapValue map[string]WgPeer) {
-	if len(mapValue) > math.MaxInt32 {
-		panic("map[string]WgPeer is too large to fit into Int32")
-	}
-
-	writeInt32(writer, int32(len(mapValue)))
-	for key, value := range mapValue {
-		FfiConverterStringINSTANCE.Write(writer, key)
-		FfiConverterWgPeerINSTANCE.Write(writer, value)
-	}
-}
-
-type FfiDestroyerMapStringWgPeer struct {}
-
-func (_ FfiDestroyerMapStringWgPeer) Destroy(mapValue map[string]WgPeer) {
-	for key, value := range mapValue {
-		FfiDestroyerString{}.Destroy(key)
-		FfiDestroyerWgPeer{}.Destroy(value)	
 	}
 }
 
