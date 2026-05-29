@@ -3125,11 +3125,14 @@ type FeatureDns struct {
 	TtlValue TtlValue
 	// Configure options for exit dns [default None]
 	ExitDns *FeatureExitDns
+	// Use the raw DNS forwarder instead of the old hickory-server
+	UseRawForwarder *bool
 }
 
 func (r *FeatureDns) Destroy() {
 		FfiDestroyerTypeTtlValue{}.Destroy(r.TtlValue);
 		FfiDestroyerOptionalFeatureExitDns{}.Destroy(r.ExitDns);
+		FfiDestroyerOptionalBool{}.Destroy(r.UseRawForwarder);
 }
 
 type FfiConverterFeatureDns struct {}
@@ -3144,6 +3147,7 @@ func (c FfiConverterFeatureDns) Read(reader io.Reader) FeatureDns {
 	return FeatureDns {
 			FfiConverterTypeTtlValueINSTANCE.Read(reader),
 			FfiConverterOptionalFeatureExitDnsINSTANCE.Read(reader),
+			FfiConverterOptionalBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -3154,6 +3158,7 @@ func (c FfiConverterFeatureDns) Lower(value FeatureDns) C.RustBuffer {
 func (c FfiConverterFeatureDns) Write(writer io.Writer, value FeatureDns) {
 		FfiConverterTypeTtlValueINSTANCE.Write(writer, value.TtlValue);
 		FfiConverterOptionalFeatureExitDnsINSTANCE.Write(writer, value.ExitDns);
+		FfiConverterOptionalBoolINSTANCE.Write(writer, value.UseRawForwarder);
 }
 
 type FfiDestroyerFeatureDns struct {}
