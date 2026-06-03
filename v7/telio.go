@@ -2951,6 +2951,95 @@ func (_ FfiDestroyerDnsMetrics) Destroy(value DnsMetrics) {
 }
 
 
+// Pair of DNS server endpoints describing how a single DNS-redirect rule
+// should rewrite outbound DNS traffic.
+type DnsRedirect struct {
+	// DNS server that would otherwise drop non-whitelisted queries.
+	Blocking SocketAddrV4
+	// DNS server to which whitelisted queries are redirected.
+	Standard SocketAddrV4
+}
+
+func (r *DnsRedirect) Destroy() {
+		FfiDestroyerTypeSocketAddrV4{}.Destroy(r.Blocking);
+		FfiDestroyerTypeSocketAddrV4{}.Destroy(r.Standard);
+}
+
+type FfiConverterDnsRedirect struct {}
+
+var FfiConverterDnsRedirectINSTANCE = FfiConverterDnsRedirect{}
+
+func (c FfiConverterDnsRedirect) Lift(rb RustBufferI) DnsRedirect {
+	return LiftFromRustBuffer[DnsRedirect](c, rb)
+}
+
+func (c FfiConverterDnsRedirect) Read(reader io.Reader) DnsRedirect {
+	return DnsRedirect {
+			FfiConverterTypeSocketAddrV4INSTANCE.Read(reader),
+			FfiConverterTypeSocketAddrV4INSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterDnsRedirect) Lower(value DnsRedirect) C.RustBuffer {
+	return LowerIntoRustBuffer[DnsRedirect](c, value)
+}
+
+func (c FfiConverterDnsRedirect) Write(writer io.Writer, value DnsRedirect) {
+		FfiConverterTypeSocketAddrV4INSTANCE.Write(writer, value.Blocking);
+		FfiConverterTypeSocketAddrV4INSTANCE.Write(writer, value.Standard);
+}
+
+type FfiDestroyerDnsRedirect struct {}
+
+func (_ FfiDestroyerDnsRedirect) Destroy(value DnsRedirect) {
+	value.Destroy()
+}
+
+
+// DNS query whitelisting via DNAT redirect.
+type DnsWhitelisting struct {
+	// Domain patterns to whitelist (matched against DNS query QNAMEs).
+	Domains []string
+	// Pairs of (blocking, standard) DNS server endpoints.
+	Redirects []DnsRedirect
+}
+
+func (r *DnsWhitelisting) Destroy() {
+		FfiDestroyerSequenceString{}.Destroy(r.Domains);
+		FfiDestroyerSequenceDnsRedirect{}.Destroy(r.Redirects);
+}
+
+type FfiConverterDnsWhitelisting struct {}
+
+var FfiConverterDnsWhitelistingINSTANCE = FfiConverterDnsWhitelisting{}
+
+func (c FfiConverterDnsWhitelisting) Lift(rb RustBufferI) DnsWhitelisting {
+	return LiftFromRustBuffer[DnsWhitelisting](c, rb)
+}
+
+func (c FfiConverterDnsWhitelisting) Read(reader io.Reader) DnsWhitelisting {
+	return DnsWhitelisting {
+			FfiConverterSequenceStringINSTANCE.Read(reader),
+			FfiConverterSequenceDnsRedirectINSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterDnsWhitelisting) Lower(value DnsWhitelisting) C.RustBuffer {
+	return LowerIntoRustBuffer[DnsWhitelisting](c, value)
+}
+
+func (c FfiConverterDnsWhitelisting) Write(writer io.Writer, value DnsWhitelisting) {
+		FfiConverterSequenceStringINSTANCE.Write(writer, value.Domains);
+		FfiConverterSequenceDnsRedirectINSTANCE.Write(writer, value.Redirects);
+}
+
+type FfiDestroyerDnsWhitelisting struct {}
+
+func (_ FfiDestroyerDnsWhitelisting) Destroy(value DnsWhitelisting) {
+	value.Destroy()
+}
+
+
 // Error event. Used to inform the upper layer about errors in `libtelio`.
 type ErrorEvent struct {
 	// The level of the error
@@ -3125,11 +3214,14 @@ type FeatureDns struct {
 	TtlValue TtlValue
 	// Configure options for exit dns [default None]
 	ExitDns *FeatureExitDns
+	// Use the raw DNS forwarder instead of the old hickory-server
+	UseRawForwarder *bool
 }
 
 func (r *FeatureDns) Destroy() {
 		FfiDestroyerTypeTtlValue{}.Destroy(r.TtlValue);
 		FfiDestroyerOptionalFeatureExitDns{}.Destroy(r.ExitDns);
+		FfiDestroyerOptionalBool{}.Destroy(r.UseRawForwarder);
 }
 
 type FfiConverterFeatureDns struct {}
@@ -3144,6 +3236,7 @@ func (c FfiConverterFeatureDns) Read(reader io.Reader) FeatureDns {
 	return FeatureDns {
 			FfiConverterTypeTtlValueINSTANCE.Read(reader),
 			FfiConverterOptionalFeatureExitDnsINSTANCE.Read(reader),
+			FfiConverterOptionalBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -3154,6 +3247,7 @@ func (c FfiConverterFeatureDns) Lower(value FeatureDns) C.RustBuffer {
 func (c FfiConverterFeatureDns) Write(writer io.Writer, value FeatureDns) {
 		FfiConverterTypeTtlValueINSTANCE.Write(writer, value.TtlValue);
 		FfiConverterOptionalFeatureExitDnsINSTANCE.Write(writer, value.ExitDns);
+		FfiConverterOptionalBoolINSTANCE.Write(writer, value.UseRawForwarder);
 }
 
 type FfiDestroyerFeatureDns struct {}
@@ -3312,6 +3406,9 @@ type FeatureFirewall struct {
 	ExcludePrivateIpRange *Ipv4Net
 	// Blackist for outgoing connections
 	OutgoingBlacklist []FirewallBlacklistTuple
+	// DNS query whitelisting (DNAT redirect of whitelisted queries away
+	// from the blocking DNS server to the standard one).
+	DnsWhitelisting *DnsWhitelisting
 }
 
 func (r *FeatureFirewall) Destroy() {
@@ -3319,6 +3416,7 @@ func (r *FeatureFirewall) Destroy() {
 		FfiDestroyerBool{}.Destroy(r.BoringtunResetConns);
 		FfiDestroyerOptionalTypeIpv4Net{}.Destroy(r.ExcludePrivateIpRange);
 		FfiDestroyerSequenceFirewallBlacklistTuple{}.Destroy(r.OutgoingBlacklist);
+		FfiDestroyerOptionalDnsWhitelisting{}.Destroy(r.DnsWhitelisting);
 }
 
 type FfiConverterFeatureFirewall struct {}
@@ -3335,6 +3433,7 @@ func (c FfiConverterFeatureFirewall) Read(reader io.Reader) FeatureFirewall {
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterOptionalTypeIpv4NetINSTANCE.Read(reader),
 			FfiConverterSequenceFirewallBlacklistTupleINSTANCE.Read(reader),
+			FfiConverterOptionalDnsWhitelistingINSTANCE.Read(reader),
 	}
 }
 
@@ -3347,6 +3446,7 @@ func (c FfiConverterFeatureFirewall) Write(writer io.Writer, value FeatureFirewa
 		FfiConverterBoolINSTANCE.Write(writer, value.BoringtunResetConns);
 		FfiConverterOptionalTypeIpv4NetINSTANCE.Write(writer, value.ExcludePrivateIpRange);
 		FfiConverterSequenceFirewallBlacklistTupleINSTANCE.Write(writer, value.OutgoingBlacklist);
+		FfiConverterOptionalDnsWhitelistingINSTANCE.Write(writer, value.DnsWhitelisting);
 }
 
 type FfiDestroyerFeatureFirewall struct {}
@@ -4452,6 +4552,12 @@ type TpLiteStatsOptions struct {
 	//
 	// Default value: same as blocked_domains_buffer_size
 	MaxOpenRequests *uint64
+	// The stats collection can only operate on plaintext DNS packets
+	// Setting this flag will block DoT and DoH packets, causing the client to fallback to plaintext
+	// Note: Some clients can be configured with no plaintext fallback, which would then break if this flag is set 
+	//
+	// Default value: false
+	ForcePlaintextDns *bool
 }
 
 func (r *TpLiteStatsOptions) Destroy() {
@@ -4460,6 +4566,7 @@ func (r *TpLiteStatsOptions) Destroy() {
 		FfiDestroyerOptionalUint64{}.Destroy(r.CallbackIntervalS);
 		FfiDestroyerOptionalUint64{}.Destroy(r.CacheSize);
 		FfiDestroyerOptionalUint64{}.Destroy(r.MaxOpenRequests);
+		FfiDestroyerOptionalBool{}.Destroy(r.ForcePlaintextDns);
 }
 
 type FfiConverterTpLiteStatsOptions struct {}
@@ -4477,6 +4584,7 @@ func (c FfiConverterTpLiteStatsOptions) Read(reader io.Reader) TpLiteStatsOption
 			FfiConverterOptionalUint64INSTANCE.Read(reader),
 			FfiConverterOptionalUint64INSTANCE.Read(reader),
 			FfiConverterOptionalUint64INSTANCE.Read(reader),
+			FfiConverterOptionalBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -4490,6 +4598,7 @@ func (c FfiConverterTpLiteStatsOptions) Write(writer io.Writer, value TpLiteStat
 		FfiConverterOptionalUint64INSTANCE.Write(writer, value.CallbackIntervalS);
 		FfiConverterOptionalUint64INSTANCE.Write(writer, value.CacheSize);
 		FfiConverterOptionalUint64INSTANCE.Write(writer, value.MaxOpenRequests);
+		FfiConverterOptionalBoolINSTANCE.Write(writer, value.ForcePlaintextDns);
 }
 
 type FfiDestroyerTpLiteStatsOptions struct {}
@@ -6326,6 +6435,45 @@ func (_ FfiDestroyerOptionalDnsConfig) Destroy(value *DnsConfig) {
 
 
 
+type FfiConverterOptionalDnsWhitelisting struct{}
+
+var FfiConverterOptionalDnsWhitelistingINSTANCE = FfiConverterOptionalDnsWhitelisting{}
+
+func (c FfiConverterOptionalDnsWhitelisting) Lift(rb RustBufferI) *DnsWhitelisting {
+	return LiftFromRustBuffer[*DnsWhitelisting](c, rb)
+}
+
+func (_ FfiConverterOptionalDnsWhitelisting) Read(reader io.Reader) *DnsWhitelisting {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterDnsWhitelistingINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalDnsWhitelisting) Lower(value *DnsWhitelisting) C.RustBuffer {
+	return LowerIntoRustBuffer[*DnsWhitelisting](c, value)
+}
+
+func (_ FfiConverterOptionalDnsWhitelisting) Write(writer io.Writer, value *DnsWhitelisting) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterDnsWhitelistingINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalDnsWhitelisting struct {}
+
+func (_ FfiDestroyerOptionalDnsWhitelisting) Destroy(value *DnsWhitelisting) {
+	if value != nil {
+		FfiDestroyerDnsWhitelisting{}.Destroy(*value)
+	}
+}
+
+
+
 type FfiConverterOptionalFeatureDerp struct{}
 
 var FfiConverterOptionalFeatureDerpINSTANCE = FfiConverterOptionalFeatureDerp{}
@@ -7391,6 +7539,51 @@ func (FfiDestroyerSequenceBlockedDomain) Destroy(sequence []BlockedDomain) {
 
 
 
+type FfiConverterSequenceDnsRedirect struct{}
+
+var FfiConverterSequenceDnsRedirectINSTANCE = FfiConverterSequenceDnsRedirect{}
+
+func (c FfiConverterSequenceDnsRedirect) Lift(rb RustBufferI) []DnsRedirect {
+	return LiftFromRustBuffer[[]DnsRedirect](c, rb)
+}
+
+func (c FfiConverterSequenceDnsRedirect) Read(reader io.Reader) []DnsRedirect {
+	length := readInt32(reader)
+	if length == 0 {
+		return nil
+	}
+	result := make([]DnsRedirect, 0, length)
+	for i := int32(0); i < length; i++ {
+		result = append(result, FfiConverterDnsRedirectINSTANCE.Read(reader))
+	}
+	return result
+}
+
+func (c FfiConverterSequenceDnsRedirect) Lower(value []DnsRedirect) C.RustBuffer {
+	return LowerIntoRustBuffer[[]DnsRedirect](c, value)
+}
+
+func (c FfiConverterSequenceDnsRedirect) Write(writer io.Writer, value []DnsRedirect) {
+	if len(value) > math.MaxInt32 {
+		panic("[]DnsRedirect is too large to fit into Int32")
+	}
+
+	writeInt32(writer, int32(len(value)))
+	for _, item := range value {
+		FfiConverterDnsRedirectINSTANCE.Write(writer, item)
+	}
+}
+
+type FfiDestroyerSequenceDnsRedirect struct {}
+
+func (FfiDestroyerSequenceDnsRedirect) Destroy(sequence []DnsRedirect) {
+	for _, value := range sequence {
+		FfiDestroyerDnsRedirect{}.Destroy(value)	
+	}
+}
+
+
+
 type FfiConverterSequenceFirewallBlacklistTuple struct{}
 
 var FfiConverterSequenceFirewallBlacklistTupleINSTANCE = FfiConverterSequenceFirewallBlacklistTuple{}
@@ -7994,6 +8187,17 @@ type SocketAddr = string
 type FfiConverterTypeSocketAddr = FfiConverterString
 type FfiDestroyerTypeSocketAddr = FfiDestroyerString
 var FfiConverterTypeSocketAddrINSTANCE = FfiConverterString{}
+
+
+/**
+ * Typealias from the type name used in the UDL file to the builtin type.  This
+ * is needed because the UDL type name is used in function/method signatures.
+ * It's also what we have an external type that references a custom type.
+ */
+type SocketAddrV4 = string
+type FfiConverterTypeSocketAddrV4 = FfiConverterString
+type FfiDestroyerTypeSocketAddrV4 = FfiDestroyerString
+var FfiConverterTypeSocketAddrV4INSTANCE = FfiConverterString{}
 
 
 /**
