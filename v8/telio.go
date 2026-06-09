@@ -851,6 +851,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_set_tp_lite_whitelisted_domains()
+	})
+	if checksum != 64229 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_set_tp_lite_whitelisted_domains: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_tun()
 	})
 	if checksum != 49747 {
@@ -1722,7 +1731,7 @@ type TelioInterface interface {
 	EnableMagicDns(forwardServers []IpAddr) error
 	// Register callback to get metrics and domains blocked by TP-Lite
 	//
-	// Requires firewall to be enabled through setting firewall field of Features object 
+	// Requires firewall to be enabled through setting firewall field of Features object
 	// to a non-null value
 	//
 	// Passing empty list of IPs will disable the collection of TP-Lite stats
@@ -1774,6 +1783,16 @@ type TelioInterface interface {
 	// - `private_key`: WireGuard private key.
 
 	SetSecretKey(secretKey SecretKey) error
+	// Set the TP-Lite DNS whitelisted domains at runtime, reconfiguring the
+	// firewall to redirect queries for these domains away from the blocking
+	// DNS server to the standard one.
+	//
+	// Requires firewall to be enabled through setting firewall field of Features
+	// object to a non-null value. The DNS server pairs are configured via the
+	// tp_lite_dns_redirects field of the firewall feature config.
+	//
+	// Passing an empty list clears the whitelist.
+	SetTpLiteWhitelistedDomains(domains []string) error
 	// Sets the tunnel file descriptor
 	//
 	// # Parameters:
@@ -2038,7 +2057,7 @@ func (_self *Telio) EnableMagicDns(forwardServers []IpAddr) error {
 
 // Register callback to get metrics and domains blocked by TP-Lite
 //
-// Requires firewall to be enabled through setting firewall field of Features object 
+// Requires firewall to be enabled through setting firewall field of Features object
 // to a non-null value
 //
 // Passing empty list of IPs will disable the collection of TP-Lite stats
@@ -2263,6 +2282,26 @@ func (_self *Telio) SetSecretKey(secretKey SecretKey) error {
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_set_secret_key(
 		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey),_uniffiStatus)
+		return false
+	})
+		return _uniffiErr.AsError()
+}
+
+// Set the TP-Lite DNS whitelisted domains at runtime, reconfiguring the
+// firewall to redirect queries for these domains away from the blocking
+// DNS server to the standard one.
+//
+// Requires firewall to be enabled through setting firewall field of Features
+// object to a non-null value. The DNS server pairs are configured via the
+// tp_lite_dns_redirects field of the firewall feature config.
+//
+// Passing an empty list clears the whitelist.
+func (_self *Telio) SetTpLiteWhitelistedDomains(domains []string) error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_set_tp_lite_whitelisted_domains(
+		_pointer,FfiConverterSequenceStringINSTANCE.Lower(domains),_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()
@@ -2761,7 +2800,7 @@ func (_ FfiDestroyerBackoff) Destroy(value Backoff) {
 
 // Information about a domain blocked by TP-Lite
 type BlockedDomain struct {
-	// The domain name that was blocked 
+	// The domain name that was blocked
 	DomainName string
 	// When the request occurred
 	Timestamp uint64
@@ -2904,7 +2943,7 @@ func (_ FfiDestroyerDnsConfig) Destroy(value DnsConfig) {
 
 // Simple metrics about TP-Lite DNS activity
 type DnsMetrics struct {
-	// Number of DNS requests that have been made 
+	// Number of DNS requests that have been made
 	NumRequests uint32
 	// Number of received DNS responses
 	NumResponses uint32
@@ -2992,50 +3031,6 @@ func (c FfiConverterDnsRedirect) Write(writer io.Writer, value DnsRedirect) {
 type FfiDestroyerDnsRedirect struct {}
 
 func (_ FfiDestroyerDnsRedirect) Destroy(value DnsRedirect) {
-	value.Destroy()
-}
-
-
-// DNS query whitelisting via DNAT redirect.
-type DnsWhitelisting struct {
-	// Domain patterns to whitelist (matched against DNS query QNAMEs).
-	Domains []string
-	// Pairs of (blocking, standard) DNS server endpoints.
-	Redirects []DnsRedirect
-}
-
-func (r *DnsWhitelisting) Destroy() {
-		FfiDestroyerSequenceString{}.Destroy(r.Domains);
-		FfiDestroyerSequenceDnsRedirect{}.Destroy(r.Redirects);
-}
-
-type FfiConverterDnsWhitelisting struct {}
-
-var FfiConverterDnsWhitelistingINSTANCE = FfiConverterDnsWhitelisting{}
-
-func (c FfiConverterDnsWhitelisting) Lift(rb RustBufferI) DnsWhitelisting {
-	return LiftFromRustBuffer[DnsWhitelisting](c, rb)
-}
-
-func (c FfiConverterDnsWhitelisting) Read(reader io.Reader) DnsWhitelisting {
-	return DnsWhitelisting {
-			FfiConverterSequenceStringINSTANCE.Read(reader),
-			FfiConverterSequenceDnsRedirectINSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterDnsWhitelisting) Lower(value DnsWhitelisting) C.RustBuffer {
-	return LowerIntoRustBuffer[DnsWhitelisting](c, value)
-}
-
-func (c FfiConverterDnsWhitelisting) Write(writer io.Writer, value DnsWhitelisting) {
-		FfiConverterSequenceStringINSTANCE.Write(writer, value.Domains);
-		FfiConverterSequenceDnsRedirectINSTANCE.Write(writer, value.Redirects);
-}
-
-type FfiDestroyerDnsWhitelisting struct {}
-
-func (_ FfiDestroyerDnsWhitelisting) Destroy(value DnsWhitelisting) {
 	value.Destroy()
 }
 
@@ -3406,9 +3401,12 @@ type FeatureFirewall struct {
 	ExcludePrivateIpRange *Ipv4Net
 	// Blackist for outgoing connections
 	OutgoingBlacklist []FirewallBlacklistTuple
-	// DNS query whitelisting (DNAT redirect of whitelisted queries away
-	// from the blocking DNS server to the standard one).
-	DnsWhitelisting *DnsWhitelisting
+	// TP-Lite DNS whitelisting redirects: pairs of (blocking, standard) DNS
+	// server endpoints. Queries to a blocking endpoint whose QNAME matches a
+	// whitelisted domain are DNAT-rewritten to the standard endpoint. The
+	// whitelisted domains are set at runtime via set_tp_lite_whitelisted_domains.
+	// Empty disables the feature.
+	TpLiteDnsRedirects []DnsRedirect
 }
 
 func (r *FeatureFirewall) Destroy() {
@@ -3416,7 +3414,7 @@ func (r *FeatureFirewall) Destroy() {
 		FfiDestroyerBool{}.Destroy(r.BoringtunResetConns);
 		FfiDestroyerOptionalTypeIpv4Net{}.Destroy(r.ExcludePrivateIpRange);
 		FfiDestroyerSequenceFirewallBlacklistTuple{}.Destroy(r.OutgoingBlacklist);
-		FfiDestroyerOptionalDnsWhitelisting{}.Destroy(r.DnsWhitelisting);
+		FfiDestroyerSequenceDnsRedirect{}.Destroy(r.TpLiteDnsRedirects);
 }
 
 type FfiConverterFeatureFirewall struct {}
@@ -3433,7 +3431,7 @@ func (c FfiConverterFeatureFirewall) Read(reader io.Reader) FeatureFirewall {
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterOptionalTypeIpv4NetINSTANCE.Read(reader),
 			FfiConverterSequenceFirewallBlacklistTupleINSTANCE.Read(reader),
-			FfiConverterOptionalDnsWhitelistingINSTANCE.Read(reader),
+			FfiConverterSequenceDnsRedirectINSTANCE.Read(reader),
 	}
 }
 
@@ -3446,7 +3444,7 @@ func (c FfiConverterFeatureFirewall) Write(writer io.Writer, value FeatureFirewa
 		FfiConverterBoolINSTANCE.Write(writer, value.BoringtunResetConns);
 		FfiConverterOptionalTypeIpv4NetINSTANCE.Write(writer, value.ExcludePrivateIpRange);
 		FfiConverterSequenceFirewallBlacklistTupleINSTANCE.Write(writer, value.OutgoingBlacklist);
-		FfiConverterOptionalDnsWhitelistingINSTANCE.Write(writer, value.DnsWhitelisting);
+		FfiConverterSequenceDnsRedirectINSTANCE.Write(writer, value.TpLiteDnsRedirects);
 }
 
 type FfiDestroyerFeatureFirewall struct {}
@@ -4530,8 +4528,8 @@ func (_ FfiDestroyerTelioNode) Destroy(value TelioNode) {
 type TpLiteStatsOptions struct {
 	// The IP addresses of the TP-Lite DNS servers
 	DnsServerIps []IpAddr
-	// How many blocked domains libfirewall can store between passing them through the callback 
-	// If the buffer fills up and new blocked domains arrive, data will be lost 
+	// How many blocked domains libfirewall can store between passing them through the callback
+	// If the buffer fills up and new blocked domains arrive, data will be lost
 	//
 	// Default value: 100
 	BlockedDomainsBufferSize *uint64
@@ -4554,7 +4552,7 @@ type TpLiteStatsOptions struct {
 	MaxOpenRequests *uint64
 	// The stats collection can only operate on plaintext DNS packets
 	// Setting this flag will block DoT and DoH packets, causing the client to fallback to plaintext
-	// Note: Some clients can be configured with no plaintext fallback, which would then break if this flag is set 
+	// Note: Some clients can be configured with no plaintext fallback, which would then break if this flag is set
 	//
 	// Default value: false
 	ForcePlaintextDns *bool
@@ -6430,45 +6428,6 @@ type FfiDestroyerOptionalDnsConfig struct {}
 func (_ FfiDestroyerOptionalDnsConfig) Destroy(value *DnsConfig) {
 	if value != nil {
 		FfiDestroyerDnsConfig{}.Destroy(*value)
-	}
-}
-
-
-
-type FfiConverterOptionalDnsWhitelisting struct{}
-
-var FfiConverterOptionalDnsWhitelistingINSTANCE = FfiConverterOptionalDnsWhitelisting{}
-
-func (c FfiConverterOptionalDnsWhitelisting) Lift(rb RustBufferI) *DnsWhitelisting {
-	return LiftFromRustBuffer[*DnsWhitelisting](c, rb)
-}
-
-func (_ FfiConverterOptionalDnsWhitelisting) Read(reader io.Reader) *DnsWhitelisting {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterDnsWhitelistingINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalDnsWhitelisting) Lower(value *DnsWhitelisting) C.RustBuffer {
-	return LowerIntoRustBuffer[*DnsWhitelisting](c, value)
-}
-
-func (_ FfiConverterOptionalDnsWhitelisting) Write(writer io.Writer, value *DnsWhitelisting) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterDnsWhitelistingINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalDnsWhitelisting struct {}
-
-func (_ FfiDestroyerOptionalDnsWhitelisting) Destroy(value *DnsWhitelisting) {
-	if value != nil {
-		FfiDestroyerDnsWhitelisting{}.Destroy(*value)
 	}
 }
 

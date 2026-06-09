@@ -764,6 +764,11 @@ void uniffi_telio_fn_method_telio_set_meshnet_off(void* ptr, RustCallStatus *out
 void uniffi_telio_fn_method_telio_set_secret_key(void* ptr, RustBuffer secret_key, RustCallStatus *out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_TP_LITE_WHITELISTED_DOMAINS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_TP_LITE_WHITELISTED_DOMAINS
+void uniffi_telio_fn_method_telio_set_tp_lite_whitelisted_domains(void* ptr, RustBuffer domains, RustCallStatus *out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_TUN
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_TUN
 void uniffi_telio_fn_method_telio_set_tun(void* ptr, int32_t tun, RustCallStatus *out_status
@@ -1537,6 +1542,12 @@ uint16_t uniffi_telio_checksum_method_telio_set_meshnet_off(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_SECRET_KEY
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_SECRET_KEY
 uint16_t uniffi_telio_checksum_method_telio_set_secret_key(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_TP_LITE_WHITELISTED_DOMAINS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_TP_LITE_WHITELISTED_DOMAINS
+uint16_t uniffi_telio_checksum_method_telio_set_tp_lite_whitelisted_domains(void
     
 );
 #endif
