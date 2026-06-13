@@ -851,11 +851,11 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_set_tp_lite_whitelisted_domains()
+		return C.uniffi_telio_checksum_method_telio_set_tp_lite_domain_whitelist()
 	})
-	if checksum != 64229 {
+	if checksum != 14462 {
 		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_set_tp_lite_whitelisted_domains: UniFFI API checksum mismatch")
+		panic("telio: uniffi_telio_checksum_method_telio_set_tp_lite_domain_whitelist: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1783,16 +1783,16 @@ type TelioInterface interface {
 	// - `private_key`: WireGuard private key.
 
 	SetSecretKey(secretKey SecretKey) error
-	// Set the TP-Lite DNS whitelisted domains at runtime, reconfiguring the
-	// firewall to redirect queries for these domains away from the blocking
-	// DNS server to the standard one.
+	// Set the TP-Lite DNS whitelisting configuration at runtime: the whitelisted
+	// domains and the (blocking, standard) DNS server redirect pairs. Outbound DNS
+	// queries to a blocking endpoint whose QNAME matches a whitelisted domain are
+	// DNAT-rewritten to the corresponding standard endpoint.
 	//
 	// Requires firewall to be enabled through setting firewall field of Features
-	// object to a non-null value. The DNS server pairs are configured via the
-	// tp_lite_dns_redirects field of the firewall feature config.
+	// object to a non-null value.
 	//
-	// Passing an empty list clears the whitelist.
-	SetTpLiteWhitelistedDomains(domains []string) error
+	// Passing empty lists clears the whitelisting.
+	SetTpLiteDomainWhitelist(domains []string, redirects []DnsRedirect) error
 	// Sets the tunnel file descriptor
 	//
 	// # Parameters:
@@ -2287,21 +2287,21 @@ func (_self *Telio) SetSecretKey(secretKey SecretKey) error {
 		return _uniffiErr.AsError()
 }
 
-// Set the TP-Lite DNS whitelisted domains at runtime, reconfiguring the
-// firewall to redirect queries for these domains away from the blocking
-// DNS server to the standard one.
+// Set the TP-Lite DNS whitelisting configuration at runtime: the whitelisted
+// domains and the (blocking, standard) DNS server redirect pairs. Outbound DNS
+// queries to a blocking endpoint whose QNAME matches a whitelisted domain are
+// DNAT-rewritten to the corresponding standard endpoint.
 //
 // Requires firewall to be enabled through setting firewall field of Features
-// object to a non-null value. The DNS server pairs are configured via the
-// tp_lite_dns_redirects field of the firewall feature config.
+// object to a non-null value.
 //
-// Passing an empty list clears the whitelist.
-func (_self *Telio) SetTpLiteWhitelistedDomains(domains []string) error {
+// Passing empty lists clears the whitelisting.
+func (_self *Telio) SetTpLiteDomainWhitelist(domains []string, redirects []DnsRedirect) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_telio_set_tp_lite_whitelisted_domains(
-		_pointer,FfiConverterSequenceStringINSTANCE.Lower(domains),_uniffiStatus)
+		C.uniffi_telio_fn_method_telio_set_tp_lite_domain_whitelist(
+		_pointer,FfiConverterSequenceStringINSTANCE.Lower(domains), FfiConverterSequenceDnsRedirectINSTANCE.Lower(redirects),_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()
@@ -3401,12 +3401,6 @@ type FeatureFirewall struct {
 	ExcludePrivateIpRange *Ipv4Net
 	// Blackist for outgoing connections
 	OutgoingBlacklist []FirewallBlacklistTuple
-	// TP-Lite DNS whitelisting redirects: pairs of (blocking, standard) DNS
-	// server endpoints. Queries to a blocking endpoint whose QNAME matches a
-	// whitelisted domain are DNAT-rewritten to the standard endpoint. The
-	// whitelisted domains are set at runtime via set_tp_lite_whitelisted_domains.
-	// Empty disables the feature.
-	TpLiteDnsRedirects []DnsRedirect
 }
 
 func (r *FeatureFirewall) Destroy() {
@@ -3414,7 +3408,6 @@ func (r *FeatureFirewall) Destroy() {
 		FfiDestroyerBool{}.Destroy(r.BoringtunResetConns);
 		FfiDestroyerOptionalTypeIpv4Net{}.Destroy(r.ExcludePrivateIpRange);
 		FfiDestroyerSequenceFirewallBlacklistTuple{}.Destroy(r.OutgoingBlacklist);
-		FfiDestroyerSequenceDnsRedirect{}.Destroy(r.TpLiteDnsRedirects);
 }
 
 type FfiConverterFeatureFirewall struct {}
@@ -3431,7 +3424,6 @@ func (c FfiConverterFeatureFirewall) Read(reader io.Reader) FeatureFirewall {
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterOptionalTypeIpv4NetINSTANCE.Read(reader),
 			FfiConverterSequenceFirewallBlacklistTupleINSTANCE.Read(reader),
-			FfiConverterSequenceDnsRedirectINSTANCE.Read(reader),
 	}
 }
 
@@ -3444,7 +3436,6 @@ func (c FfiConverterFeatureFirewall) Write(writer io.Writer, value FeatureFirewa
 		FfiConverterBoolINSTANCE.Write(writer, value.BoringtunResetConns);
 		FfiConverterOptionalTypeIpv4NetINSTANCE.Write(writer, value.ExcludePrivateIpRange);
 		FfiConverterSequenceFirewallBlacklistTupleINSTANCE.Write(writer, value.OutgoingBlacklist);
-		FfiConverterSequenceDnsRedirectINSTANCE.Write(writer, value.TpLiteDnsRedirects);
 }
 
 type FfiDestroyerFeatureFirewall struct {}
