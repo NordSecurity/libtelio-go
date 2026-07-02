@@ -851,15 +851,6 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_set_tp_lite_domain_whitelist()
-	})
-	if checksum != 14462 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_set_tp_lite_domain_whitelist: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_tun()
 	})
 	if checksum != 49747 {
@@ -1731,7 +1722,7 @@ type TelioInterface interface {
 	EnableMagicDns(forwardServers []IpAddr) error
 	// Register callback to get metrics and domains blocked by TP-Lite
 	//
-	// Requires firewall to be enabled through setting firewall field of Features object
+	// Requires firewall to be enabled through setting firewall field of Features object 
 	// to a non-null value
 	//
 	// Passing empty list of IPs will disable the collection of TP-Lite stats
@@ -1783,16 +1774,6 @@ type TelioInterface interface {
 	// - `private_key`: WireGuard private key.
 
 	SetSecretKey(secretKey SecretKey) error
-	// Set the TP-Lite DNS whitelisting configuration at runtime: the whitelisted
-	// domains and the (blocking, standard) DNS server redirect pairs. Outbound DNS
-	// queries to a blocking endpoint whose QNAME matches a whitelisted domain are
-	// DNAT-rewritten to the corresponding standard endpoint.
-	//
-	// Requires firewall to be enabled through setting firewall field of Features
-	// object to a non-null value.
-	//
-	// Passing empty lists clears the whitelisting.
-	SetTpLiteDomainWhitelist(domains []string, redirects []DnsRedirect) error
 	// Sets the tunnel file descriptor
 	//
 	// # Parameters:
@@ -2057,7 +2038,7 @@ func (_self *Telio) EnableMagicDns(forwardServers []IpAddr) error {
 
 // Register callback to get metrics and domains blocked by TP-Lite
 //
-// Requires firewall to be enabled through setting firewall field of Features object
+// Requires firewall to be enabled through setting firewall field of Features object 
 // to a non-null value
 //
 // Passing empty list of IPs will disable the collection of TP-Lite stats
@@ -2282,26 +2263,6 @@ func (_self *Telio) SetSecretKey(secretKey SecretKey) error {
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_set_secret_key(
 		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey),_uniffiStatus)
-		return false
-	})
-		return _uniffiErr.AsError()
-}
-
-// Set the TP-Lite DNS whitelisting configuration at runtime: the whitelisted
-// domains and the (blocking, standard) DNS server redirect pairs. Outbound DNS
-// queries to a blocking endpoint whose QNAME matches a whitelisted domain are
-// DNAT-rewritten to the corresponding standard endpoint.
-//
-// Requires firewall to be enabled through setting firewall field of Features
-// object to a non-null value.
-//
-// Passing empty lists clears the whitelisting.
-func (_self *Telio) SetTpLiteDomainWhitelist(domains []string, redirects []DnsRedirect) error {
-	_pointer := _self.ffiObject.incrementPointer("*Telio")
-	defer _self.ffiObject.decrementPointer()
-	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_telio_set_tp_lite_domain_whitelist(
-		_pointer,FfiConverterSequenceStringINSTANCE.Lower(domains), FfiConverterSequenceDnsRedirectINSTANCE.Lower(redirects),_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()
@@ -2800,7 +2761,7 @@ func (_ FfiDestroyerBackoff) Destroy(value Backoff) {
 
 // Information about a domain blocked by TP-Lite
 type BlockedDomain struct {
-	// The domain name that was blocked
+	// The domain name that was blocked 
 	DomainName string
 	// When the request occurred
 	Timestamp uint64
@@ -2943,7 +2904,7 @@ func (_ FfiDestroyerDnsConfig) Destroy(value DnsConfig) {
 
 // Simple metrics about TP-Lite DNS activity
 type DnsMetrics struct {
-	// Number of DNS requests that have been made
+	// Number of DNS requests that have been made 
 	NumRequests uint32
 	// Number of received DNS responses
 	NumResponses uint32
@@ -2986,51 +2947,6 @@ func (c FfiConverterDnsMetrics) Write(writer io.Writer, value DnsMetrics) {
 type FfiDestroyerDnsMetrics struct {}
 
 func (_ FfiDestroyerDnsMetrics) Destroy(value DnsMetrics) {
-	value.Destroy()
-}
-
-
-// Pair of DNS server endpoints describing how a single DNS-redirect rule
-// should rewrite outbound DNS traffic.
-type DnsRedirect struct {
-	// DNS server that would otherwise drop non-whitelisted queries.
-	Blocking SocketAddrV4
-	// DNS server to which whitelisted queries are redirected.
-	Standard SocketAddrV4
-}
-
-func (r *DnsRedirect) Destroy() {
-		FfiDestroyerTypeSocketAddrV4{}.Destroy(r.Blocking);
-		FfiDestroyerTypeSocketAddrV4{}.Destroy(r.Standard);
-}
-
-type FfiConverterDnsRedirect struct {}
-
-var FfiConverterDnsRedirectINSTANCE = FfiConverterDnsRedirect{}
-
-func (c FfiConverterDnsRedirect) Lift(rb RustBufferI) DnsRedirect {
-	return LiftFromRustBuffer[DnsRedirect](c, rb)
-}
-
-func (c FfiConverterDnsRedirect) Read(reader io.Reader) DnsRedirect {
-	return DnsRedirect {
-			FfiConverterTypeSocketAddrV4INSTANCE.Read(reader),
-			FfiConverterTypeSocketAddrV4INSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterDnsRedirect) Lower(value DnsRedirect) C.RustBuffer {
-	return LowerIntoRustBuffer[DnsRedirect](c, value)
-}
-
-func (c FfiConverterDnsRedirect) Write(writer io.Writer, value DnsRedirect) {
-		FfiConverterTypeSocketAddrV4INSTANCE.Write(writer, value.Blocking);
-		FfiConverterTypeSocketAddrV4INSTANCE.Write(writer, value.Standard);
-}
-
-type FfiDestroyerDnsRedirect struct {}
-
-func (_ FfiDestroyerDnsRedirect) Destroy(value DnsRedirect) {
 	value.Destroy()
 }
 
@@ -3209,14 +3125,11 @@ type FeatureDns struct {
 	TtlValue TtlValue
 	// Configure options for exit dns [default None]
 	ExitDns *FeatureExitDns
-	// Use the raw DNS forwarder instead of the old hickory-server
-	UseRawForwarder *bool
 }
 
 func (r *FeatureDns) Destroy() {
 		FfiDestroyerTypeTtlValue{}.Destroy(r.TtlValue);
 		FfiDestroyerOptionalFeatureExitDns{}.Destroy(r.ExitDns);
-		FfiDestroyerOptionalBool{}.Destroy(r.UseRawForwarder);
 }
 
 type FfiConverterFeatureDns struct {}
@@ -3231,7 +3144,6 @@ func (c FfiConverterFeatureDns) Read(reader io.Reader) FeatureDns {
 	return FeatureDns {
 			FfiConverterTypeTtlValueINSTANCE.Read(reader),
 			FfiConverterOptionalFeatureExitDnsINSTANCE.Read(reader),
-			FfiConverterOptionalBoolINSTANCE.Read(reader),
 	}
 }
 
@@ -3242,7 +3154,6 @@ func (c FfiConverterFeatureDns) Lower(value FeatureDns) C.RustBuffer {
 func (c FfiConverterFeatureDns) Write(writer io.Writer, value FeatureDns) {
 		FfiConverterTypeTtlValueINSTANCE.Write(writer, value.TtlValue);
 		FfiConverterOptionalFeatureExitDnsINSTANCE.Write(writer, value.ExitDns);
-		FfiConverterOptionalBoolINSTANCE.Write(writer, value.UseRawForwarder);
 }
 
 type FfiDestroyerFeatureDns struct {}
@@ -4519,8 +4430,8 @@ func (_ FfiDestroyerTelioNode) Destroy(value TelioNode) {
 type TpLiteStatsOptions struct {
 	// The IP addresses of the TP-Lite DNS servers
 	DnsServerIps []IpAddr
-	// How many blocked domains libfirewall can store between passing them through the callback
-	// If the buffer fills up and new blocked domains arrive, data will be lost
+	// How many blocked domains libfirewall can store between passing them through the callback 
+	// If the buffer fills up and new blocked domains arrive, data will be lost 
 	//
 	// Default value: 100
 	BlockedDomainsBufferSize *uint64
@@ -4543,7 +4454,7 @@ type TpLiteStatsOptions struct {
 	MaxOpenRequests *uint64
 	// The stats collection can only operate on plaintext DNS packets
 	// Setting this flag will block DoT and DoH packets, causing the client to fallback to plaintext
-	// Note: Some clients can be configured with no plaintext fallback, which would then break if this flag is set
+	// Note: Some clients can be configured with no plaintext fallback, which would then break if this flag is set 
 	//
 	// Default value: false
 	ForcePlaintextDns *bool
@@ -7489,51 +7400,6 @@ func (FfiDestroyerSequenceBlockedDomain) Destroy(sequence []BlockedDomain) {
 
 
 
-type FfiConverterSequenceDnsRedirect struct{}
-
-var FfiConverterSequenceDnsRedirectINSTANCE = FfiConverterSequenceDnsRedirect{}
-
-func (c FfiConverterSequenceDnsRedirect) Lift(rb RustBufferI) []DnsRedirect {
-	return LiftFromRustBuffer[[]DnsRedirect](c, rb)
-}
-
-func (c FfiConverterSequenceDnsRedirect) Read(reader io.Reader) []DnsRedirect {
-	length := readInt32(reader)
-	if length == 0 {
-		return nil
-	}
-	result := make([]DnsRedirect, 0, length)
-	for i := int32(0); i < length; i++ {
-		result = append(result, FfiConverterDnsRedirectINSTANCE.Read(reader))
-	}
-	return result
-}
-
-func (c FfiConverterSequenceDnsRedirect) Lower(value []DnsRedirect) C.RustBuffer {
-	return LowerIntoRustBuffer[[]DnsRedirect](c, value)
-}
-
-func (c FfiConverterSequenceDnsRedirect) Write(writer io.Writer, value []DnsRedirect) {
-	if len(value) > math.MaxInt32 {
-		panic("[]DnsRedirect is too large to fit into Int32")
-	}
-
-	writeInt32(writer, int32(len(value)))
-	for _, item := range value {
-		FfiConverterDnsRedirectINSTANCE.Write(writer, item)
-	}
-}
-
-type FfiDestroyerSequenceDnsRedirect struct {}
-
-func (FfiDestroyerSequenceDnsRedirect) Destroy(sequence []DnsRedirect) {
-	for _, value := range sequence {
-		FfiDestroyerDnsRedirect{}.Destroy(value)	
-	}
-}
-
-
-
 type FfiConverterSequenceFirewallBlacklistTuple struct{}
 
 var FfiConverterSequenceFirewallBlacklistTupleINSTANCE = FfiConverterSequenceFirewallBlacklistTuple{}
@@ -8137,17 +8003,6 @@ type SocketAddr = string
 type FfiConverterTypeSocketAddr = FfiConverterString
 type FfiDestroyerTypeSocketAddr = FfiDestroyerString
 var FfiConverterTypeSocketAddrINSTANCE = FfiConverterString{}
-
-
-/**
- * Typealias from the type name used in the UDL file to the builtin type.  This
- * is needed because the UDL type name is used in function/method signatures.
- * It's also what we have an external type that references a custom type.
- */
-type SocketAddrV4 = string
-type FfiConverterTypeSocketAddrV4 = FfiConverterString
-type FfiDestroyerTypeSocketAddrV4 = FfiDestroyerString
-var FfiConverterTypeSocketAddrV4INSTANCE = FfiConverterString{}
 
 
 /**
