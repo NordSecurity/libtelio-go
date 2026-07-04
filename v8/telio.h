@@ -774,6 +774,11 @@ void uniffi_telio_fn_method_telio_set_tp_lite_domain_whitelist(void* ptr, RustBu
 void uniffi_telio_fn_method_telio_set_tun(void* ptr, int32_t tun, RustCallStatus *out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_TUNNEL_SRC_IP
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SET_TUNNEL_SRC_IP
+void uniffi_telio_fn_method_telio_set_tunnel_src_ip(void* ptr, RustBuffer src_ips, RustCallStatus *out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SHUTDOWN
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_SHUTDOWN
 void uniffi_telio_fn_method_telio_shutdown(void* ptr, RustCallStatus *out_status
@@ -1554,6 +1559,12 @@ uint16_t uniffi_telio_checksum_method_telio_set_tp_lite_domain_whitelist(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_TUN
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_TUN
 uint16_t uniffi_telio_checksum_method_telio_set_tun(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_TUNNEL_SRC_IP
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_SET_TUNNEL_SRC_IP
+uint16_t uniffi_telio_checksum_method_telio_set_tunnel_src_ip(void
     
 );
 #endif
