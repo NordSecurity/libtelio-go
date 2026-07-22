@@ -869,15 +869,6 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_set_tunnel_src_ip()
-	})
-	if checksum != 65092 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_set_tunnel_src_ip: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_shutdown()
 	})
 	if checksum != 25927 {
@@ -1354,7 +1345,7 @@ func (ffiObject *FfiObject)freeRustArcPtr() {
 	})
 }
 // A [Features] builder that allows a simpler initialization of
-// features with defaults coming from libtelio lib.
+// features with defaults comming from libtelio lib.
 //
 // !!! Should only be used then remote config is inaccessible !!!
 
@@ -1370,7 +1361,7 @@ type FeaturesDefaultsBuilderInterface interface {
 	EnableErrorNotificationService() *FeaturesDefaultsBuilder
 	// Enable firewall connection resets when NepTUN is used
 	EnableFirewallConnectionReset() *FeaturesDefaultsBuilder
-	// Enable blocking event flush with timeout on stop with defaults
+	// Enable blocking event flush with timout on stop with defaults
 	EnableFlushEventsOnStopTimeoutSeconds() *FeaturesDefaultsBuilder
 	// Enable IPv6 with defaults
 	EnableIpv6() *FeaturesDefaultsBuilder
@@ -1378,13 +1369,13 @@ type FeaturesDefaultsBuilderInterface interface {
 	EnableLana(eventPath string, isProd bool) *FeaturesDefaultsBuilder
 	// Enable Link detection mechanism with defaults
 	EnableLinkDetection() *FeaturesDefaultsBuilder
-	// Enable multicast with defaults
+	// Eanable multicast with defaults
 	EnableMulticast() *FeaturesDefaultsBuilder
 	// Enable nicknames with defaults
 	EnableNicknames() *FeaturesDefaultsBuilder
 	// Enable nurse with defaults
 	EnableNurse() *FeaturesDefaultsBuilder
-	// Enable key validation in set_config call with defaults
+	// Enable key valiation in set_config call with defaults
 	EnableValidateKeys() *FeaturesDefaultsBuilder
 	// Enable custom socket buffer sizes for NepTUN
 	SetInterThreadChannelSize(interThreadChannelSize uint32) *FeaturesDefaultsBuilder
@@ -1394,7 +1385,7 @@ type FeaturesDefaultsBuilderInterface interface {
 	SetSktBufferSize(sktBufferSize uint32) *FeaturesDefaultsBuilder
 }
 // A [Features] builder that allows a simpler initialization of
-// features with defaults coming from libtelio lib.
+// features with defaults comming from libtelio lib.
 //
 // !!! Should only be used then remote config is inaccessible !!!
 
@@ -1472,7 +1463,7 @@ func (_self *FeaturesDefaultsBuilder) EnableFirewallConnectionReset() *FeaturesD
 	}))
 }
 
-// Enable blocking event flush with timeout on stop with defaults
+// Enable blocking event flush with timout on stop with defaults
 func (_self *FeaturesDefaultsBuilder) EnableFlushEventsOnStopTimeoutSeconds() *FeaturesDefaultsBuilder {
 	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
 	defer _self.ffiObject.decrementPointer()
@@ -1512,7 +1503,7 @@ func (_self *FeaturesDefaultsBuilder) EnableLinkDetection() *FeaturesDefaultsBui
 	}))
 }
 
-// Enable multicast with defaults
+// Eanable multicast with defaults
 func (_self *FeaturesDefaultsBuilder) EnableMulticast() *FeaturesDefaultsBuilder {
 	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
 	defer _self.ffiObject.decrementPointer()
@@ -1542,7 +1533,7 @@ func (_self *FeaturesDefaultsBuilder) EnableNurse() *FeaturesDefaultsBuilder {
 	}))
 }
 
-// Enable key validation in set_config call with defaults
+// Enable key valiation in set_config call with defaults
 func (_self *FeaturesDefaultsBuilder) EnableValidateKeys() *FeaturesDefaultsBuilder {
 	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
 	defer _self.ffiObject.decrementPointer()
@@ -1808,14 +1799,6 @@ type TelioInterface interface {
 	// - `tun`: the file descriptor of the TUN interface
 
 	SetTun(tun int32) error
-	// Set the source IP address(es) currently configured on the tunnel
-	// interface. When set, the firewall rejects outbound packets whose source
-	// IP is not one of these.
-	//
-	// # Parameters
-	// - `src_ips`: tunnel interface source IPs, empty to disable.
-
-	SetTunnelSrcIp(srcIps []IpAddr) error
 	// Completely stop and uninit telio lib.
 	Shutdown() error
 	// Explicitly deallocate telio object and shutdown async rt.
@@ -2335,24 +2318,6 @@ func (_self *Telio) SetTun(tun int32) error {
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_set_tun(
 		_pointer,FfiConverterInt32INSTANCE.Lower(tun),_uniffiStatus)
-		return false
-	})
-		return _uniffiErr.AsError()
-}
-
-// Set the source IP address(es) currently configured on the tunnel
-// interface. When set, the firewall rejects outbound packets whose source
-// IP is not one of these.
-//
-// # Parameters
-// - `src_ips`: tunnel interface source IPs, empty to disable.
-
-func (_self *Telio) SetTunnelSrcIp(srcIps []IpAddr) error {
-	_pointer := _self.ffiObject.incrementPointer("*Telio")
-	defer _self.ffiObject.decrementPointer()
-	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_telio_set_tunnel_src_ip(
-		_pointer,FfiConverterSequenceTypeIpAddrINSTANCE.Lower(srcIps),_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()
