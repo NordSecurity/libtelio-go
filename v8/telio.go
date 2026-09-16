@@ -5739,6 +5739,8 @@ const (
 	VpnConnectionErrorUnauthenticated VpnConnectionError = 4
 	// There is a newer connection to this VPN server
 	VpnConnectionErrorSuperseded VpnConnectionError = 5
+	// The server rejected the VPN encryption cipher
+	VpnConnectionErrorUnsupportedCipher VpnConnectionError = 6
 )
 
 type FfiConverterVpnConnectionError struct {}
