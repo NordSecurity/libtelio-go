@@ -626,6 +626,24 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_meshnetconnectionconfigbuilder_build()
+	})
+	if checksum != 46672 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_meshnetconnectionconfigbuilder_build: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_meshnetconnectionconfigbuilder_with_allowed_ips()
+	})
+	if checksum != 22757 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_meshnetconnectionconfigbuilder_with_allowed_ips: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node()
 	})
 	if checksum != 5979 {
@@ -640,6 +658,15 @@ func uniffiCheckChecksums() {
 	if checksum != 1113 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node_postquantum: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node_with_config()
+	})
+	if checksum != 59331 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node_with_config: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -995,11 +1022,56 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_vpnconnectionconfigbuilder_build()
+	})
+	if checksum != 2745 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_vpnconnectionconfigbuilder_build: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_vpnconnectionconfigbuilder_force_pq()
+	})
+	if checksum != 58950 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_vpnconnectionconfigbuilder_force_pq: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_vpnconnectionconfigbuilder_with_allowed_ips()
+	})
+	if checksum != 63405 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_vpnconnectionconfigbuilder_with_allowed_ips: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_vpnconnectionconfigbuilder_with_identifier()
+	})
+	if checksum != 17707 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_vpnconnectionconfigbuilder_with_identifier: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_constructor_featuresdefaultsbuilder_new()
 	})
 	if checksum != 33447 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_constructor_featuresdefaultsbuilder_new: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_constructor_meshnetconnectionconfigbuilder_new()
+	})
+	if checksum != 11592 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_constructor_meshnetconnectionconfigbuilder_new: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1018,6 +1090,15 @@ func uniffiCheckChecksums() {
 	if checksum != 57901 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_constructor_telio_new_with_protect: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_constructor_vpnconnectionconfigbuilder_new()
+	})
+	if checksum != 32796 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_constructor_vpnconnectionconfigbuilder_new: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1635,6 +1716,126 @@ func (_ FfiDestroyerFeaturesDefaultsBuilder) Destroy(value *FeaturesDefaultsBuil
 
 
 
+// Builder for meshnet exit-through-peer connections.
+//
+// Only `public_key` is mandatory and supplied to the constructor.
+//
+// # Example
+//
+// ```c
+// ConnectionConfig config = new MeshnetConnectionConfigBuilder(pubkey)
+//     .with_allowed_ips(["100.64.0.0/10"])
+//     .build();
+// telio.connect_to_exit_node_with_config(config);
+// ```
+type MeshnetConnectionConfigBuilderInterface interface {
+	// Build the final ConnectionConfig.
+	Build() ConnectionConfig
+	// Set the subnets routed through the exit peer.
+	// If not called, defaults to "0.0.0.0/0" (all traffic).
+	WithAllowedIps(allowedIps []IpNet) *MeshnetConnectionConfigBuilder
+}
+// Builder for meshnet exit-through-peer connections.
+//
+// Only `public_key` is mandatory and supplied to the constructor.
+//
+// # Example
+//
+// ```c
+// ConnectionConfig config = new MeshnetConnectionConfigBuilder(pubkey)
+//     .with_allowed_ips(["100.64.0.0/10"])
+//     .build();
+// telio.connect_to_exit_node_with_config(config);
+// ```
+type MeshnetConnectionConfigBuilder struct {
+	ffiObject FfiObject
+}
+// Create a builder with the WireGuard public key of the meshnet exit peer.
+func NewMeshnetConnectionConfigBuilder(publicKey PublicKey) *MeshnetConnectionConfigBuilder {
+	return FfiConverterMeshnetConnectionConfigBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_constructor_meshnetconnectionconfigbuilder_new(FfiConverterTypePublicKeyINSTANCE.Lower(publicKey),_uniffiStatus)
+	}))
+}
+
+
+
+
+// Build the final ConnectionConfig.
+func (_self *MeshnetConnectionConfigBuilder) Build() ConnectionConfig {
+	_pointer := _self.ffiObject.incrementPointer("*MeshnetConnectionConfigBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterConnectionConfigINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
+		return GoRustBuffer {
+		inner: C.uniffi_telio_fn_method_meshnetconnectionconfigbuilder_build(
+		_pointer,_uniffiStatus),
+	}
+	}))
+}
+
+// Set the subnets routed through the exit peer.
+// If not called, defaults to "0.0.0.0/0" (all traffic).
+func (_self *MeshnetConnectionConfigBuilder) WithAllowedIps(allowedIps []IpNet) *MeshnetConnectionConfigBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*MeshnetConnectionConfigBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterMeshnetConnectionConfigBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_meshnetconnectionconfigbuilder_with_allowed_ips(
+		_pointer,FfiConverterSequenceTypeIpNetINSTANCE.Lower(allowedIps),_uniffiStatus)
+	}))
+}
+func (object *MeshnetConnectionConfigBuilder) Destroy() {
+	runtime.SetFinalizer(object, nil)
+	object.ffiObject.destroy()
+}
+
+type FfiConverterMeshnetConnectionConfigBuilder struct {}
+
+var FfiConverterMeshnetConnectionConfigBuilderINSTANCE = FfiConverterMeshnetConnectionConfigBuilder{}
+
+
+func (c FfiConverterMeshnetConnectionConfigBuilder) Lift(pointer unsafe.Pointer) *MeshnetConnectionConfigBuilder {
+	result := &MeshnetConnectionConfigBuilder {
+		newFfiObject(
+			pointer,
+			func(pointer unsafe.Pointer, status *C.RustCallStatus) unsafe.Pointer {
+				return C.uniffi_telio_fn_clone_meshnetconnectionconfigbuilder(pointer, status)
+			},
+			func(pointer unsafe.Pointer, status *C.RustCallStatus) {
+				C.uniffi_telio_fn_free_meshnetconnectionconfigbuilder(pointer, status)
+			},
+		),
+	}
+	runtime.SetFinalizer(result, (*MeshnetConnectionConfigBuilder).Destroy)
+	return result
+}
+
+func (c FfiConverterMeshnetConnectionConfigBuilder) Read(reader io.Reader) *MeshnetConnectionConfigBuilder {
+	return c.Lift(unsafe.Pointer(uintptr(readUint64(reader))))
+}
+
+func (c FfiConverterMeshnetConnectionConfigBuilder) Lower(value *MeshnetConnectionConfigBuilder) unsafe.Pointer {
+	// TODO: this is bad - all synchronization from ObjectRuntime.go is discarded here,
+	// because the pointer will be decremented immediately after this function returns,
+	// and someone will be left holding onto a non-locked pointer.
+	pointer := value.ffiObject.incrementPointer("*MeshnetConnectionConfigBuilder")
+	defer value.ffiObject.decrementPointer()
+	return pointer
+	
+}
+
+func (c FfiConverterMeshnetConnectionConfigBuilder) Write(writer io.Writer, value *MeshnetConnectionConfigBuilder) {
+	writeUint64(writer, uint64(uintptr(c.Lower(value))))
+}
+
+type FfiDestroyerMeshnetConnectionConfigBuilder struct {}
+
+func (_ FfiDestroyerMeshnetConnectionConfigBuilder) Destroy(value *MeshnetConnectionConfigBuilder) {
+		value.Destroy()
+}
+
+
+
+
+
 type TelioInterface interface {
 	// Wrapper for `telio_connect_to_exit_node_with_id` that doesn't take an identifier
 	ConnectToExitNode(publicKey PublicKey, allowedIps *[]IpNet, endpoint *SocketAddr) error
@@ -1670,6 +1871,35 @@ type TelioInterface interface {
 	// ```
 
 	ConnectToExitNodePostquantum(identifier *string, publicKey PublicKey, allowedIps *[]IpNet, endpoint SocketAddr) error
+	// Connects to an exit node using a [`ConnectionConfig`].
+	//
+	// This is the canonical connection method. Use [`VpnConnectionConfigBuilder`] for VPN
+	// connections or [`MeshnetConnectionConfigBuilder`] for meshnet.
+	//
+	// Routing should be set by the user accordingly.
+	//
+	// # Examples
+	//
+	// ```c
+	// // VPN connection (standard)
+	// VpnConnectionConfigBuilder builder = new VpnConnectionConfigBuilder(
+	//     "QKyApX/ewza7QEbC03Yt8t2ghu6nV5/rve/ZJvsecXo=",
+	//     "1.2.3.4:5678"
+	// );
+	// telio.connect_to_exit_node_with_config(builder.build());
+	//
+	// // VPN connection (post-quantum)
+	// telio.connect_to_exit_node_with_config(
+	//     new VpnConnectionConfigBuilder(pubkey, endpoint).force_pq().build()
+	// );
+	//
+	// // Meshnet exit-through-peer (DERP)
+	// telio.connect_to_exit_node_with_config(
+	//     new MeshnetConnectionConfigBuilder(pubkey).build()
+	// );
+	// ```
+
+	ConnectToExitNodeWithConfig(config ConnectionConfig) error
 	// Connects to an exit node. (VPN if endpoint is not NULL, Peer if endpoint is NULL)
 	//
 	// Routing should be set by the user accordingly.
@@ -1939,6 +2169,45 @@ func (_self *Telio) ConnectToExitNodePostquantum(identifier *string, publicKey P
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_connect_to_exit_node_postquantum(
 		_pointer,FfiConverterOptionalStringINSTANCE.Lower(identifier), FfiConverterTypePublicKeyINSTANCE.Lower(publicKey), FfiConverterOptionalSequenceTypeIpNetINSTANCE.Lower(allowedIps), FfiConverterTypeSocketAddrINSTANCE.Lower(endpoint),_uniffiStatus)
+		return false
+	})
+		return _uniffiErr.AsError()
+}
+
+// Connects to an exit node using a [`ConnectionConfig`].
+//
+// This is the canonical connection method. Use [`VpnConnectionConfigBuilder`] for VPN
+// connections or [`MeshnetConnectionConfigBuilder`] for meshnet.
+//
+// Routing should be set by the user accordingly.
+//
+// # Examples
+//
+// ```c
+// // VPN connection (standard)
+// VpnConnectionConfigBuilder builder = new VpnConnectionConfigBuilder(
+//     "QKyApX/ewza7QEbC03Yt8t2ghu6nV5/rve/ZJvsecXo=",
+//     "1.2.3.4:5678"
+// );
+// telio.connect_to_exit_node_with_config(builder.build());
+//
+// // VPN connection (post-quantum)
+// telio.connect_to_exit_node_with_config(
+//     new VpnConnectionConfigBuilder(pubkey, endpoint).force_pq().build()
+// );
+//
+// // Meshnet exit-through-peer (DERP)
+// telio.connect_to_exit_node_with_config(
+//     new MeshnetConnectionConfigBuilder(pubkey).build()
+// );
+// ```
+
+func (_self *Telio) ConnectToExitNodeWithConfig(config ConnectionConfig) error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_connect_to_exit_node_with_config(
+		_pointer,FfiConverterConnectionConfigINSTANCE.Lower(config),_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()
@@ -2784,6 +3053,156 @@ func (c FfiConverterTelioCustomAdapter) register() {
 
 
 
+// Builder for VPN exit-node connections where a direct UDP endpoint is known.
+//
+// Both `public_key` and `endpoint` are mandatory and supplied to the constructor.
+// Use `force_pq()` to enable post-quantum tunnelling.
+//
+// # Example
+//
+// ```c
+// ConnectionConfig config = new VpnConnectionConfigBuilder(pubkey, "1.2.3.4:5678")
+//     .with_identifier("my-node")
+//     .force_pq()
+//     .build();
+// telio.connect_to_exit_node_with_config(config);
+// ```
+type VpnConnectionConfigBuilderInterface interface {
+	// Build the final ConnectionConfig.
+	Build() ConnectionConfig
+	// Enable post-quantum key exchange for this VPN tunnel.
+	ForcePq() *VpnConnectionConfigBuilder
+	// Set the subnets routed through the exit node.
+	// If not called, defaults to "0.0.0.0/0" (all traffic).
+	WithAllowedIps(allowedIps []IpNet) *VpnConnectionConfigBuilder
+	// Set a stable string identifier for the exit node.
+	// If not called, a random UUID is generated at connect time.
+	WithIdentifier(identifier string) *VpnConnectionConfigBuilder
+}
+// Builder for VPN exit-node connections where a direct UDP endpoint is known.
+//
+// Both `public_key` and `endpoint` are mandatory and supplied to the constructor.
+// Use `force_pq()` to enable post-quantum tunnelling.
+//
+// # Example
+//
+// ```c
+// ConnectionConfig config = new VpnConnectionConfigBuilder(pubkey, "1.2.3.4:5678")
+//     .with_identifier("my-node")
+//     .force_pq()
+//     .build();
+// telio.connect_to_exit_node_with_config(config);
+// ```
+type VpnConnectionConfigBuilder struct {
+	ffiObject FfiObject
+}
+// Create a builder. Both `public_key` and `endpoint` are required for any VPN connection.
+func NewVpnConnectionConfigBuilder(publicKey PublicKey, endpoint SocketAddr) *VpnConnectionConfigBuilder {
+	return FfiConverterVpnConnectionConfigBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_constructor_vpnconnectionconfigbuilder_new(FfiConverterTypePublicKeyINSTANCE.Lower(publicKey), FfiConverterTypeSocketAddrINSTANCE.Lower(endpoint),_uniffiStatus)
+	}))
+}
+
+
+
+
+// Build the final ConnectionConfig.
+func (_self *VpnConnectionConfigBuilder) Build() ConnectionConfig {
+	_pointer := _self.ffiObject.incrementPointer("*VpnConnectionConfigBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterConnectionConfigINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
+		return GoRustBuffer {
+		inner: C.uniffi_telio_fn_method_vpnconnectionconfigbuilder_build(
+		_pointer,_uniffiStatus),
+	}
+	}))
+}
+
+// Enable post-quantum key exchange for this VPN tunnel.
+func (_self *VpnConnectionConfigBuilder) ForcePq() *VpnConnectionConfigBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*VpnConnectionConfigBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterVpnConnectionConfigBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_vpnconnectionconfigbuilder_force_pq(
+		_pointer,_uniffiStatus)
+	}))
+}
+
+// Set the subnets routed through the exit node.
+// If not called, defaults to "0.0.0.0/0" (all traffic).
+func (_self *VpnConnectionConfigBuilder) WithAllowedIps(allowedIps []IpNet) *VpnConnectionConfigBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*VpnConnectionConfigBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterVpnConnectionConfigBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_vpnconnectionconfigbuilder_with_allowed_ips(
+		_pointer,FfiConverterSequenceTypeIpNetINSTANCE.Lower(allowedIps),_uniffiStatus)
+	}))
+}
+
+// Set a stable string identifier for the exit node.
+// If not called, a random UUID is generated at connect time.
+func (_self *VpnConnectionConfigBuilder) WithIdentifier(identifier string) *VpnConnectionConfigBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*VpnConnectionConfigBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterVpnConnectionConfigBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_vpnconnectionconfigbuilder_with_identifier(
+		_pointer,FfiConverterStringINSTANCE.Lower(identifier),_uniffiStatus)
+	}))
+}
+func (object *VpnConnectionConfigBuilder) Destroy() {
+	runtime.SetFinalizer(object, nil)
+	object.ffiObject.destroy()
+}
+
+type FfiConverterVpnConnectionConfigBuilder struct {}
+
+var FfiConverterVpnConnectionConfigBuilderINSTANCE = FfiConverterVpnConnectionConfigBuilder{}
+
+
+func (c FfiConverterVpnConnectionConfigBuilder) Lift(pointer unsafe.Pointer) *VpnConnectionConfigBuilder {
+	result := &VpnConnectionConfigBuilder {
+		newFfiObject(
+			pointer,
+			func(pointer unsafe.Pointer, status *C.RustCallStatus) unsafe.Pointer {
+				return C.uniffi_telio_fn_clone_vpnconnectionconfigbuilder(pointer, status)
+			},
+			func(pointer unsafe.Pointer, status *C.RustCallStatus) {
+				C.uniffi_telio_fn_free_vpnconnectionconfigbuilder(pointer, status)
+			},
+		),
+	}
+	runtime.SetFinalizer(result, (*VpnConnectionConfigBuilder).Destroy)
+	return result
+}
+
+func (c FfiConverterVpnConnectionConfigBuilder) Read(reader io.Reader) *VpnConnectionConfigBuilder {
+	return c.Lift(unsafe.Pointer(uintptr(readUint64(reader))))
+}
+
+func (c FfiConverterVpnConnectionConfigBuilder) Lower(value *VpnConnectionConfigBuilder) unsafe.Pointer {
+	// TODO: this is bad - all synchronization from ObjectRuntime.go is discarded here,
+	// because the pointer will be decremented immediately after this function returns,
+	// and someone will be left holding onto a non-locked pointer.
+	pointer := value.ffiObject.incrementPointer("*VpnConnectionConfigBuilder")
+	defer value.ffiObject.decrementPointer()
+	return pointer
+	
+}
+
+func (c FfiConverterVpnConnectionConfigBuilder) Write(writer io.Writer, value *VpnConnectionConfigBuilder) {
+	writeUint64(writer, uint64(uintptr(c.Lower(value))))
+}
+
+type FfiDestroyerVpnConnectionConfigBuilder struct {}
+
+func (_ FfiDestroyerVpnConnectionConfigBuilder) Destroy(value *VpnConnectionConfigBuilder) {
+		value.Destroy()
+}
+
+
+
+
+
 // Exponential backoff bounds
 type Backoff struct {
 	// Initial bound
@@ -2933,6 +3352,68 @@ func (c FfiConverterConfig) Write(writer io.Writer, value Config) {
 type FfiDestroyerConfig struct {}
 
 func (_ FfiDestroyerConfig) Destroy(value Config) {
+	value.Destroy()
+}
+
+
+// Connection configuration for VPN or meshnet exit-node connections.
+// Produced by [`VpnConnectionConfigBuilder`] or [`MeshnetConnectionConfigBuilder`].
+type ConnectionConfig struct {
+	// Optional stable identifier for the exit node.
+	// If null, a random UUID is generated at connect time.
+	Identifier *string
+	// WireGuard public key of the exit node.
+	PublicKey PublicKey
+	// Subnets routed through the exit node. Null is equivalent to "0.0.0.0/0".
+	AllowedIps *[]IpNet
+	// Direct UDP endpoint (IP:port) of the exit node.
+	// Always set for VPN connections; always null for meshnet peer exit.
+	Endpoint *SocketAddr
+	// When true, a post-quantum tunnel is established (VPN connections only).
+	PostQuantum bool
+}
+
+func (r *ConnectionConfig) Destroy() {
+		FfiDestroyerOptionalString{}.Destroy(r.Identifier);
+		FfiDestroyerTypePublicKey{}.Destroy(r.PublicKey);
+		FfiDestroyerOptionalSequenceTypeIpNet{}.Destroy(r.AllowedIps);
+		FfiDestroyerOptionalTypeSocketAddr{}.Destroy(r.Endpoint);
+		FfiDestroyerBool{}.Destroy(r.PostQuantum);
+}
+
+type FfiConverterConnectionConfig struct {}
+
+var FfiConverterConnectionConfigINSTANCE = FfiConverterConnectionConfig{}
+
+func (c FfiConverterConnectionConfig) Lift(rb RustBufferI) ConnectionConfig {
+	return LiftFromRustBuffer[ConnectionConfig](c, rb)
+}
+
+func (c FfiConverterConnectionConfig) Read(reader io.Reader) ConnectionConfig {
+	return ConnectionConfig {
+			FfiConverterOptionalStringINSTANCE.Read(reader),
+			FfiConverterTypePublicKeyINSTANCE.Read(reader),
+			FfiConverterOptionalSequenceTypeIpNetINSTANCE.Read(reader),
+			FfiConverterOptionalTypeSocketAddrINSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterConnectionConfig) Lower(value ConnectionConfig) C.RustBuffer {
+	return LowerIntoRustBuffer[ConnectionConfig](c, value)
+}
+
+func (c FfiConverterConnectionConfig) Write(writer io.Writer, value ConnectionConfig) {
+		FfiConverterOptionalStringINSTANCE.Write(writer, value.Identifier);
+		FfiConverterTypePublicKeyINSTANCE.Write(writer, value.PublicKey);
+		FfiConverterOptionalSequenceTypeIpNetINSTANCE.Write(writer, value.AllowedIps);
+		FfiConverterOptionalTypeSocketAddrINSTANCE.Write(writer, value.Endpoint);
+		FfiConverterBoolINSTANCE.Write(writer, value.PostQuantum);
+}
+
+type FfiDestroyerConnectionConfig struct {}
+
+func (_ FfiDestroyerConnectionConfig) Destroy(value ConnectionConfig) {
 	value.Destroy()
 }
 
