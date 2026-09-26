@@ -599,6 +599,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_wg_nt_guid_rotation()
+	})
+	if checksum != 5760 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_featuresdefaultsbuilder_enable_wg_nt_guid_rotation: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_featuresdefaultsbuilder_set_inter_thread_channel_size()
 	})
 	if checksum != 13344 {
@@ -1467,6 +1476,8 @@ type FeaturesDefaultsBuilderInterface interface {
 	EnableNurse() *FeaturesDefaultsBuilder
 	// Enable key validation in set_config call with defaults
 	EnableValidateKeys() *FeaturesDefaultsBuilder
+	// Enable WireGuard-NT adapter GUID rotation on failed adapter creation
+	EnableWgNtGuidRotation() *FeaturesDefaultsBuilder
 	// Enable custom socket buffer sizes for NepTUN
 	SetInterThreadChannelSize(interThreadChannelSize uint32) *FeaturesDefaultsBuilder
 	// Enable custom socket buffer sizes for NepTUN
@@ -1629,6 +1640,16 @@ func (_self *FeaturesDefaultsBuilder) EnableValidateKeys() *FeaturesDefaultsBuil
 	defer _self.ffiObject.decrementPointer()
 	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
 		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_validate_keys(
+		_pointer,_uniffiStatus)
+	}))
+}
+
+// Enable WireGuard-NT adapter GUID rotation on failed adapter creation
+func (_self *FeaturesDefaultsBuilder) EnableWgNtGuidRotation() *FeaturesDefaultsBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*FeaturesDefaultsBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterFeaturesDefaultsBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_featuresdefaultsbuilder_enable_wg_nt_guid_rotation(
 		_pointer,_uniffiStatus)
 	}))
 }
@@ -4465,6 +4486,8 @@ type FeatureWireguard struct {
 	Polling FeaturePolling
 	// Configurable up/down behavior of WireGuard-NT adapter. See RFC LLT-0089 for details
 	EnableDynamicWgNtControl bool
+	// Retry failed adapter creation with a different GUID from a small fixed pool. Windows only.
+	EnableWgNtGuidRotation bool
 	// Configurable socket buffer size for NepTUN
 	SktBufferSize *uint32
 	// Configurable socket buffer size for NepTUN
@@ -4477,6 +4500,7 @@ func (r *FeatureWireguard) Destroy() {
 		FfiDestroyerFeaturePersistentKeepalive{}.Destroy(r.PersistentKeepalive);
 		FfiDestroyerFeaturePolling{}.Destroy(r.Polling);
 		FfiDestroyerBool{}.Destroy(r.EnableDynamicWgNtControl);
+		FfiDestroyerBool{}.Destroy(r.EnableWgNtGuidRotation);
 		FfiDestroyerOptionalUint32{}.Destroy(r.SktBufferSize);
 		FfiDestroyerOptionalUint32{}.Destroy(r.InterThreadChannelSize);
 		FfiDestroyerOptionalUint32{}.Destroy(r.MaxInterThreadBatchedPkts);
@@ -4495,6 +4519,7 @@ func (c FfiConverterFeatureWireguard) Read(reader io.Reader) FeatureWireguard {
 			FfiConverterFeaturePersistentKeepaliveINSTANCE.Read(reader),
 			FfiConverterFeaturePollingINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterOptionalUint32INSTANCE.Read(reader),
 			FfiConverterOptionalUint32INSTANCE.Read(reader),
 			FfiConverterOptionalUint32INSTANCE.Read(reader),
@@ -4509,6 +4534,7 @@ func (c FfiConverterFeatureWireguard) Write(writer io.Writer, value FeatureWireg
 		FfiConverterFeaturePersistentKeepaliveINSTANCE.Write(writer, value.PersistentKeepalive);
 		FfiConverterFeaturePollingINSTANCE.Write(writer, value.Polling);
 		FfiConverterBoolINSTANCE.Write(writer, value.EnableDynamicWgNtControl);
+		FfiConverterBoolINSTANCE.Write(writer, value.EnableWgNtGuidRotation);
 		FfiConverterOptionalUint32INSTANCE.Write(writer, value.SktBufferSize);
 		FfiConverterOptionalUint32INSTANCE.Write(writer, value.InterThreadChannelSize);
 		FfiConverterOptionalUint32INSTANCE.Write(writer, value.MaxInterThreadBatchedPkts);
