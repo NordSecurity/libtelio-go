@@ -842,6 +842,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_set_adapter_mtu()
+	})
+	if checksum != 13178 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_set_adapter_mtu: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_ext_if_filter()
 	})
 	if checksum != 8768 {
@@ -964,6 +973,15 @@ func uniffiCheckChecksums() {
 	if checksum != 19301 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_start_named_ext_if_filter: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_start_with_config()
+	})
+	if checksum != 48483 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_start_with_config: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -2018,6 +2036,12 @@ type TelioInterface interface {
 	// Notify telio when system wakes up.
 	NotifyWakeup() error
 	ReceivePing() (string, error)
+	// Set the MTU of the adapter interface, at least 1280. `None` restores the
+	// adapter's own MTU handling.
+	//
+	// Only supported by the Windows native adapter, other adapters fail with
+	// an unsupported-adapter error.
+	SetAdapterMtu(mtu *uint32) error
 	// Set filtered interfaces list on adapter
 	SetExtIfFilter(extIfFilter []string) error
 	// Sets fmark for started device.
@@ -2087,6 +2111,10 @@ type TelioInterface interface {
 	//
 	// Adapter will attempt to open its own tunnel.
 	StartNamedExtIfFilter(secretKey SecretKey, adapter TelioAdapterType, name string, extIfFilter []string) error
+	// Start telio with the specified adapter and the options in `config`.
+	//
+	// Adapter will attempt to open its own tunnel unless `config.tun` is set.
+	StartWithConfig(secretKey SecretKey, adapter TelioAdapterType, config StartConfig) error
 	// Start telio device with specified adapter and already open tunnel.
 	//
 	// Telio will take ownership of tunnel , and close it on stop.
@@ -2519,6 +2547,22 @@ func (_self *Telio) ReceivePing() (string, error) {
 		}
 }
 
+// Set the MTU of the adapter interface, at least 1280. `None` restores the
+// adapter's own MTU handling.
+//
+// Only supported by the Windows native adapter, other adapters fail with
+// an unsupported-adapter error.
+func (_self *Telio) SetAdapterMtu(mtu *uint32) error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_set_adapter_mtu(
+		_pointer,FfiConverterOptionalUint32INSTANCE.Lower(mtu),_uniffiStatus)
+		return false
+	})
+		return _uniffiErr.AsError()
+}
+
 // Set filtered interfaces list on adapter
 func (_self *Telio) SetExtIfFilter(extIfFilter []string) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
@@ -2723,6 +2767,20 @@ func (_self *Telio) StartNamedExtIfFilter(secretKey SecretKey, adapter TelioAdap
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_start_named_ext_if_filter(
 		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey), FfiConverterTelioAdapterTypeINSTANCE.Lower(adapter), FfiConverterStringINSTANCE.Lower(name), FfiConverterSequenceStringINSTANCE.Lower(extIfFilter),_uniffiStatus)
+		return false
+	})
+		return _uniffiErr.AsError()
+}
+
+// Start telio with the specified adapter and the options in `config`.
+//
+// Adapter will attempt to open its own tunnel unless `config.tun` is set.
+func (_self *Telio) StartWithConfig(secretKey SecretKey, adapter TelioAdapterType, config StartConfig) error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_start_with_config(
+		_pointer,FfiConverterTypeSecretKeyINSTANCE.Lower(secretKey), FfiConverterTelioAdapterTypeINSTANCE.Lower(adapter), FfiConverterStartConfigINSTANCE.Lower(config),_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()
@@ -4947,6 +5005,68 @@ func (_ FfiDestroyerServer) Destroy(value Server) {
 }
 
 
+// Optional settings for starting telio, consumed by [Telio::start_with_config].
+//
+// Every field defaults to "not set", so supporting a new option requires a
+// single additional field instead of an additional `start*` function.
+type StartConfig struct {
+	// Name of the tunnel interface opened by the adapter. When not set, telio
+	// picks a platform default.
+	Name *string
+	// Interfaces to skip while looking for the default interface.
+	ExtIfFilter *[]string
+	// MTU to set on the adapter interface, at least 1280. When not set, the
+	// adapter picks its own. Only supported by the Windows native adapter,
+	// starting any other adapter with it set fails.
+	Mtu *uint32
+	// File descriptor of an already open tunnel, which telio takes ownership
+	// of and closes on stop. When not set, the adapter opens its own tunnel.
+	// Ignored on Windows.
+	Tun *int32
+}
+
+func (r *StartConfig) Destroy() {
+		FfiDestroyerOptionalString{}.Destroy(r.Name);
+		FfiDestroyerOptionalSequenceString{}.Destroy(r.ExtIfFilter);
+		FfiDestroyerOptionalUint32{}.Destroy(r.Mtu);
+		FfiDestroyerOptionalInt32{}.Destroy(r.Tun);
+}
+
+type FfiConverterStartConfig struct {}
+
+var FfiConverterStartConfigINSTANCE = FfiConverterStartConfig{}
+
+func (c FfiConverterStartConfig) Lift(rb RustBufferI) StartConfig {
+	return LiftFromRustBuffer[StartConfig](c, rb)
+}
+
+func (c FfiConverterStartConfig) Read(reader io.Reader) StartConfig {
+	return StartConfig {
+			FfiConverterOptionalStringINSTANCE.Read(reader),
+			FfiConverterOptionalSequenceStringINSTANCE.Read(reader),
+			FfiConverterOptionalUint32INSTANCE.Read(reader),
+			FfiConverterOptionalInt32INSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterStartConfig) Lower(value StartConfig) C.RustBuffer {
+	return LowerIntoRustBuffer[StartConfig](c, value)
+}
+
+func (c FfiConverterStartConfig) Write(writer io.Writer, value StartConfig) {
+		FfiConverterOptionalStringINSTANCE.Write(writer, value.Name);
+		FfiConverterOptionalSequenceStringINSTANCE.Write(writer, value.ExtIfFilter);
+		FfiConverterOptionalUint32INSTANCE.Write(writer, value.Mtu);
+		FfiConverterOptionalInt32INSTANCE.Write(writer, value.Tun);
+}
+
+type FfiDestroyerStartConfig struct {}
+
+func (_ FfiDestroyerStartConfig) Destroy(value StartConfig) {
+	value.Destroy()
+}
+
+
 // Description of a Node
 type TelioNode struct {
 	// An identifier for a node
@@ -6793,6 +6913,45 @@ func (_ FfiDestroyerOptionalUint32) Destroy(value *uint32) {
 
 
 
+type FfiConverterOptionalInt32 struct{}
+
+var FfiConverterOptionalInt32INSTANCE = FfiConverterOptionalInt32{}
+
+func (c FfiConverterOptionalInt32) Lift(rb RustBufferI) *int32 {
+	return LiftFromRustBuffer[*int32](c, rb)
+}
+
+func (_ FfiConverterOptionalInt32) Read(reader io.Reader) *int32 {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterInt32INSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalInt32) Lower(value *int32) C.RustBuffer {
+	return LowerIntoRustBuffer[*int32](c, value)
+}
+
+func (_ FfiConverterOptionalInt32) Write(writer io.Writer, value *int32) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterInt32INSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalInt32 struct {}
+
+func (_ FfiDestroyerOptionalInt32) Destroy(value *int32) {
+	if value != nil {
+		FfiDestroyerInt32{}.Destroy(*value)
+	}
+}
+
+
+
 type FfiConverterOptionalUint64 struct{}
 
 var FfiConverterOptionalUint64INSTANCE = FfiConverterOptionalUint64{}
@@ -7646,6 +7805,45 @@ type FfiDestroyerOptionalVpnConnectionError struct {}
 func (_ FfiDestroyerOptionalVpnConnectionError) Destroy(value *VpnConnectionError) {
 	if value != nil {
 		FfiDestroyerVpnConnectionError{}.Destroy(*value)
+	}
+}
+
+
+
+type FfiConverterOptionalSequenceString struct{}
+
+var FfiConverterOptionalSequenceStringINSTANCE = FfiConverterOptionalSequenceString{}
+
+func (c FfiConverterOptionalSequenceString) Lift(rb RustBufferI) *[]string {
+	return LiftFromRustBuffer[*[]string](c, rb)
+}
+
+func (_ FfiConverterOptionalSequenceString) Read(reader io.Reader) *[]string {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterSequenceStringINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalSequenceString) Lower(value *[]string) C.RustBuffer {
+	return LowerIntoRustBuffer[*[]string](c, value)
+}
+
+func (_ FfiConverterOptionalSequenceString) Write(writer io.Writer, value *[]string) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterSequenceStringINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalSequenceString struct {}
+
+func (_ FfiDestroyerOptionalSequenceString) Destroy(value *[]string) {
+	if value != nil {
+		FfiDestroyerSequenceString{}.Destroy(*value)
 	}
 }
 
