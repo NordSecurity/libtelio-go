@@ -446,6 +446,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_func_parse_ciphers()
+	})
+	if checksum != 5865 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_func_parse_ciphers: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_func_serialize_feature_config()
 	})
 	if checksum != 64562 {
@@ -1072,6 +1081,15 @@ func uniffiCheckChecksums() {
 	if checksum != 63405 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_vpnconnectionconfigbuilder_with_allowed_ips: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_vpnconnectionconfigbuilder_with_ciphers()
+	})
+	if checksum != 29456 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_vpnconnectionconfigbuilder_with_ciphers: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -3154,6 +3172,9 @@ type VpnConnectionConfigBuilderInterface interface {
 	// Set the subnets routed through the exit node.
 	// If not called, defaults to "0.0.0.0/0" (all traffic).
 	WithAllowedIps(allowedIps []IpNet) *VpnConnectionConfigBuilder
+	// Set the supported ciphers for VPN connection (NepTUN only).
+	// The order of ciphers does not matter for preference negotiation.
+	WithCiphers(ciphers []Cipher) *VpnConnectionConfigBuilder
 	// Set a stable string identifier for the exit node.
 	// If not called, a random UUID is generated at connect time.
 	WithIdentifier(identifier string) *VpnConnectionConfigBuilder
@@ -3215,6 +3236,17 @@ func (_self *VpnConnectionConfigBuilder) WithAllowedIps(allowedIps []IpNet) *Vpn
 	return FfiConverterVpnConnectionConfigBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
 		return C.uniffi_telio_fn_method_vpnconnectionconfigbuilder_with_allowed_ips(
 		_pointer,FfiConverterSequenceTypeIpNetINSTANCE.Lower(allowedIps),_uniffiStatus)
+	}))
+}
+
+// Set the supported ciphers for VPN connection (NepTUN only).
+// The order of ciphers does not matter for preference negotiation.
+func (_self *VpnConnectionConfigBuilder) WithCiphers(ciphers []Cipher) *VpnConnectionConfigBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*VpnConnectionConfigBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterVpnConnectionConfigBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_vpnconnectionconfigbuilder_with_ciphers(
+		_pointer,FfiConverterSequenceCipherINSTANCE.Lower(ciphers),_uniffiStatus)
 	}))
 }
 
@@ -3450,6 +3482,8 @@ type ConnectionConfig struct {
 	Endpoint *SocketAddr
 	// When true, a post-quantum tunnel is established (VPN connections only).
 	PostQuantum bool
+	// Ciphers supported by the VPN server (NepTUN only). Null for meshnet.
+	SupportedCiphers *[]Cipher
 }
 
 func (r *ConnectionConfig) Destroy() {
@@ -3458,6 +3492,7 @@ func (r *ConnectionConfig) Destroy() {
 		FfiDestroyerOptionalSequenceTypeIpNet{}.Destroy(r.AllowedIps);
 		FfiDestroyerOptionalTypeSocketAddr{}.Destroy(r.Endpoint);
 		FfiDestroyerBool{}.Destroy(r.PostQuantum);
+		FfiDestroyerOptionalSequenceCipher{}.Destroy(r.SupportedCiphers);
 }
 
 type FfiConverterConnectionConfig struct {}
@@ -3475,6 +3510,7 @@ func (c FfiConverterConnectionConfig) Read(reader io.Reader) ConnectionConfig {
 			FfiConverterOptionalSequenceTypeIpNetINSTANCE.Read(reader),
 			FfiConverterOptionalTypeSocketAddrINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterOptionalSequenceCipherINSTANCE.Read(reader),
 	}
 }
 
@@ -3488,6 +3524,7 @@ func (c FfiConverterConnectionConfig) Write(writer io.Writer, value ConnectionCo
 		FfiConverterOptionalSequenceTypeIpNetINSTANCE.Write(writer, value.AllowedIps);
 		FfiConverterOptionalTypeSocketAddrINSTANCE.Write(writer, value.Endpoint);
 		FfiConverterBoolINSTANCE.Write(writer, value.PostQuantum);
+		FfiConverterOptionalSequenceCipherINSTANCE.Write(writer, value.SupportedCiphers);
 }
 
 type FfiDestroyerConnectionConfig struct {}
@@ -5108,6 +5145,10 @@ type TelioNode struct {
 	PeerAllowsMulticast bool
 	// Configuration for the Error Notification Service
 	VpnConnectionError *VpnConnectionError
+	// Cipher selected by NepTUN for this VPN connection.
+	// Only set for VPN (exit-node) connections when NepTUN is the WireGuard adapter.
+	// `null` for meshnet peers or non-NepTUN adapters.
+	SelectedCipher *Cipher
 }
 
 func (r *TelioNode) Destroy() {
@@ -5130,6 +5171,7 @@ func (r *TelioNode) Destroy() {
 		FfiDestroyerBool{}.Destroy(r.AllowMulticast);
 		FfiDestroyerBool{}.Destroy(r.PeerAllowsMulticast);
 		FfiDestroyerOptionalVpnConnectionError{}.Destroy(r.VpnConnectionError);
+		FfiDestroyerOptionalCipher{}.Destroy(r.SelectedCipher);
 }
 
 type FfiConverterTelioNode struct {}
@@ -5161,6 +5203,7 @@ func (c FfiConverterTelioNode) Read(reader io.Reader) TelioNode {
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterOptionalVpnConnectionErrorINSTANCE.Read(reader),
+			FfiConverterOptionalCipherINSTANCE.Read(reader),
 	}
 }
 
@@ -5188,6 +5231,7 @@ func (c FfiConverterTelioNode) Write(writer io.Writer, value TelioNode) {
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowMulticast);
 		FfiConverterBoolINSTANCE.Write(writer, value.PeerAllowsMulticast);
 		FfiConverterOptionalVpnConnectionErrorINSTANCE.Write(writer, value.VpnConnectionError);
+		FfiConverterOptionalCipherINSTANCE.Write(writer, value.SelectedCipher);
 }
 
 type FfiDestroyerTelioNode struct {}
@@ -5493,6 +5537,48 @@ type FfiDestroyerWgResponse struct {}
 func (_ FfiDestroyerWgResponse) Destroy(value WgResponse) {
 	value.Destroy()
 }
+
+
+
+// AEAD supported cipher suites.
+type Cipher uint
+
+const (
+	// ChaCha20-Poly1305 – the WireGuard default, always supported.
+	CipherChacha20Poly1305 Cipher = 1
+	// AEGIS-256 with a 256-bit tag.
+	CipherAegis256 Cipher = 2
+	// AEGIS-256 with two parallel instances.
+	CipherAegis256x2 Cipher = 3
+	// AEGIS-256 with four parallel instances.
+	CipherAegis256x4 Cipher = 4
+)
+
+type FfiConverterCipher struct {}
+
+var FfiConverterCipherINSTANCE = FfiConverterCipher{}
+
+func (c FfiConverterCipher) Lift(rb RustBufferI) Cipher {
+	return LiftFromRustBuffer[Cipher](c, rb)
+}
+
+func (c FfiConverterCipher) Lower(value Cipher) C.RustBuffer {
+	return LowerIntoRustBuffer[Cipher](c, value)
+}
+func (FfiConverterCipher) Read(reader io.Reader) Cipher {
+	id := readInt32(reader)
+	return Cipher(id)
+}
+
+func (FfiConverterCipher) Write(writer io.Writer, value Cipher) {
+	writeInt32(writer, int32(value))
+}
+
+type FfiDestroyerCipher struct {}
+
+func (_ FfiDestroyerCipher) Destroy(value Cipher) {
+}
+
 
 
 
@@ -7693,6 +7779,45 @@ func (_ FfiDestroyerOptionalWgInterface) Destroy(value *WgInterface) {
 
 
 
+type FfiConverterOptionalCipher struct{}
+
+var FfiConverterOptionalCipherINSTANCE = FfiConverterOptionalCipher{}
+
+func (c FfiConverterOptionalCipher) Lift(rb RustBufferI) *Cipher {
+	return LiftFromRustBuffer[*Cipher](c, rb)
+}
+
+func (_ FfiConverterOptionalCipher) Read(reader io.Reader) *Cipher {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterCipherINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalCipher) Lower(value *Cipher) C.RustBuffer {
+	return LowerIntoRustBuffer[*Cipher](c, value)
+}
+
+func (_ FfiConverterOptionalCipher) Write(writer io.Writer, value *Cipher) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterCipherINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalCipher struct {}
+
+func (_ FfiDestroyerOptionalCipher) Destroy(value *Cipher) {
+	if value != nil {
+		FfiDestroyerCipher{}.Destroy(*value)
+	}
+}
+
+
+
 type FfiConverterOptionalLinkState struct{}
 
 var FfiConverterOptionalLinkStateINSTANCE = FfiConverterOptionalLinkState{}
@@ -7922,6 +8047,45 @@ type FfiDestroyerOptionalSequenceServer struct {}
 func (_ FfiDestroyerOptionalSequenceServer) Destroy(value *[]Server) {
 	if value != nil {
 		FfiDestroyerSequenceServer{}.Destroy(*value)
+	}
+}
+
+
+
+type FfiConverterOptionalSequenceCipher struct{}
+
+var FfiConverterOptionalSequenceCipherINSTANCE = FfiConverterOptionalSequenceCipher{}
+
+func (c FfiConverterOptionalSequenceCipher) Lift(rb RustBufferI) *[]Cipher {
+	return LiftFromRustBuffer[*[]Cipher](c, rb)
+}
+
+func (_ FfiConverterOptionalSequenceCipher) Read(reader io.Reader) *[]Cipher {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterSequenceCipherINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalSequenceCipher) Lower(value *[]Cipher) C.RustBuffer {
+	return LowerIntoRustBuffer[*[]Cipher](c, value)
+}
+
+func (_ FfiConverterOptionalSequenceCipher) Write(writer io.Writer, value *[]Cipher) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterSequenceCipherINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalSequenceCipher struct {}
+
+func (_ FfiDestroyerOptionalSequenceCipher) Destroy(value *[]Cipher) {
+	if value != nil {
+		FfiDestroyerSequenceCipher{}.Destroy(*value)
 	}
 }
 
@@ -8521,6 +8685,51 @@ func (FfiDestroyerSequenceWgPeer) Destroy(sequence []WgPeer) {
 
 
 
+type FfiConverterSequenceCipher struct{}
+
+var FfiConverterSequenceCipherINSTANCE = FfiConverterSequenceCipher{}
+
+func (c FfiConverterSequenceCipher) Lift(rb RustBufferI) []Cipher {
+	return LiftFromRustBuffer[[]Cipher](c, rb)
+}
+
+func (c FfiConverterSequenceCipher) Read(reader io.Reader) []Cipher {
+	length := readInt32(reader)
+	if length == 0 {
+		return nil
+	}
+	result := make([]Cipher, 0, length)
+	for i := int32(0); i < length; i++ {
+		result = append(result, FfiConverterCipherINSTANCE.Read(reader))
+	}
+	return result
+}
+
+func (c FfiConverterSequenceCipher) Lower(value []Cipher) C.RustBuffer {
+	return LowerIntoRustBuffer[[]Cipher](c, value)
+}
+
+func (c FfiConverterSequenceCipher) Write(writer io.Writer, value []Cipher) {
+	if len(value) > math.MaxInt32 {
+		panic("[]Cipher is too large to fit into Int32")
+	}
+
+	writeInt32(writer, int32(len(value)))
+	for _, item := range value {
+		FfiConverterCipherINSTANCE.Write(writer, item)
+	}
+}
+
+type FfiDestroyerSequenceCipher struct {}
+
+func (FfiDestroyerSequenceCipher) Destroy(sequence []Cipher) {
+	for _, value := range sequence {
+		FfiDestroyerCipher{}.Destroy(value)	
+	}
+}
+
+
+
 type FfiConverterSequenceEndpointProvider struct{}
 
 var FfiConverterSequenceEndpointProviderINSTANCE = FfiConverterSequenceEndpointProvider{}
@@ -9011,6 +9220,21 @@ func GetVersionTag() string {
 	return FfiConverterStringINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
 		return GoRustBuffer {
 		inner: C.uniffi_telio_fn_func_get_version_tag(_uniffiStatus),
+	}
+	}))
+}
+
+// Parse a comma-separated list of cipher names into a sequence of known [`Cipher`] values.
+//
+// Unknown cipher names are ignored. Duplicate cipher names are
+// silently deduplicated. Parser is case-sensitive.
+//
+// Example input:  "chacha20poly1305, aegis256, unknown"
+// Example output: [Cipher.Chacha20Poly1305, Cipher.Aegis256]
+func ParseCiphers(ciphers string) []Cipher {
+	return FfiConverterSequenceCipherINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
+		return GoRustBuffer {
+		inner: C.uniffi_telio_fn_func_parse_ciphers(FfiConverterStringINSTANCE.Lower(ciphers),_uniffiStatus),
 	}
 	}))
 }

@@ -934,6 +934,11 @@ void* uniffi_telio_fn_method_vpnconnectionconfigbuilder_force_pq(void* ptr, Rust
 void* uniffi_telio_fn_method_vpnconnectionconfigbuilder_with_allowed_ips(void* ptr, RustBuffer allowed_ips, RustCallStatus *out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_VPNCONNECTIONCONFIGBUILDER_WITH_CIPHERS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_VPNCONNECTIONCONFIGBUILDER_WITH_CIPHERS
+void* uniffi_telio_fn_method_vpnconnectionconfigbuilder_with_ciphers(void* ptr, RustBuffer ciphers, RustCallStatus *out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_VPNCONNECTIONCONFIGBUILDER_WITH_IDENTIFIER
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_VPNCONNECTIONCONFIGBUILDER_WITH_IDENTIFIER
 void* uniffi_telio_fn_method_vpnconnectionconfigbuilder_with_identifier(void* ptr, RustBuffer identifier, RustCallStatus *out_status
@@ -1008,6 +1013,11 @@ RustBuffer uniffi_telio_fn_func_get_default_feature_config(RustCallStatus *out_s
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_GET_VERSION_TAG
 RustBuffer uniffi_telio_fn_func_get_version_tag(RustCallStatus *out_status
     
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_PARSE_CIPHERS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_PARSE_CIPHERS
+RustBuffer uniffi_telio_fn_func_parse_ciphers(RustBuffer ciphers, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FUNC_SERIALIZE_FEATURE_CONFIG
@@ -1357,6 +1367,12 @@ uint16_t uniffi_telio_checksum_func_get_default_feature_config(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GET_VERSION_TAG
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_GET_VERSION_TAG
 uint16_t uniffi_telio_checksum_func_get_version_tag(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_PARSE_CIPHERS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_FUNC_PARSE_CIPHERS
+uint16_t uniffi_telio_checksum_func_parse_ciphers(void
     
 );
 #endif
@@ -1777,6 +1793,12 @@ uint16_t uniffi_telio_checksum_method_vpnconnectionconfigbuilder_force_pq(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_VPNCONNECTIONCONFIGBUILDER_WITH_ALLOWED_IPS
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_VPNCONNECTIONCONFIGBUILDER_WITH_ALLOWED_IPS
 uint16_t uniffi_telio_checksum_method_vpnconnectionconfigbuilder_with_allowed_ips(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_VPNCONNECTIONCONFIGBUILDER_WITH_CIPHERS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_VPNCONNECTIONCONFIGBUILDER_WITH_CIPHERS
+uint16_t uniffi_telio_checksum_method_vpnconnectionconfigbuilder_with_ciphers(void
     
 );
 #endif
