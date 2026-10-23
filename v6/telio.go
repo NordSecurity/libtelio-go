@@ -2831,6 +2831,20 @@ type FeatureErrorNotificationService struct {
 	// DER encoded root certificate to be used for verification of all TLS connections
 	// to gRPC ENS endpoint in place of the hardcoded one
 	RootCertificateOverride *[]byte
+	// Interval between the keep alive messages sent over the ENS connection, in seconds.
+	// When the underlying tcp connection stops working, the dead connection will be
+	// detected after at most keepalive_interval_s + keepalive_timeout_s seconds and
+	// a new connection will be created after the ENS backoff elapses.
+	// When set to null, the keep alives are disabled.
+	// Setting it to 0 is an error.
+	// [default 120s]
+	KeepaliveIntervalS *uint32
+	// How long to wait for a response to a keep alive message before considering the ENS
+	// connection dead, in seconds. Only used when keepalive_interval_s is set.
+	// When set to null, the underlying http client default is used
+	// Setting it to 0 is an error.
+	// [default 20s]
+	KeepaliveTimeoutS *uint32
 }
 
 func (r *FeatureErrorNotificationService) Destroy() {
@@ -2838,6 +2852,8 @@ func (r *FeatureErrorNotificationService) Destroy() {
 		FfiDestroyerBool{}.Destroy(r.AllowOnlyPq);
 		FfiDestroyerBackoff{}.Destroy(r.Backoff);
 		FfiDestroyerOptionalBytes{}.Destroy(r.RootCertificateOverride);
+		FfiDestroyerOptionalUint32{}.Destroy(r.KeepaliveIntervalS);
+		FfiDestroyerOptionalUint32{}.Destroy(r.KeepaliveTimeoutS);
 }
 
 type FfiConverterFeatureErrorNotificationService struct {}
@@ -2854,6 +2870,8 @@ func (c FfiConverterFeatureErrorNotificationService) Read(reader io.Reader) Feat
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBackoffINSTANCE.Read(reader),
 			FfiConverterOptionalBytesINSTANCE.Read(reader),
+			FfiConverterOptionalUint32INSTANCE.Read(reader),
+			FfiConverterOptionalUint32INSTANCE.Read(reader),
 	}
 }
 
@@ -2866,6 +2884,8 @@ func (c FfiConverterFeatureErrorNotificationService) Write(writer io.Writer, val
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowOnlyPq);
 		FfiConverterBackoffINSTANCE.Write(writer, value.Backoff);
 		FfiConverterOptionalBytesINSTANCE.Write(writer, value.RootCertificateOverride);
+		FfiConverterOptionalUint32INSTANCE.Write(writer, value.KeepaliveIntervalS);
+		FfiConverterOptionalUint32INSTANCE.Write(writer, value.KeepaliveTimeoutS);
 }
 
 type FfiDestroyerFeatureErrorNotificationService struct {}
