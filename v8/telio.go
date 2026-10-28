@@ -1094,6 +1094,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_vpnconnectionconfigbuilder_with_custom_pq_upgrader_ip()
+	})
+	if checksum != 46223 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_vpnconnectionconfigbuilder_with_custom_pq_upgrader_ip: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_vpnconnectionconfigbuilder_with_identifier()
 	})
 	if checksum != 17707 {
@@ -3175,6 +3184,9 @@ type VpnConnectionConfigBuilderInterface interface {
 	// Set the supported ciphers for VPN connection (NepTUN only).
 	// The order of ciphers does not matter for preference negotiation.
 	WithCiphers(ciphers []Cipher) *VpnConnectionConfigBuilder
+	// Override the default PQ Upgrader IP (10.5.0.1) used for post-quantum key exchange.
+	// Has no effect unless post-quantum is enabled via force_pq().
+	WithCustomPqUpgraderIp(ip Ipv4Addr) *VpnConnectionConfigBuilder
 	// Set a stable string identifier for the exit node.
 	// If not called, a random UUID is generated at connect time.
 	WithIdentifier(identifier string) *VpnConnectionConfigBuilder
@@ -3247,6 +3259,17 @@ func (_self *VpnConnectionConfigBuilder) WithCiphers(ciphers []Cipher) *VpnConne
 	return FfiConverterVpnConnectionConfigBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
 		return C.uniffi_telio_fn_method_vpnconnectionconfigbuilder_with_ciphers(
 		_pointer,FfiConverterSequenceCipherINSTANCE.Lower(ciphers),_uniffiStatus)
+	}))
+}
+
+// Override the default PQ Upgrader IP (10.5.0.1) used for post-quantum key exchange.
+// Has no effect unless post-quantum is enabled via force_pq().
+func (_self *VpnConnectionConfigBuilder) WithCustomPqUpgraderIp(ip Ipv4Addr) *VpnConnectionConfigBuilder {
+	_pointer := _self.ffiObject.incrementPointer("*VpnConnectionConfigBuilder")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterVpnConnectionConfigBuilderINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_vpnconnectionconfigbuilder_with_custom_pq_upgrader_ip(
+		_pointer,FfiConverterTypeIpv4AddrINSTANCE.Lower(ip),_uniffiStatus)
 	}))
 }
 
@@ -3484,6 +3507,10 @@ type ConnectionConfig struct {
 	PostQuantum bool
 	// Ciphers supported by the VPN server (NepTUN only). Null for meshnet.
 	SupportedCiphers *[]Cipher
+	// Override the default PQ upgrader IP used for post-quantum key exchange.
+	// When null, the default 10.5.0.1 is used.
+	// Only meaningful for VPN connections with post-quantum enabled.
+	PqUpgraderIp *Ipv4Addr
 }
 
 func (r *ConnectionConfig) Destroy() {
@@ -3493,6 +3520,7 @@ func (r *ConnectionConfig) Destroy() {
 		FfiDestroyerOptionalTypeSocketAddr{}.Destroy(r.Endpoint);
 		FfiDestroyerBool{}.Destroy(r.PostQuantum);
 		FfiDestroyerOptionalSequenceCipher{}.Destroy(r.SupportedCiphers);
+		FfiDestroyerOptionalTypeIpv4Addr{}.Destroy(r.PqUpgraderIp);
 }
 
 type FfiConverterConnectionConfig struct {}
@@ -3511,6 +3539,7 @@ func (c FfiConverterConnectionConfig) Read(reader io.Reader) ConnectionConfig {
 			FfiConverterOptionalTypeSocketAddrINSTANCE.Read(reader),
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterOptionalSequenceCipherINSTANCE.Read(reader),
+			FfiConverterOptionalTypeIpv4AddrINSTANCE.Read(reader),
 	}
 }
 
@@ -3525,6 +3554,7 @@ func (c FfiConverterConnectionConfig) Write(writer io.Writer, value ConnectionCo
 		FfiConverterOptionalTypeSocketAddrINSTANCE.Write(writer, value.Endpoint);
 		FfiConverterBoolINSTANCE.Write(writer, value.PostQuantum);
 		FfiConverterOptionalSequenceCipherINSTANCE.Write(writer, value.SupportedCiphers);
+		FfiConverterOptionalTypeIpv4AddrINSTANCE.Write(writer, value.PqUpgraderIp);
 }
 
 type FfiDestroyerConnectionConfig struct {}
@@ -8242,6 +8272,45 @@ type FfiDestroyerOptionalTypeHiddenString struct {}
 func (_ FfiDestroyerOptionalTypeHiddenString) Destroy(value *HiddenString) {
 	if value != nil {
 		FfiDestroyerTypeHiddenString{}.Destroy(*value)
+	}
+}
+
+
+
+type FfiConverterOptionalTypeIpv4Addr struct{}
+
+var FfiConverterOptionalTypeIpv4AddrINSTANCE = FfiConverterOptionalTypeIpv4Addr{}
+
+func (c FfiConverterOptionalTypeIpv4Addr) Lift(rb RustBufferI) *Ipv4Addr {
+	return LiftFromRustBuffer[*Ipv4Addr](c, rb)
+}
+
+func (_ FfiConverterOptionalTypeIpv4Addr) Read(reader io.Reader) *Ipv4Addr {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterTypeIpv4AddrINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalTypeIpv4Addr) Lower(value *Ipv4Addr) C.RustBuffer {
+	return LowerIntoRustBuffer[*Ipv4Addr](c, value)
+}
+
+func (_ FfiConverterOptionalTypeIpv4Addr) Write(writer io.Writer, value *Ipv4Addr) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterTypeIpv4AddrINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalTypeIpv4Addr struct {}
+
+func (_ FfiDestroyerOptionalTypeIpv4Addr) Destroy(value *Ipv4Addr) {
+	if value != nil {
+		FfiDestroyerTypeIpv4Addr{}.Destroy(*value)
 	}
 }
 
