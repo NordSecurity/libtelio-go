@@ -860,6 +860,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_set_tunnel_src_ip()
+	})
+	if checksum != 65092 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_set_tunnel_src_ip: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_shutdown()
 	})
 	if checksum != 25927 {
@@ -1780,6 +1789,14 @@ type TelioInterface interface {
 	// - `tun`: the file descriptor of the TUN interface
 
 	SetTun(tun int32) error
+	// Set the source IP address(es) currently configured on the tunnel
+	// interface. When set, the firewall rejects outbound packets whose source
+	// IP is not one of these.
+	//
+	// # Parameters
+	// - `src_ips`: tunnel interface source IPs, empty to disable.
+
+	SetTunnelSrcIp(srcIps []IpAddr) error
 	// Completely stop and uninit telio lib.
 	Shutdown() error
 	// Explicitly deallocate telio object and shutdown async rt.
@@ -2279,6 +2296,24 @@ func (_self *Telio) SetTun(tun int32) error {
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_set_tun(
 		_pointer,FfiConverterInt32INSTANCE.Lower(tun),_uniffiStatus)
+		return false
+	})
+		return _uniffiErr.AsError()
+}
+
+// Set the source IP address(es) currently configured on the tunnel
+// interface. When set, the firewall rejects outbound packets whose source
+// IP is not one of these.
+//
+// # Parameters
+// - `src_ips`: tunnel interface source IPs, empty to disable.
+
+func (_self *Telio) SetTunnelSrcIp(srcIps []IpAddr) error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_set_tunnel_src_ip(
+		_pointer,FfiConverterSequenceTypeIpAddrINSTANCE.Lower(srcIps),_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()
@@ -3218,6 +3253,20 @@ type FeatureErrorNotificationService struct {
 	// DER encoded root certificate to be used for verification of all TLS connections
 	// to gRPC ENS endpoint in place of the hardcoded one
 	RootCertificateOverride *[]byte
+	// Interval between the keep alive messages sent over the ENS connection, in seconds.
+	// When the underlying tcp connection stops working, the dead connection will be
+	// detected after at most keepalive_interval_s + keepalive_timeout_s seconds and
+	// a new connection will be created after the ENS backoff elapses.
+	// When set to null, the keep alives are disabled.
+	// Setting it to 0 is an error.
+	// [default 120s]
+	KeepaliveIntervalS *uint32
+	// How long to wait for a response to a keep alive message before considering the ENS
+	// connection dead, in seconds. Only used when keepalive_interval_s is set.
+	// When set to null, the underlying http client default is used
+	// Setting it to 0 is an error.
+	// [default 20s]
+	KeepaliveTimeoutS *uint32
 }
 
 func (r *FeatureErrorNotificationService) Destroy() {
@@ -3225,6 +3274,8 @@ func (r *FeatureErrorNotificationService) Destroy() {
 		FfiDestroyerBool{}.Destroy(r.AllowOnlyPq);
 		FfiDestroyerBackoff{}.Destroy(r.Backoff);
 		FfiDestroyerOptionalBytes{}.Destroy(r.RootCertificateOverride);
+		FfiDestroyerOptionalUint32{}.Destroy(r.KeepaliveIntervalS);
+		FfiDestroyerOptionalUint32{}.Destroy(r.KeepaliveTimeoutS);
 }
 
 type FfiConverterFeatureErrorNotificationService struct {}
@@ -3241,6 +3292,8 @@ func (c FfiConverterFeatureErrorNotificationService) Read(reader io.Reader) Feat
 			FfiConverterBoolINSTANCE.Read(reader),
 			FfiConverterBackoffINSTANCE.Read(reader),
 			FfiConverterOptionalBytesINSTANCE.Read(reader),
+			FfiConverterOptionalUint32INSTANCE.Read(reader),
+			FfiConverterOptionalUint32INSTANCE.Read(reader),
 	}
 }
 
@@ -3253,6 +3306,8 @@ func (c FfiConverterFeatureErrorNotificationService) Write(writer io.Writer, val
 		FfiConverterBoolINSTANCE.Write(writer, value.AllowOnlyPq);
 		FfiConverterBackoffINSTANCE.Write(writer, value.Backoff);
 		FfiConverterOptionalBytesINSTANCE.Write(writer, value.RootCertificateOverride);
+		FfiConverterOptionalUint32INSTANCE.Write(writer, value.KeepaliveIntervalS);
+		FfiConverterOptionalUint32INSTANCE.Write(writer, value.KeepaliveTimeoutS);
 }
 
 type FfiDestroyerFeatureErrorNotificationService struct {}
