@@ -518,6 +518,21 @@ typedef struct UniffiVTableCallbackInterfaceTelioCustomAdapter {
 } UniffiVTableCallbackInterfaceTelioCustomAdapter;
 
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_BACKTRACE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_BACKTRACE
+void* uniffi_telio_fn_clone_backtrace(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_BACKTRACE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_BACKTRACE
+void uniffi_telio_fn_free_backtrace(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_BACKTRACE_FUNCTIONS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_BACKTRACE_FUNCTIONS
+RustBuffer uniffi_telio_fn_method_backtrace_functions(void* ptr, RustCallStatus *out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_FEATURESDEFAULTSBUILDER
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_FEATURESDEFAULTSBUILDER
 void* uniffi_telio_fn_clone_featuresdefaultsbuilder(void* ptr, RustCallStatus *out_status
@@ -622,6 +637,46 @@ void* uniffi_telio_fn_method_featuresdefaultsbuilder_set_max_inter_thread_batche
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_SET_SKT_BUFFER_SIZE
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_FEATURESDEFAULTSBUILDER_SET_SKT_BUFFER_SIZE
 void* uniffi_telio_fn_method_featuresdefaultsbuilder_set_skt_buffer_size(void* ptr, uint32_t skt_buffer_size, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_LOCATION
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_LOCATION
+void* uniffi_telio_fn_clone_location(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_LOCATION
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_LOCATION
+void uniffi_telio_fn_free_location(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_LOCATION_ADDRESS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_LOCATION_ADDRESS
+RustBuffer uniffi_telio_fn_method_location_address(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_LOCATION_FILE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_LOCATION_FILE
+RustBuffer uniffi_telio_fn_method_location_file(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_LOCATION_LINE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_LOCATION_LINE
+RustBuffer uniffi_telio_fn_method_location_line(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_LOCATION_MODULE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_LOCATION_MODULE
+RustBuffer uniffi_telio_fn_method_location_module(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_LOCATION_MODULE_ID
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_LOCATION_MODULE_ID
+RustBuffer uniffi_telio_fn_method_location_module_id(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_LOCATION_NAME
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_LOCATION_NAME
+RustBuffer uniffi_telio_fn_method_location_name(void* ptr, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_MESHNETCONNECTIONCONFIGBUILDER
@@ -902,6 +957,36 @@ void uniffi_telio_fn_method_teliocustomadapter_start(void* ptr, RustCallStatus *
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOCUSTOMADAPTER_STOP
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOCUSTOMADAPTER_STOP
 void uniffi_telio_fn_method_teliocustomadapter_stop(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_TELIOERROR
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_TELIOERROR
+void* uniffi_telio_fn_clone_telioerror(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_TELIOERROR
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_TELIOERROR
+void uniffi_telio_fn_free_telioerror(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOERROR_BACKTRACE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOERROR_BACKTRACE
+void* uniffi_telio_fn_method_telioerror_backtrace(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOERROR_VARIANT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOERROR_VARIANT
+RustBuffer uniffi_telio_fn_method_telioerror_variant(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOERROR_UNIFFI_TRAIT_DEBUG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOERROR_UNIFFI_TRAIT_DEBUG
+RustBuffer uniffi_telio_fn_method_telioerror_uniffi_trait_debug(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOERROR_UNIFFI_TRAIT_DISPLAY
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIOERROR_UNIFFI_TRAIT_DISPLAY
+RustBuffer uniffi_telio_fn_method_telioerror_uniffi_trait_display(void* ptr, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_VPNCONNECTIONCONFIGBUILDER
@@ -1399,6 +1484,12 @@ uint16_t uniffi_telio_checksum_func_unset_global_logger(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_BACKTRACE_FUNCTIONS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_BACKTRACE_FUNCTIONS
+uint16_t uniffi_telio_checksum_method_backtrace_functions(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_BUILD
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_BUILD
 uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_build(void
@@ -1504,6 +1595,42 @@ uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_set_max_inter_thre
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_SET_SKT_BUFFER_SIZE
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_FEATURESDEFAULTSBUILDER_SET_SKT_BUFFER_SIZE
 uint16_t uniffi_telio_checksum_method_featuresdefaultsbuilder_set_skt_buffer_size(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_LOCATION_ADDRESS
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_LOCATION_ADDRESS
+uint16_t uniffi_telio_checksum_method_location_address(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_LOCATION_FILE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_LOCATION_FILE
+uint16_t uniffi_telio_checksum_method_location_file(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_LOCATION_LINE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_LOCATION_LINE
+uint16_t uniffi_telio_checksum_method_location_line(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_LOCATION_MODULE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_LOCATION_MODULE
+uint16_t uniffi_telio_checksum_method_location_module(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_LOCATION_MODULE_ID
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_LOCATION_MODULE_ID
+uint16_t uniffi_telio_checksum_method_location_module_id(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_LOCATION_NAME
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_LOCATION_NAME
+uint16_t uniffi_telio_checksum_method_location_name(void
     
 );
 #endif
@@ -1780,6 +1907,18 @@ uint16_t uniffi_telio_checksum_method_teliocustomadapter_start(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOCUSTOMADAPTER_STOP
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOCUSTOMADAPTER_STOP
 uint16_t uniffi_telio_checksum_method_teliocustomadapter_stop(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOERROR_BACKTRACE
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOERROR_BACKTRACE
+uint16_t uniffi_telio_checksum_method_telioerror_backtrace(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOERROR_VARIANT
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIOERROR_VARIANT
+uint16_t uniffi_telio_checksum_method_telioerror_variant(void
     
 );
 #endif
