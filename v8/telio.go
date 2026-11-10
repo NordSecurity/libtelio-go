@@ -482,6 +482,15 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_backtrace_as_string()
+	})
+	if checksum != 65532 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_backtrace_as_string: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_backtrace_functions()
 	})
 	if checksum != 62992 {
@@ -811,6 +820,15 @@ func uniffiCheckChecksums() {
 	if checksum != 14181 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_enable_tp_lite_stats_collection: UniFFI API checksum mismatch")
+	}
+	}
+	{
+	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
+		return C.uniffi_telio_checksum_method_telio_generate_error()
+	})
+	if checksum != 130 {
+		// If this happens try cleaning and rebuilding your project
+		panic("telio: uniffi_telio_checksum_method_telio_generate_error: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -1570,6 +1588,8 @@ func (ffiObject *FfiObject)freeRustArcPtr() {
 	})
 }
 type BacktraceInterface interface {
+	// Functions in one line, innermost first, for example `a -> b -> c`
+	AsString() string
 	Functions() []*Location
 }
 type Backtrace struct {
@@ -1578,6 +1598,18 @@ type Backtrace struct {
 
 
 
+
+// Functions in one line, innermost first, for example `a -> b -> c`
+func (_self *Backtrace) AsString() string {
+	_pointer := _self.ffiObject.incrementPointer("*Backtrace")
+	defer _self.ffiObject.decrementPointer()
+	return FfiConverterStringINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
+		return GoRustBuffer {
+		inner: C.uniffi_telio_fn_method_backtrace_as_string(
+		_pointer,_uniffiStatus),
+	}
+	}))
+}
 
 func (_self *Backtrace) Functions() []*Location {
 	_pointer := _self.ffiObject.incrementPointer("*Backtrace")
@@ -2346,6 +2378,8 @@ type TelioInterface interface {
 	//
 	// Passing empty list of IPs will disable the collection of TP-Lite stats
 	EnableTpLiteStatsCollection(config TpLiteStatsOptions, collectStatsCb TpLiteStatsCallback) error
+	// For testing only. Returns an error created by a chain of nested calls.
+	GenerateError() error
 	// For testing only.
 	GenerateStackPanic() error
 	// For testing only.
@@ -2734,6 +2768,18 @@ func (_self *Telio) EnableTpLiteStatsCollection(config TpLiteStatsOptions, colle
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_enable_tp_lite_stats_collection(
 		_pointer,FfiConverterTpLiteStatsOptionsINSTANCE.Lower(config), FfiConverterCallbackInterfaceTpLiteStatsCallbackINSTANCE.Lower(collectStatsCb),_uniffiStatus)
+		return false
+	})
+		return _uniffiErr.AsError()
+}
+
+// For testing only. Returns an error created by a chain of nested calls.
+func (_self *Telio) GenerateError() error {
+	_pointer := _self.ffiObject.incrementPointer("*Telio")
+	defer _self.ffiObject.decrementPointer()
+	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
+		C.uniffi_telio_fn_method_telio_generate_error(
+		_pointer,_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()

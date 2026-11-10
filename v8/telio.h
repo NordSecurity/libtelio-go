@@ -528,6 +528,11 @@ void* uniffi_telio_fn_clone_backtrace(void* ptr, RustCallStatus *out_status
 void uniffi_telio_fn_free_backtrace(void* ptr, RustCallStatus *out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_BACKTRACE_AS_STRING
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_BACKTRACE_AS_STRING
+RustBuffer uniffi_telio_fn_method_backtrace_as_string(void* ptr, RustCallStatus *out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_BACKTRACE_FUNCTIONS
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_BACKTRACE_FUNCTIONS
 RustBuffer uniffi_telio_fn_method_backtrace_functions(void* ptr, RustCallStatus *out_status
@@ -772,6 +777,11 @@ void uniffi_telio_fn_method_telio_enable_magic_dns(void* ptr, RustBuffer forward
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_ENABLE_TP_LITE_STATS_COLLECTION
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_ENABLE_TP_LITE_STATS_COLLECTION
 void uniffi_telio_fn_method_telio_enable_tp_lite_stats_collection(void* ptr, RustBuffer config, uint64_t collect_stats_cb, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GENERATE_ERROR
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GENERATE_ERROR
+void uniffi_telio_fn_method_telio_generate_error(void* ptr, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GENERATE_STACK_PANIC
@@ -1484,6 +1494,12 @@ uint16_t uniffi_telio_checksum_func_unset_global_logger(void
     
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_BACKTRACE_AS_STRING
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_BACKTRACE_AS_STRING
+uint16_t uniffi_telio_checksum_method_backtrace_as_string(void
+    
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_BACKTRACE_FUNCTIONS
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_BACKTRACE_FUNCTIONS
 uint16_t uniffi_telio_checksum_method_backtrace_functions(void
@@ -1703,6 +1719,12 @@ uint16_t uniffi_telio_checksum_method_telio_enable_magic_dns(void
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_ENABLE_TP_LITE_STATS_COLLECTION
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_ENABLE_TP_LITE_STATS_COLLECTION
 uint16_t uniffi_telio_checksum_method_telio_enable_tp_lite_stats_collection(void
+    
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GENERATE_ERROR
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_CHECKSUM_METHOD_TELIO_GENERATE_ERROR
+uint16_t uniffi_telio_checksum_method_telio_generate_error(void
     
 );
 #endif
