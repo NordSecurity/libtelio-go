@@ -538,6 +538,16 @@ RustBuffer uniffi_telio_fn_method_backtrace_as_string(void* ptr, RustCallStatus 
 RustBuffer uniffi_telio_fn_method_backtrace_functions(void* ptr, RustCallStatus *out_status
 );
 #endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_CONNECTIONCONFIG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_CONNECTIONCONFIG
+void* uniffi_telio_fn_clone_connectionconfig(void* ptr, RustCallStatus *out_status
+);
+#endif
+#ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_CONNECTIONCONFIG
+#define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_FREE_CONNECTIONCONFIG
+void uniffi_telio_fn_free_connectionconfig(void* ptr, RustCallStatus *out_status
+);
+#endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_FEATURESDEFAULTSBUILDER
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_CLONE_FEATURESDEFAULTSBUILDER
 void* uniffi_telio_fn_clone_featuresdefaultsbuilder(void* ptr, RustCallStatus *out_status
@@ -701,7 +711,7 @@ void* uniffi_telio_fn_constructor_meshnetconnectionconfigbuilder_new(RustBuffer 
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_MESHNETCONNECTIONCONFIGBUILDER_BUILD
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_MESHNETCONNECTIONCONFIGBUILDER_BUILD
-RustBuffer uniffi_telio_fn_method_meshnetconnectionconfigbuilder_build(void* ptr, RustCallStatus *out_status
+void* uniffi_telio_fn_method_meshnetconnectionconfigbuilder_build(void* ptr, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_MESHNETCONNECTIONCONFIGBUILDER_WITH_ALLOWED_IPS
@@ -741,7 +751,7 @@ void uniffi_telio_fn_method_telio_connect_to_exit_node_postquantum(void* ptr, Ru
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_CONNECT_TO_EXIT_NODE_WITH_CONFIG
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_CONNECT_TO_EXIT_NODE_WITH_CONFIG
-void uniffi_telio_fn_method_telio_connect_to_exit_node_with_config(void* ptr, RustBuffer config, RustCallStatus *out_status
+void uniffi_telio_fn_method_telio_connect_to_exit_node_with_config(void* ptr, void* config, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_CONNECT_TO_EXIT_NODE_WITH_ID
@@ -781,7 +791,7 @@ void uniffi_telio_fn_method_telio_enable_tp_lite_stats_collection(void* ptr, Rus
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GENERATE_ERROR
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GENERATE_ERROR
-void uniffi_telio_fn_method_telio_generate_error(void* ptr, RustCallStatus *out_status
+void uniffi_telio_fn_method_telio_generate_error(void* ptr, int8_t from_async, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_TELIO_GENERATE_STACK_PANIC
@@ -1016,7 +1026,7 @@ void* uniffi_telio_fn_constructor_vpnconnectionconfigbuilder_new(RustBuffer publ
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_VPNCONNECTIONCONFIGBUILDER_BUILD
 #define UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_VPNCONNECTIONCONFIGBUILDER_BUILD
-RustBuffer uniffi_telio_fn_method_vpnconnectionconfigbuilder_build(void* ptr, RustCallStatus *out_status
+void* uniffi_telio_fn_method_vpnconnectionconfigbuilder_build(void* ptr, RustCallStatus *out_status
 );
 #endif
 #ifndef UNIFFI_FFIDEF_UNIFFI_TELIO_FN_METHOD_VPNCONNECTIONCONFIGBUILDER_FORCE_PQ

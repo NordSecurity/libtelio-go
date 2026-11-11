@@ -718,7 +718,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_meshnetconnectionconfigbuilder_build()
 	})
-	if checksum != 46672 {
+	if checksum != 20328 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_meshnetconnectionconfigbuilder_build: UniFFI API checksum mismatch")
 	}
@@ -754,7 +754,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node_with_config()
 	})
-	if checksum != 28782 {
+	if checksum != 57597 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node_with_config: UniFFI API checksum mismatch")
 	}
@@ -826,7 +826,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_generate_error()
 	})
-	if checksum != 130 {
+	if checksum != 18442 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_generate_error: UniFFI API checksum mismatch")
 	}
@@ -1159,7 +1159,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_vpnconnectionconfigbuilder_build()
 	})
-	if checksum != 2745 {
+	if checksum != 59371 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_vpnconnectionconfigbuilder_build: UniFFI API checksum mismatch")
 	}
@@ -1675,6 +1675,72 @@ func (_ FfiDestroyerBacktrace) Destroy(value *Backtrace) {
 
 
 
+// Connection configuration for VPN or meshnet exit-node connections.
+// Produced by [`VpnConnectionConfigBuilder`] or [`MeshnetConnectionConfigBuilder`].
+type ConnectionConfigInterface interface {
+}
+// Connection configuration for VPN or meshnet exit-node connections.
+// Produced by [`VpnConnectionConfigBuilder`] or [`MeshnetConnectionConfigBuilder`].
+type ConnectionConfig struct {
+	ffiObject FfiObject
+}
+
+
+
+func (object *ConnectionConfig) Destroy() {
+	runtime.SetFinalizer(object, nil)
+	object.ffiObject.destroy()
+}
+
+type FfiConverterConnectionConfig struct {}
+
+var FfiConverterConnectionConfigINSTANCE = FfiConverterConnectionConfig{}
+
+
+func (c FfiConverterConnectionConfig) Lift(pointer unsafe.Pointer) *ConnectionConfig {
+	result := &ConnectionConfig {
+		newFfiObject(
+			pointer,
+			func(pointer unsafe.Pointer, status *C.RustCallStatus) unsafe.Pointer {
+				return C.uniffi_telio_fn_clone_connectionconfig(pointer, status)
+			},
+			func(pointer unsafe.Pointer, status *C.RustCallStatus) {
+				C.uniffi_telio_fn_free_connectionconfig(pointer, status)
+			},
+		),
+	}
+	runtime.SetFinalizer(result, (*ConnectionConfig).Destroy)
+	return result
+}
+
+func (c FfiConverterConnectionConfig) Read(reader io.Reader) *ConnectionConfig {
+	return c.Lift(unsafe.Pointer(uintptr(readUint64(reader))))
+}
+
+func (c FfiConverterConnectionConfig) Lower(value *ConnectionConfig) unsafe.Pointer {
+	// TODO: this is bad - all synchronization from ObjectRuntime.go is discarded here,
+	// because the pointer will be decremented immediately after this function returns,
+	// and someone will be left holding onto a non-locked pointer.
+	pointer := value.ffiObject.incrementPointer("*ConnectionConfig")
+	defer value.ffiObject.decrementPointer()
+	return pointer
+	
+}
+
+func (c FfiConverterConnectionConfig) Write(writer io.Writer, value *ConnectionConfig) {
+	writeUint64(writer, uint64(uintptr(c.Lower(value))))
+}
+
+type FfiDestroyerConnectionConfig struct {}
+
+func (_ FfiDestroyerConnectionConfig) Destroy(value *ConnectionConfig) {
+		value.Destroy()
+}
+
+
+
+
+
 // A [Features] builder that allows a simpler initialization of
 // features with defaults coming from libtelio lib.
 //
@@ -2133,7 +2199,7 @@ func (_ FfiDestroyerLocation) Destroy(value *Location) {
 // ```
 type MeshnetConnectionConfigBuilderInterface interface {
 	// Build the final ConnectionConfig.
-	Build() ConnectionConfig
+	Build() *ConnectionConfig
 	// Set the subnets routed through the exit peer.
 	// If not called, defaults to "0.0.0.0/0" (all traffic).
 	WithAllowedIps(allowedIps []IpNet) *MeshnetConnectionConfigBuilder
@@ -2164,14 +2230,12 @@ func NewMeshnetConnectionConfigBuilder(publicKey PublicKey) *MeshnetConnectionCo
 
 
 // Build the final ConnectionConfig.
-func (_self *MeshnetConnectionConfigBuilder) Build() ConnectionConfig {
+func (_self *MeshnetConnectionConfigBuilder) Build() *ConnectionConfig {
 	_pointer := _self.ffiObject.incrementPointer("*MeshnetConnectionConfigBuilder")
 	defer _self.ffiObject.decrementPointer()
-	return FfiConverterConnectionConfigINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_meshnetconnectionconfigbuilder_build(
-		_pointer,_uniffiStatus),
-	}
+	return FfiConverterConnectionConfigINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_meshnetconnectionconfigbuilder_build(
+		_pointer,_uniffiStatus)
 	}))
 }
 
@@ -2302,7 +2366,7 @@ type TelioInterface interface {
 	// );
 	// ```
 
-	ConnectToExitNodeWithConfig(config ConnectionConfig) error
+	ConnectToExitNodeWithConfig(config *ConnectionConfig) error
 	// Connects to an exit node. (VPN if endpoint is not NULL, Peer if endpoint is NULL)
 	//
 	// Routing should be set by the user accordingly.
@@ -2379,7 +2443,7 @@ type TelioInterface interface {
 	// Passing empty list of IPs will disable the collection of TP-Lite stats
 	EnableTpLiteStatsCollection(config TpLiteStatsOptions, collectStatsCb TpLiteStatsCallback) error
 	// For testing only. Returns an error created by a chain of nested calls.
-	GenerateError() error
+	GenerateError(fromAsync bool) error
 	// For testing only.
 	GenerateStackPanic() error
 	// For testing only.
@@ -2617,7 +2681,7 @@ func (_self *Telio) ConnectToExitNodePostquantum(identifier *string, publicKey P
 // );
 // ```
 
-func (_self *Telio) ConnectToExitNodeWithConfig(config ConnectionConfig) error {
+func (_self *Telio) ConnectToExitNodeWithConfig(config *ConnectionConfig) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2774,12 +2838,12 @@ func (_self *Telio) EnableTpLiteStatsCollection(config TpLiteStatsOptions, colle
 }
 
 // For testing only. Returns an error created by a chain of nested calls.
-func (_self *Telio) GenerateError() error {
+func (_self *Telio) GenerateError(fromAsync bool) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_generate_error(
-		_pointer,_uniffiStatus)
+		_pointer,FfiConverterBoolINSTANCE.Lower(fromAsync),_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()
@@ -3650,7 +3714,7 @@ func (_ FfiDestroyerTelioError) Destroy(value *TelioError) {
 // ```
 type VpnConnectionConfigBuilderInterface interface {
 	// Build the final ConnectionConfig.
-	Build() ConnectionConfig
+	Build() *ConnectionConfig
 	// Enable post-quantum key exchange for this VPN tunnel.
 	ForcePq() *VpnConnectionConfigBuilder
 	// Set the subnets routed through the exit node.
@@ -3694,14 +3758,12 @@ func NewVpnConnectionConfigBuilder(publicKey PublicKey, endpoint SocketAddr) *Vp
 
 
 // Build the final ConnectionConfig.
-func (_self *VpnConnectionConfigBuilder) Build() ConnectionConfig {
+func (_self *VpnConnectionConfigBuilder) Build() *ConnectionConfig {
 	_pointer := _self.ffiObject.incrementPointer("*VpnConnectionConfigBuilder")
 	defer _self.ffiObject.decrementPointer()
-	return FfiConverterConnectionConfigINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_vpnconnectionconfigbuilder_build(
-		_pointer,_uniffiStatus),
-	}
+	return FfiConverterConnectionConfigINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
+		return C.uniffi_telio_fn_method_vpnconnectionconfigbuilder_build(
+		_pointer,_uniffiStatus)
 	}))
 }
 
@@ -3961,80 +4023,6 @@ func (c FfiConverterConfig) Write(writer io.Writer, value Config) {
 type FfiDestroyerConfig struct {}
 
 func (_ FfiDestroyerConfig) Destroy(value Config) {
-	value.Destroy()
-}
-
-
-// Connection configuration for VPN or meshnet exit-node connections.
-// Produced by [`VpnConnectionConfigBuilder`] or [`MeshnetConnectionConfigBuilder`].
-type ConnectionConfig struct {
-	// Optional stable identifier for the exit node.
-	// If null, a random UUID is generated at connect time.
-	Identifier *string
-	// WireGuard public key of the exit node.
-	PublicKey PublicKey
-	// Subnets routed through the exit node. Null is equivalent to "0.0.0.0/0".
-	AllowedIps *[]IpNet
-	// Direct UDP endpoint (IP:port) of the exit node.
-	// Always set for VPN connections; always null for meshnet peer exit.
-	Endpoint *SocketAddr
-	// When true, a post-quantum tunnel is established (VPN connections only).
-	PostQuantum bool
-	// Ciphers supported by the VPN server (NepTUN only). Null for meshnet.
-	SupportedCiphers *[]Cipher
-	// Override the default PQ upgrader IP used for post-quantum key exchange.
-	// When null, the default 10.5.0.1 is used.
-	// Only meaningful for VPN connections with post-quantum enabled.
-	PqUpgraderIp *Ipv4Addr
-}
-
-func (r *ConnectionConfig) Destroy() {
-		FfiDestroyerOptionalString{}.Destroy(r.Identifier);
-		FfiDestroyerTypePublicKey{}.Destroy(r.PublicKey);
-		FfiDestroyerOptionalSequenceTypeIpNet{}.Destroy(r.AllowedIps);
-		FfiDestroyerOptionalTypeSocketAddr{}.Destroy(r.Endpoint);
-		FfiDestroyerBool{}.Destroy(r.PostQuantum);
-		FfiDestroyerOptionalSequenceCipher{}.Destroy(r.SupportedCiphers);
-		FfiDestroyerOptionalTypeIpv4Addr{}.Destroy(r.PqUpgraderIp);
-}
-
-type FfiConverterConnectionConfig struct {}
-
-var FfiConverterConnectionConfigINSTANCE = FfiConverterConnectionConfig{}
-
-func (c FfiConverterConnectionConfig) Lift(rb RustBufferI) ConnectionConfig {
-	return LiftFromRustBuffer[ConnectionConfig](c, rb)
-}
-
-func (c FfiConverterConnectionConfig) Read(reader io.Reader) ConnectionConfig {
-	return ConnectionConfig {
-			FfiConverterOptionalStringINSTANCE.Read(reader),
-			FfiConverterTypePublicKeyINSTANCE.Read(reader),
-			FfiConverterOptionalSequenceTypeIpNetINSTANCE.Read(reader),
-			FfiConverterOptionalTypeSocketAddrINSTANCE.Read(reader),
-			FfiConverterBoolINSTANCE.Read(reader),
-			FfiConverterOptionalSequenceCipherINSTANCE.Read(reader),
-			FfiConverterOptionalTypeIpv4AddrINSTANCE.Read(reader),
-	}
-}
-
-func (c FfiConverterConnectionConfig) Lower(value ConnectionConfig) C.RustBuffer {
-	return LowerIntoRustBuffer[ConnectionConfig](c, value)
-}
-
-func (c FfiConverterConnectionConfig) Write(writer io.Writer, value ConnectionConfig) {
-		FfiConverterOptionalStringINSTANCE.Write(writer, value.Identifier);
-		FfiConverterTypePublicKeyINSTANCE.Write(writer, value.PublicKey);
-		FfiConverterOptionalSequenceTypeIpNetINSTANCE.Write(writer, value.AllowedIps);
-		FfiConverterOptionalTypeSocketAddrINSTANCE.Write(writer, value.Endpoint);
-		FfiConverterBoolINSTANCE.Write(writer, value.PostQuantum);
-		FfiConverterOptionalSequenceCipherINSTANCE.Write(writer, value.SupportedCiphers);
-		FfiConverterOptionalTypeIpv4AddrINSTANCE.Write(writer, value.PqUpgraderIp);
-}
-
-type FfiDestroyerConnectionConfig struct {}
-
-func (_ FfiDestroyerConnectionConfig) Destroy(value ConnectionConfig) {
 	value.Destroy()
 }
 
@@ -8557,45 +8545,6 @@ func (_ FfiDestroyerOptionalSequenceServer) Destroy(value *[]Server) {
 
 
 
-type FfiConverterOptionalSequenceCipher struct{}
-
-var FfiConverterOptionalSequenceCipherINSTANCE = FfiConverterOptionalSequenceCipher{}
-
-func (c FfiConverterOptionalSequenceCipher) Lift(rb RustBufferI) *[]Cipher {
-	return LiftFromRustBuffer[*[]Cipher](c, rb)
-}
-
-func (_ FfiConverterOptionalSequenceCipher) Read(reader io.Reader) *[]Cipher {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterSequenceCipherINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalSequenceCipher) Lower(value *[]Cipher) C.RustBuffer {
-	return LowerIntoRustBuffer[*[]Cipher](c, value)
-}
-
-func (_ FfiConverterOptionalSequenceCipher) Write(writer io.Writer, value *[]Cipher) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterSequenceCipherINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalSequenceCipher struct {}
-
-func (_ FfiDestroyerOptionalSequenceCipher) Destroy(value *[]Cipher) {
-	if value != nil {
-		FfiDestroyerSequenceCipher{}.Destroy(*value)
-	}
-}
-
-
-
 type FfiConverterOptionalSequenceTypeIpAddr struct{}
 
 var FfiConverterOptionalSequenceTypeIpAddrINSTANCE = FfiConverterOptionalSequenceTypeIpAddr{}
@@ -8747,45 +8696,6 @@ type FfiDestroyerOptionalTypeHiddenString struct {}
 func (_ FfiDestroyerOptionalTypeHiddenString) Destroy(value *HiddenString) {
 	if value != nil {
 		FfiDestroyerTypeHiddenString{}.Destroy(*value)
-	}
-}
-
-
-
-type FfiConverterOptionalTypeIpv4Addr struct{}
-
-var FfiConverterOptionalTypeIpv4AddrINSTANCE = FfiConverterOptionalTypeIpv4Addr{}
-
-func (c FfiConverterOptionalTypeIpv4Addr) Lift(rb RustBufferI) *Ipv4Addr {
-	return LiftFromRustBuffer[*Ipv4Addr](c, rb)
-}
-
-func (_ FfiConverterOptionalTypeIpv4Addr) Read(reader io.Reader) *Ipv4Addr {
-	if readInt8(reader) == 0 {
-		return nil
-	}
-	temp := FfiConverterTypeIpv4AddrINSTANCE.Read(reader)
-	return &temp
-}
-
-func (c FfiConverterOptionalTypeIpv4Addr) Lower(value *Ipv4Addr) C.RustBuffer {
-	return LowerIntoRustBuffer[*Ipv4Addr](c, value)
-}
-
-func (_ FfiConverterOptionalTypeIpv4Addr) Write(writer io.Writer, value *Ipv4Addr) {
-	if value == nil {
-		writeInt8(writer, 0)
-	} else {
-		writeInt8(writer, 1)
-		FfiConverterTypeIpv4AddrINSTANCE.Write(writer, *value)
-	}
-}
-
-type FfiDestroyerOptionalTypeIpv4Addr struct {}
-
-func (_ FfiDestroyerOptionalTypeIpv4Addr) Destroy(value *Ipv4Addr) {
-	if value != nil {
-		FfiDestroyerTypeIpv4Addr{}.Destroy(*value)
 	}
 }
 
