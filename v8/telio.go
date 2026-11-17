@@ -9727,8 +9727,9 @@ func GetVersionTag() string {
 //
 // Unknown cipher names are ignored. Duplicate cipher names are
 // silently deduplicated. Parser is case-sensitive.
+// Cipher names shall follow IANA registry AEAD ciphers naming convention.
 //
-// Example input:  "chacha20poly1305, aegis256, unknown"
+// Example input:  "AEAD_CHACHA20_POLY1305, AEAD_AEGIS256, unknown"
 // Example output: [Cipher.Chacha20Poly1305, Cipher.Aegis256]
 func ParseCiphers(ciphers string) []Cipher {
 	return FfiConverterSequenceCipherINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
