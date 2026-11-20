@@ -376,7 +376,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_func_deserialize_feature_config()
 	})
-	if checksum != 19104 {
+	if checksum != 11797 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_func_deserialize_feature_config: UniFFI API checksum mismatch")
 	}
@@ -385,7 +385,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_func_deserialize_meshnet_config()
 	})
-	if checksum != 579 {
+	if checksum != 53042 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_func_deserialize_meshnet_config: UniFFI API checksum mismatch")
 	}
@@ -457,7 +457,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_func_serialize_feature_config()
 	})
-	if checksum != 51061 {
+	if checksum != 64562 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_func_serialize_feature_config: UniFFI API checksum mismatch")
 	}
@@ -478,24 +478,6 @@ func uniffiCheckChecksums() {
 	if checksum != 32201 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_func_unset_global_logger: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_backtrace_as_string()
-	})
-	if checksum != 65532 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_backtrace_as_string: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_backtrace_functions()
-	})
-	if checksum != 62992 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_backtrace_functions: UniFFI API checksum mismatch")
 	}
 	}
 	{
@@ -662,63 +644,9 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_location_address()
-	})
-	if checksum != 61895 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_location_address: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_location_file()
-	})
-	if checksum != 16259 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_location_file: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_location_line()
-	})
-	if checksum != 53215 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_location_line: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_location_module()
-	})
-	if checksum != 53718 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_location_module: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_location_module_id()
-	})
-	if checksum != 50925 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_location_module_id: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_location_name()
-	})
-	if checksum != 25365 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_location_name: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_meshnetconnectionconfigbuilder_build()
 	})
-	if checksum != 20328 {
+	if checksum != 46672 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_meshnetconnectionconfigbuilder_build: UniFFI API checksum mismatch")
 	}
@@ -736,7 +664,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node()
 	})
-	if checksum != 31943 {
+	if checksum != 5979 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node: UniFFI API checksum mismatch")
 	}
@@ -745,7 +673,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node_postquantum()
 	})
-	if checksum != 36953 {
+	if checksum != 1113 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node_postquantum: UniFFI API checksum mismatch")
 	}
@@ -754,7 +682,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node_with_config()
 	})
-	if checksum != 57597 {
+	if checksum != 59331 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node_with_config: UniFFI API checksum mismatch")
 	}
@@ -763,7 +691,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_connect_to_exit_node_with_id()
 	})
-	if checksum != 45758 {
+	if checksum != 16832 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_connect_to_exit_node_with_id: UniFFI API checksum mismatch")
 	}
@@ -772,7 +700,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_disable_magic_dns()
 	})
-	if checksum != 43977 {
+	if checksum != 48202 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_disable_magic_dns: UniFFI API checksum mismatch")
 	}
@@ -781,7 +709,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_disable_tp_lite_stats_collection()
 	})
-	if checksum != 56551 {
+	if checksum != 7223 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_disable_tp_lite_stats_collection: UniFFI API checksum mismatch")
 	}
@@ -790,7 +718,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_disconnect_from_exit_node()
 	})
-	if checksum != 8827 {
+	if checksum != 36107 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_disconnect_from_exit_node: UniFFI API checksum mismatch")
 	}
@@ -799,7 +727,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_disconnect_from_exit_nodes()
 	})
-	if checksum != 8193 {
+	if checksum != 56626 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_disconnect_from_exit_nodes: UniFFI API checksum mismatch")
 	}
@@ -808,7 +736,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_enable_magic_dns()
 	})
-	if checksum != 6590 {
+	if checksum != 32172 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_enable_magic_dns: UniFFI API checksum mismatch")
 	}
@@ -817,25 +745,16 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_enable_tp_lite_stats_collection()
 	})
-	if checksum != 14181 {
+	if checksum != 30074 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_enable_tp_lite_stats_collection: UniFFI API checksum mismatch")
 	}
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telio_generate_error()
-	})
-	if checksum != 18442 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telio_generate_error: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_generate_stack_panic()
 	})
-	if checksum != 64569 {
+	if checksum != 48978 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_generate_stack_panic: UniFFI API checksum mismatch")
 	}
@@ -844,7 +763,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_generate_thread_panic()
 	})
-	if checksum != 57714 {
+	if checksum != 3906 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_generate_thread_panic: UniFFI API checksum mismatch")
 	}
@@ -889,7 +808,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_is_running()
 	})
-	if checksum != 362 {
+	if checksum != 5169 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_is_running: UniFFI API checksum mismatch")
 	}
@@ -898,7 +817,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_notify_network_change()
 	})
-	if checksum != 33129 {
+	if checksum != 6052 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_notify_network_change: UniFFI API checksum mismatch")
 	}
@@ -907,7 +826,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_notify_sleep()
 	})
-	if checksum != 54685 {
+	if checksum != 12814 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_notify_sleep: UniFFI API checksum mismatch")
 	}
@@ -916,7 +835,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_notify_wakeup()
 	})
-	if checksum != 3126 {
+	if checksum != 58222 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_notify_wakeup: UniFFI API checksum mismatch")
 	}
@@ -925,7 +844,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_receive_ping()
 	})
-	if checksum != 6180 {
+	if checksum != 36743 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_receive_ping: UniFFI API checksum mismatch")
 	}
@@ -934,7 +853,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_adapter_mtu()
 	})
-	if checksum != 6554 {
+	if checksum != 13178 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_set_adapter_mtu: UniFFI API checksum mismatch")
 	}
@@ -943,7 +862,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_ext_if_filter()
 	})
-	if checksum != 41734 {
+	if checksum != 8768 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_set_ext_if_filter: UniFFI API checksum mismatch")
 	}
@@ -952,7 +871,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_fwmark()
 	})
-	if checksum != 8944 {
+	if checksum != 38777 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_set_fwmark: UniFFI API checksum mismatch")
 	}
@@ -961,7 +880,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_meshnet()
 	})
-	if checksum != 43233 {
+	if checksum != 52858 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_set_meshnet: UniFFI API checksum mismatch")
 	}
@@ -970,7 +889,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_meshnet_off()
 	})
-	if checksum != 60900 {
+	if checksum != 37791 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_set_meshnet_off: UniFFI API checksum mismatch")
 	}
@@ -979,7 +898,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_secret_key()
 	})
-	if checksum != 15008 {
+	if checksum != 34182 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_set_secret_key: UniFFI API checksum mismatch")
 	}
@@ -988,7 +907,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_tp_lite_domain_whitelist()
 	})
-	if checksum != 28505 {
+	if checksum != 14462 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_set_tp_lite_domain_whitelist: UniFFI API checksum mismatch")
 	}
@@ -997,7 +916,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_tun()
 	})
-	if checksum != 38457 {
+	if checksum != 49747 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_set_tun: UniFFI API checksum mismatch")
 	}
@@ -1006,7 +925,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_set_tunnel_src_ip()
 	})
-	if checksum != 48528 {
+	if checksum != 65092 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_set_tunnel_src_ip: UniFFI API checksum mismatch")
 	}
@@ -1015,7 +934,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_shutdown()
 	})
-	if checksum != 26519 {
+	if checksum != 25927 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_shutdown: UniFFI API checksum mismatch")
 	}
@@ -1024,7 +943,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_shutdown_hard()
 	})
-	if checksum != 47001 {
+	if checksum != 6436 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_shutdown_hard: UniFFI API checksum mismatch")
 	}
@@ -1033,7 +952,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_start()
 	})
-	if checksum != 54600 {
+	if checksum != 39667 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_start: UniFFI API checksum mismatch")
 	}
@@ -1042,7 +961,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_start_custom()
 	})
-	if checksum != 57524 {
+	if checksum != 37803 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_start_custom: UniFFI API checksum mismatch")
 	}
@@ -1051,7 +970,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_start_named()
 	})
-	if checksum != 11131 {
+	if checksum != 29016 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_start_named: UniFFI API checksum mismatch")
 	}
@@ -1060,7 +979,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_start_named_ext_if_filter()
 	})
-	if checksum != 2802 {
+	if checksum != 19301 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_start_named_ext_if_filter: UniFFI API checksum mismatch")
 	}
@@ -1069,7 +988,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_start_with_config()
 	})
-	if checksum != 29109 {
+	if checksum != 48483 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_start_with_config: UniFFI API checksum mismatch")
 	}
@@ -1078,7 +997,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_start_with_tun()
 	})
-	if checksum != 16430 {
+	if checksum != 49772 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_start_with_tun: UniFFI API checksum mismatch")
 	}
@@ -1087,7 +1006,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_stop()
 	})
-	if checksum != 1394 {
+	if checksum != 11709 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_stop: UniFFI API checksum mismatch")
 	}
@@ -1096,7 +1015,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_trigger_analytics_event()
 	})
-	if checksum != 9545 {
+	if checksum != 2691 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_trigger_analytics_event: UniFFI API checksum mismatch")
 	}
@@ -1105,7 +1024,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telio_trigger_qos_collection()
 	})
-	if checksum != 5943 {
+	if checksum != 54684 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telio_trigger_qos_collection: UniFFI API checksum mismatch")
 	}
@@ -1139,27 +1058,9 @@ func uniffiCheckChecksums() {
 	}
 	{
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telioerror_backtrace()
-	})
-	if checksum != 50637 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telioerror_backtrace: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
-		return C.uniffi_telio_checksum_method_telioerror_variant()
-	})
-	if checksum != 44031 {
-		// If this happens try cleaning and rebuilding your project
-		panic("telio: uniffi_telio_checksum_method_telioerror_variant: UniFFI API checksum mismatch")
-	}
-	}
-	{
-	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_vpnconnectionconfigbuilder_build()
 	})
-	if checksum != 59371 {
+	if checksum != 2745 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_vpnconnectionconfigbuilder_build: UniFFI API checksum mismatch")
 	}
@@ -1231,7 +1132,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_constructor_telio_new()
 	})
-	if checksum != 38391 {
+	if checksum != 22327 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_constructor_telio_new: UniFFI API checksum mismatch")
 	}
@@ -1240,7 +1141,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_constructor_telio_new_with_protect()
 	})
-	if checksum != 25968 {
+	if checksum != 57901 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_constructor_telio_new_with_protect: UniFFI API checksum mismatch")
 	}
@@ -1258,7 +1159,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telioeventcb_event()
 	})
-	if checksum != 44863 {
+	if checksum != 57944 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telioeventcb_event: UniFFI API checksum mismatch")
 	}
@@ -1267,7 +1168,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_teliologgercb_log()
 	})
-	if checksum != 50871 {
+	if checksum != 42728 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_teliologgercb_log: UniFFI API checksum mismatch")
 	}
@@ -1276,7 +1177,7 @@ func uniffiCheckChecksums() {
 	checksum := rustCall(func(_uniffiStatus *C.RustCallStatus) C.uint16_t {
 		return C.uniffi_telio_checksum_method_telioprotectcb_protect()
 	})
-	if checksum != 16167 {
+	if checksum != 52662 {
 		// If this happens try cleaning and rebuilding your project
 		panic("telio: uniffi_telio_checksum_method_telioprotectcb_protect: UniFFI API checksum mismatch")
 	}
@@ -1587,160 +1488,6 @@ func (ffiObject *FfiObject)freeRustArcPtr() {
 		return 0
 	})
 }
-type BacktraceInterface interface {
-	// Functions in one line, innermost first, for example `a -> b -> c`
-	AsString() string
-	Functions() []*Location
-}
-type Backtrace struct {
-	ffiObject FfiObject
-}
-
-
-
-
-// Functions in one line, innermost first, for example `a -> b -> c`
-func (_self *Backtrace) AsString() string {
-	_pointer := _self.ffiObject.incrementPointer("*Backtrace")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterStringINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_backtrace_as_string(
-		_pointer,_uniffiStatus),
-	}
-	}))
-}
-
-func (_self *Backtrace) Functions() []*Location {
-	_pointer := _self.ffiObject.incrementPointer("*Backtrace")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterSequenceLocationINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_backtrace_functions(
-		_pointer,_uniffiStatus),
-	}
-	}))
-}
-func (object *Backtrace) Destroy() {
-	runtime.SetFinalizer(object, nil)
-	object.ffiObject.destroy()
-}
-
-type FfiConverterBacktrace struct {}
-
-var FfiConverterBacktraceINSTANCE = FfiConverterBacktrace{}
-
-
-func (c FfiConverterBacktrace) Lift(pointer unsafe.Pointer) *Backtrace {
-	result := &Backtrace {
-		newFfiObject(
-			pointer,
-			func(pointer unsafe.Pointer, status *C.RustCallStatus) unsafe.Pointer {
-				return C.uniffi_telio_fn_clone_backtrace(pointer, status)
-			},
-			func(pointer unsafe.Pointer, status *C.RustCallStatus) {
-				C.uniffi_telio_fn_free_backtrace(pointer, status)
-			},
-		),
-	}
-	runtime.SetFinalizer(result, (*Backtrace).Destroy)
-	return result
-}
-
-func (c FfiConverterBacktrace) Read(reader io.Reader) *Backtrace {
-	return c.Lift(unsafe.Pointer(uintptr(readUint64(reader))))
-}
-
-func (c FfiConverterBacktrace) Lower(value *Backtrace) unsafe.Pointer {
-	// TODO: this is bad - all synchronization from ObjectRuntime.go is discarded here,
-	// because the pointer will be decremented immediately after this function returns,
-	// and someone will be left holding onto a non-locked pointer.
-	pointer := value.ffiObject.incrementPointer("*Backtrace")
-	defer value.ffiObject.decrementPointer()
-	return pointer
-	
-}
-
-func (c FfiConverterBacktrace) Write(writer io.Writer, value *Backtrace) {
-	writeUint64(writer, uint64(uintptr(c.Lower(value))))
-}
-
-type FfiDestroyerBacktrace struct {}
-
-func (_ FfiDestroyerBacktrace) Destroy(value *Backtrace) {
-		value.Destroy()
-}
-
-
-
-
-
-// Connection configuration for VPN or meshnet exit-node connections.
-// Produced by [`VpnConnectionConfigBuilder`] or [`MeshnetConnectionConfigBuilder`].
-type ConnectionConfigInterface interface {
-}
-// Connection configuration for VPN or meshnet exit-node connections.
-// Produced by [`VpnConnectionConfigBuilder`] or [`MeshnetConnectionConfigBuilder`].
-type ConnectionConfig struct {
-	ffiObject FfiObject
-}
-
-
-
-func (object *ConnectionConfig) Destroy() {
-	runtime.SetFinalizer(object, nil)
-	object.ffiObject.destroy()
-}
-
-type FfiConverterConnectionConfig struct {}
-
-var FfiConverterConnectionConfigINSTANCE = FfiConverterConnectionConfig{}
-
-
-func (c FfiConverterConnectionConfig) Lift(pointer unsafe.Pointer) *ConnectionConfig {
-	result := &ConnectionConfig {
-		newFfiObject(
-			pointer,
-			func(pointer unsafe.Pointer, status *C.RustCallStatus) unsafe.Pointer {
-				return C.uniffi_telio_fn_clone_connectionconfig(pointer, status)
-			},
-			func(pointer unsafe.Pointer, status *C.RustCallStatus) {
-				C.uniffi_telio_fn_free_connectionconfig(pointer, status)
-			},
-		),
-	}
-	runtime.SetFinalizer(result, (*ConnectionConfig).Destroy)
-	return result
-}
-
-func (c FfiConverterConnectionConfig) Read(reader io.Reader) *ConnectionConfig {
-	return c.Lift(unsafe.Pointer(uintptr(readUint64(reader))))
-}
-
-func (c FfiConverterConnectionConfig) Lower(value *ConnectionConfig) unsafe.Pointer {
-	// TODO: this is bad - all synchronization from ObjectRuntime.go is discarded here,
-	// because the pointer will be decremented immediately after this function returns,
-	// and someone will be left holding onto a non-locked pointer.
-	pointer := value.ffiObject.incrementPointer("*ConnectionConfig")
-	defer value.ffiObject.decrementPointer()
-	return pointer
-	
-}
-
-func (c FfiConverterConnectionConfig) Write(writer io.Writer, value *ConnectionConfig) {
-	writeUint64(writer, uint64(uintptr(c.Lower(value))))
-}
-
-type FfiDestroyerConnectionConfig struct {}
-
-func (_ FfiDestroyerConnectionConfig) Destroy(value *ConnectionConfig) {
-		value.Destroy()
-}
-
-
-
-
-
 // A [Features] builder that allows a simpler initialization of
 // features with defaults coming from libtelio lib.
 //
@@ -2035,156 +1782,6 @@ func (_ FfiDestroyerFeaturesDefaultsBuilder) Destroy(value *FeaturesDefaultsBuil
 
 
 
-// Function of a backtrace frame
-type LocationInterface interface {
-	// Address of the frame in the binary, resolvable offline with the binary's debug file
-	Address() *uint64
-	// Source file, when debug info is available
-	File() *string
-	// Line in the source file, when debug info is available
-	Line() *uint64
-	// File name of the binary holding the function
-	Module() *string
-	// UUID (Apple), GNU build ID (Linux, Android) or PDB GUID and age in symbol server format
-	// (Windows) of the binary
-	ModuleId() *string
-	// Demangled function name, when symbols are available
-	Name() *string
-}
-// Function of a backtrace frame
-type Location struct {
-	ffiObject FfiObject
-}
-
-
-
-
-// Address of the frame in the binary, resolvable offline with the binary's debug file
-func (_self *Location) Address() *uint64 {
-	_pointer := _self.ffiObject.incrementPointer("*Location")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterOptionalUint64INSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_location_address(
-		_pointer,_uniffiStatus),
-	}
-	}))
-}
-
-// Source file, when debug info is available
-func (_self *Location) File() *string {
-	_pointer := _self.ffiObject.incrementPointer("*Location")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterOptionalStringINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_location_file(
-		_pointer,_uniffiStatus),
-	}
-	}))
-}
-
-// Line in the source file, when debug info is available
-func (_self *Location) Line() *uint64 {
-	_pointer := _self.ffiObject.incrementPointer("*Location")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterOptionalUint64INSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_location_line(
-		_pointer,_uniffiStatus),
-	}
-	}))
-}
-
-// File name of the binary holding the function
-func (_self *Location) Module() *string {
-	_pointer := _self.ffiObject.incrementPointer("*Location")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterOptionalStringINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_location_module(
-		_pointer,_uniffiStatus),
-	}
-	}))
-}
-
-// UUID (Apple), GNU build ID (Linux, Android) or PDB GUID and age in symbol server format
-// (Windows) of the binary
-func (_self *Location) ModuleId() *string {
-	_pointer := _self.ffiObject.incrementPointer("*Location")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterOptionalStringINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_location_module_id(
-		_pointer,_uniffiStatus),
-	}
-	}))
-}
-
-// Demangled function name, when symbols are available
-func (_self *Location) Name() *string {
-	_pointer := _self.ffiObject.incrementPointer("*Location")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterOptionalStringINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_location_name(
-		_pointer,_uniffiStatus),
-	}
-	}))
-}
-func (object *Location) Destroy() {
-	runtime.SetFinalizer(object, nil)
-	object.ffiObject.destroy()
-}
-
-type FfiConverterLocation struct {}
-
-var FfiConverterLocationINSTANCE = FfiConverterLocation{}
-
-
-func (c FfiConverterLocation) Lift(pointer unsafe.Pointer) *Location {
-	result := &Location {
-		newFfiObject(
-			pointer,
-			func(pointer unsafe.Pointer, status *C.RustCallStatus) unsafe.Pointer {
-				return C.uniffi_telio_fn_clone_location(pointer, status)
-			},
-			func(pointer unsafe.Pointer, status *C.RustCallStatus) {
-				C.uniffi_telio_fn_free_location(pointer, status)
-			},
-		),
-	}
-	runtime.SetFinalizer(result, (*Location).Destroy)
-	return result
-}
-
-func (c FfiConverterLocation) Read(reader io.Reader) *Location {
-	return c.Lift(unsafe.Pointer(uintptr(readUint64(reader))))
-}
-
-func (c FfiConverterLocation) Lower(value *Location) unsafe.Pointer {
-	// TODO: this is bad - all synchronization from ObjectRuntime.go is discarded here,
-	// because the pointer will be decremented immediately after this function returns,
-	// and someone will be left holding onto a non-locked pointer.
-	pointer := value.ffiObject.incrementPointer("*Location")
-	defer value.ffiObject.decrementPointer()
-	return pointer
-	
-}
-
-func (c FfiConverterLocation) Write(writer io.Writer, value *Location) {
-	writeUint64(writer, uint64(uintptr(c.Lower(value))))
-}
-
-type FfiDestroyerLocation struct {}
-
-func (_ FfiDestroyerLocation) Destroy(value *Location) {
-		value.Destroy()
-}
-
-
-
-
-
 // Builder for meshnet exit-through-peer connections.
 //
 // Only `public_key` is mandatory and supplied to the constructor.
@@ -2199,7 +1796,7 @@ func (_ FfiDestroyerLocation) Destroy(value *Location) {
 // ```
 type MeshnetConnectionConfigBuilderInterface interface {
 	// Build the final ConnectionConfig.
-	Build() *ConnectionConfig
+	Build() ConnectionConfig
 	// Set the subnets routed through the exit peer.
 	// If not called, defaults to "0.0.0.0/0" (all traffic).
 	WithAllowedIps(allowedIps []IpNet) *MeshnetConnectionConfigBuilder
@@ -2230,12 +1827,14 @@ func NewMeshnetConnectionConfigBuilder(publicKey PublicKey) *MeshnetConnectionCo
 
 
 // Build the final ConnectionConfig.
-func (_self *MeshnetConnectionConfigBuilder) Build() *ConnectionConfig {
+func (_self *MeshnetConnectionConfigBuilder) Build() ConnectionConfig {
 	_pointer := _self.ffiObject.incrementPointer("*MeshnetConnectionConfigBuilder")
 	defer _self.ffiObject.decrementPointer()
-	return FfiConverterConnectionConfigINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
-		return C.uniffi_telio_fn_method_meshnetconnectionconfigbuilder_build(
-		_pointer,_uniffiStatus)
+	return FfiConverterConnectionConfigINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
+		return GoRustBuffer {
+		inner: C.uniffi_telio_fn_method_meshnetconnectionconfigbuilder_build(
+		_pointer,_uniffiStatus),
+	}
 	}))
 }
 
@@ -2366,7 +1965,7 @@ type TelioInterface interface {
 	// );
 	// ```
 
-	ConnectToExitNodeWithConfig(config *ConnectionConfig) error
+	ConnectToExitNodeWithConfig(config ConnectionConfig) error
 	// Connects to an exit node. (VPN if endpoint is not NULL, Peer if endpoint is NULL)
 	//
 	// Routing should be set by the user accordingly.
@@ -2442,8 +2041,6 @@ type TelioInterface interface {
 	//
 	// Passing empty list of IPs will disable the collection of TP-Lite stats
 	EnableTpLiteStatsCollection(config TpLiteStatsOptions, collectStatsCb TpLiteStatsCallback) error
-	// For testing only. Returns an error created by a chain of nested calls.
-	GenerateError(fromAsync bool) error
 	// For testing only.
 	GenerateStackPanic() error
 	// For testing only.
@@ -2681,7 +2278,7 @@ func (_self *Telio) ConnectToExitNodePostquantum(identifier *string, publicKey P
 // );
 // ```
 
-func (_self *Telio) ConnectToExitNodeWithConfig(config *ConnectionConfig) error {
+func (_self *Telio) ConnectToExitNodeWithConfig(config ConnectionConfig) error {
 	_pointer := _self.ffiObject.incrementPointer("*Telio")
 	defer _self.ffiObject.decrementPointer()
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
@@ -2832,18 +2429,6 @@ func (_self *Telio) EnableTpLiteStatsCollection(config TpLiteStatsOptions, colle
 	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
 		C.uniffi_telio_fn_method_telio_enable_tp_lite_stats_collection(
 		_pointer,FfiConverterTpLiteStatsOptionsINSTANCE.Lower(config), FfiConverterCallbackInterfaceTpLiteStatsCallbackINSTANCE.Lower(collectStatsCb),_uniffiStatus)
-		return false
-	})
-		return _uniffiErr.AsError()
-}
-
-// For testing only. Returns an error created by a chain of nested calls.
-func (_self *Telio) GenerateError(fromAsync bool) error {
-	_pointer := _self.ffiObject.incrementPointer("*Telio")
-	defer _self.ffiObject.decrementPointer()
-	_, _uniffiErr := rustCallWithError[TelioError](FfiConverterTelioError{},func(_uniffiStatus *C.RustCallStatus) bool {
-		C.uniffi_telio_fn_method_telio_generate_error(
-		_pointer,FfiConverterBoolINSTANCE.Lower(fromAsync),_uniffiStatus)
 		return false
 	})
 		return _uniffiErr.AsError()
@@ -3574,130 +3159,6 @@ func (c FfiConverterTelioCustomAdapter) register() {
 
 
 
-// Error thrown by libtelio, carries the backtrace of the place where it was created
-type TelioErrorInterface interface {
-	Backtrace() *Backtrace
-	Variant() *TelioErrorVariant
-}
-// Error thrown by libtelio, carries the backtrace of the place where it was created
-type TelioError struct {
-	ffiObject FfiObject
-}
-
-
-
-
-func (_self *TelioError) Backtrace() *Backtrace {
-	_pointer := _self.ffiObject.incrementPointer("*TelioError")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterBacktraceINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
-		return C.uniffi_telio_fn_method_telioerror_backtrace(
-		_pointer,_uniffiStatus)
-	}))
-}
-
-func (_self *TelioError) Variant() *TelioErrorVariant {
-	_pointer := _self.ffiObject.incrementPointer("*TelioError")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterTelioErrorVariantINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_telioerror_variant(
-		_pointer,_uniffiStatus),
-	}
-	}))
-}
-
-func (_self *TelioError) DebugString() string {
-	_pointer := _self.ffiObject.incrementPointer("*TelioError")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterStringINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_telioerror_uniffi_trait_debug(
-		_pointer,_uniffiStatus),
-	}
-	}))
-}
-
-
-
-func (_self *TelioError) String() string {
-	_pointer := _self.ffiObject.incrementPointer("*TelioError")
-	defer _self.ffiObject.decrementPointer()
-	return FfiConverterStringINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
-		return GoRustBuffer {
-		inner: C.uniffi_telio_fn_method_telioerror_uniffi_trait_display(
-		_pointer,_uniffiStatus),
-	}
-	}))
-}
-
-
-func (object *TelioError) Destroy() {
-	runtime.SetFinalizer(object, nil)
-	object.ffiObject.destroy()
-}
-
-type FfiConverterTelioError struct {}
-
-var FfiConverterTelioErrorINSTANCE = FfiConverterTelioError{}
-
-
-
-func (_self TelioError) Error() string {
-	return _self.String()
-}
-
-func (_self *TelioError) AsError() error {
-	if _self == nil {
-		return nil
-	} else {
-		return _self
-	}
-}
-func (c FfiConverterTelioError) Lift(pointer unsafe.Pointer) *TelioError {
-	result := &TelioError {
-		newFfiObject(
-			pointer,
-			func(pointer unsafe.Pointer, status *C.RustCallStatus) unsafe.Pointer {
-				return C.uniffi_telio_fn_clone_telioerror(pointer, status)
-			},
-			func(pointer unsafe.Pointer, status *C.RustCallStatus) {
-				C.uniffi_telio_fn_free_telioerror(pointer, status)
-			},
-		),
-	}
-	runtime.SetFinalizer(result, (*TelioError).Destroy)
-	return result
-}
-
-func (c FfiConverterTelioError) Read(reader io.Reader) *TelioError {
-	return c.Lift(unsafe.Pointer(uintptr(readUint64(reader))))
-}
-
-func (c FfiConverterTelioError) Lower(value *TelioError) unsafe.Pointer {
-	// TODO: this is bad - all synchronization from ObjectRuntime.go is discarded here,
-	// because the pointer will be decremented immediately after this function returns,
-	// and someone will be left holding onto a non-locked pointer.
-	pointer := value.ffiObject.incrementPointer("*TelioError")
-	defer value.ffiObject.decrementPointer()
-	return pointer
-	
-}
-
-func (c FfiConverterTelioError) Write(writer io.Writer, value *TelioError) {
-	writeUint64(writer, uint64(uintptr(c.Lower(value))))
-}
-
-type FfiDestroyerTelioError struct {}
-
-func (_ FfiDestroyerTelioError) Destroy(value *TelioError) {
-		value.Destroy()
-}
-
-
-
-
-
 // Builder for VPN exit-node connections where a direct UDP endpoint is known.
 //
 // Both `public_key` and `endpoint` are mandatory and supplied to the constructor.
@@ -3714,7 +3175,7 @@ func (_ FfiDestroyerTelioError) Destroy(value *TelioError) {
 // ```
 type VpnConnectionConfigBuilderInterface interface {
 	// Build the final ConnectionConfig.
-	Build() *ConnectionConfig
+	Build() ConnectionConfig
 	// Enable post-quantum key exchange for this VPN tunnel.
 	ForcePq() *VpnConnectionConfigBuilder
 	// Set the subnets routed through the exit node.
@@ -3758,12 +3219,14 @@ func NewVpnConnectionConfigBuilder(publicKey PublicKey, endpoint SocketAddr) *Vp
 
 
 // Build the final ConnectionConfig.
-func (_self *VpnConnectionConfigBuilder) Build() *ConnectionConfig {
+func (_self *VpnConnectionConfigBuilder) Build() ConnectionConfig {
 	_pointer := _self.ffiObject.incrementPointer("*VpnConnectionConfigBuilder")
 	defer _self.ffiObject.decrementPointer()
-	return FfiConverterConnectionConfigINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) unsafe.Pointer {
-		return C.uniffi_telio_fn_method_vpnconnectionconfigbuilder_build(
-		_pointer,_uniffiStatus)
+	return FfiConverterConnectionConfigINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
+		return GoRustBuffer {
+		inner: C.uniffi_telio_fn_method_vpnconnectionconfigbuilder_build(
+		_pointer,_uniffiStatus),
+	}
 	}))
 }
 
@@ -4023,6 +3486,80 @@ func (c FfiConverterConfig) Write(writer io.Writer, value Config) {
 type FfiDestroyerConfig struct {}
 
 func (_ FfiDestroyerConfig) Destroy(value Config) {
+	value.Destroy()
+}
+
+
+// Connection configuration for VPN or meshnet exit-node connections.
+// Produced by [`VpnConnectionConfigBuilder`] or [`MeshnetConnectionConfigBuilder`].
+type ConnectionConfig struct {
+	// Optional stable identifier for the exit node.
+	// If null, a random UUID is generated at connect time.
+	Identifier *string
+	// WireGuard public key of the exit node.
+	PublicKey PublicKey
+	// Subnets routed through the exit node. Null is equivalent to "0.0.0.0/0".
+	AllowedIps *[]IpNet
+	// Direct UDP endpoint (IP:port) of the exit node.
+	// Always set for VPN connections; always null for meshnet peer exit.
+	Endpoint *SocketAddr
+	// When true, a post-quantum tunnel is established (VPN connections only).
+	PostQuantum bool
+	// Ciphers supported by the VPN server (NepTUN only). Null for meshnet.
+	SupportedCiphers *[]Cipher
+	// Override the default PQ upgrader IP used for post-quantum key exchange.
+	// When null, the default 10.5.0.1 is used.
+	// Only meaningful for VPN connections with post-quantum enabled.
+	PqUpgraderIp *Ipv4Addr
+}
+
+func (r *ConnectionConfig) Destroy() {
+		FfiDestroyerOptionalString{}.Destroy(r.Identifier);
+		FfiDestroyerTypePublicKey{}.Destroy(r.PublicKey);
+		FfiDestroyerOptionalSequenceTypeIpNet{}.Destroy(r.AllowedIps);
+		FfiDestroyerOptionalTypeSocketAddr{}.Destroy(r.Endpoint);
+		FfiDestroyerBool{}.Destroy(r.PostQuantum);
+		FfiDestroyerOptionalSequenceCipher{}.Destroy(r.SupportedCiphers);
+		FfiDestroyerOptionalTypeIpv4Addr{}.Destroy(r.PqUpgraderIp);
+}
+
+type FfiConverterConnectionConfig struct {}
+
+var FfiConverterConnectionConfigINSTANCE = FfiConverterConnectionConfig{}
+
+func (c FfiConverterConnectionConfig) Lift(rb RustBufferI) ConnectionConfig {
+	return LiftFromRustBuffer[ConnectionConfig](c, rb)
+}
+
+func (c FfiConverterConnectionConfig) Read(reader io.Reader) ConnectionConfig {
+	return ConnectionConfig {
+			FfiConverterOptionalStringINSTANCE.Read(reader),
+			FfiConverterTypePublicKeyINSTANCE.Read(reader),
+			FfiConverterOptionalSequenceTypeIpNetINSTANCE.Read(reader),
+			FfiConverterOptionalTypeSocketAddrINSTANCE.Read(reader),
+			FfiConverterBoolINSTANCE.Read(reader),
+			FfiConverterOptionalSequenceCipherINSTANCE.Read(reader),
+			FfiConverterOptionalTypeIpv4AddrINSTANCE.Read(reader),
+	}
+}
+
+func (c FfiConverterConnectionConfig) Lower(value ConnectionConfig) C.RustBuffer {
+	return LowerIntoRustBuffer[ConnectionConfig](c, value)
+}
+
+func (c FfiConverterConnectionConfig) Write(writer io.Writer, value ConnectionConfig) {
+		FfiConverterOptionalStringINSTANCE.Write(writer, value.Identifier);
+		FfiConverterTypePublicKeyINSTANCE.Write(writer, value.PublicKey);
+		FfiConverterOptionalSequenceTypeIpNetINSTANCE.Write(writer, value.AllowedIps);
+		FfiConverterOptionalTypeSocketAddrINSTANCE.Write(writer, value.Endpoint);
+		FfiConverterBoolINSTANCE.Write(writer, value.PostQuantum);
+		FfiConverterOptionalSequenceCipherINSTANCE.Write(writer, value.SupportedCiphers);
+		FfiConverterOptionalTypeIpv4AddrINSTANCE.Write(writer, value.PqUpgraderIp);
+}
+
+type FfiDestroyerConnectionConfig struct {}
+
+func (_ FfiDestroyerConnectionConfig) Destroy(value ConnectionConfig) {
 	value.Destroy()
 }
 
@@ -6614,13 +6151,13 @@ func (_ FfiDestroyerTelioAdapterType) Destroy(value TelioAdapterType) {
 }
 
 
-type TelioErrorVariant struct {
+type TelioError struct {
 	err error
 }
 
-// Convience method to turn *TelioErrorVariant into error
+// Convience method to turn *TelioError into error
 // Avoiding treating nil pointer as non nil error interface
-func (err *TelioErrorVariant) AsError() error {
+func (err *TelioError) AsError() error {
 	if err == nil {
 		return nil
 	} else {
@@ -6628,40 +6165,40 @@ func (err *TelioErrorVariant) AsError() error {
 	}
 }
 
-func (err TelioErrorVariant) Error() string {
-	return fmt.Sprintf("TelioErrorVariant: %s", err.err.Error())
+func (err TelioError) Error() string {
+	return fmt.Sprintf("TelioError: %s", err.err.Error())
 }
 
-func (err TelioErrorVariant) Unwrap() error {
+func (err TelioError) Unwrap() error {
 	return err.err
 }
 
 // Err* are used for checking error type with `errors.Is`
-var ErrTelioErrorVariantUnknownError = fmt.Errorf("TelioErrorVariantUnknownError")
-var ErrTelioErrorVariantInvalidKey = fmt.Errorf("TelioErrorVariantInvalidKey")
-var ErrTelioErrorVariantBadConfig = fmt.Errorf("TelioErrorVariantBadConfig")
-var ErrTelioErrorVariantLockError = fmt.Errorf("TelioErrorVariantLockError")
-var ErrTelioErrorVariantInvalidString = fmt.Errorf("TelioErrorVariantInvalidString")
-var ErrTelioErrorVariantAlreadyStarted = fmt.Errorf("TelioErrorVariantAlreadyStarted")
-var ErrTelioErrorVariantNotStarted = fmt.Errorf("TelioErrorVariantNotStarted")
+var ErrTelioErrorUnknownError = fmt.Errorf("TelioErrorUnknownError")
+var ErrTelioErrorInvalidKey = fmt.Errorf("TelioErrorInvalidKey")
+var ErrTelioErrorBadConfig = fmt.Errorf("TelioErrorBadConfig")
+var ErrTelioErrorLockError = fmt.Errorf("TelioErrorLockError")
+var ErrTelioErrorInvalidString = fmt.Errorf("TelioErrorInvalidString")
+var ErrTelioErrorAlreadyStarted = fmt.Errorf("TelioErrorAlreadyStarted")
+var ErrTelioErrorNotStarted = fmt.Errorf("TelioErrorNotStarted")
 
 // Variant structs
-type TelioErrorVariantUnknownError struct {
+type TelioErrorUnknownError struct {
 	Inner string
 }
-func NewTelioErrorVariantUnknownError(
+func NewTelioErrorUnknownError(
 	inner string,
-) *TelioErrorVariant {
-	return &TelioErrorVariant { err: &TelioErrorVariantUnknownError {
+) *TelioError {
+	return &TelioError { err: &TelioErrorUnknownError {
 			Inner: inner,} }
 }
 
-func (e TelioErrorVariantUnknownError) destroy() {
+func (e TelioErrorUnknownError) destroy() {
 		FfiDestroyerString{}.Destroy(e.Inner)
 }
 
 
-func (err TelioErrorVariantUnknownError) Error() string {
+func (err TelioErrorUnknownError) Error() string {
 	return fmt.Sprint("UnknownError",
 		": ",
 		
@@ -6670,217 +6207,217 @@ func (err TelioErrorVariantUnknownError) Error() string {
 	)
 }
 
-func (self TelioErrorVariantUnknownError) Is(target error) bool {
-	return target == ErrTelioErrorVariantUnknownError
+func (self TelioErrorUnknownError) Is(target error) bool {
+	return target == ErrTelioErrorUnknownError
 }
-type TelioErrorVariantInvalidKey struct {
+type TelioErrorInvalidKey struct {
 }
-func NewTelioErrorVariantInvalidKey(
-) *TelioErrorVariant {
-	return &TelioErrorVariant { err: &TelioErrorVariantInvalidKey {} }
-}
-
-func (e TelioErrorVariantInvalidKey) destroy() {
+func NewTelioErrorInvalidKey(
+) *TelioError {
+	return &TelioError { err: &TelioErrorInvalidKey {} }
 }
 
+func (e TelioErrorInvalidKey) destroy() {
+}
 
-func (err TelioErrorVariantInvalidKey) Error() string {
+
+func (err TelioErrorInvalidKey) Error() string {
 	return fmt.Sprint("InvalidKey",
 		
 	)
 }
 
-func (self TelioErrorVariantInvalidKey) Is(target error) bool {
-	return target == ErrTelioErrorVariantInvalidKey
+func (self TelioErrorInvalidKey) Is(target error) bool {
+	return target == ErrTelioErrorInvalidKey
 }
-type TelioErrorVariantBadConfig struct {
+type TelioErrorBadConfig struct {
 }
-func NewTelioErrorVariantBadConfig(
-) *TelioErrorVariant {
-	return &TelioErrorVariant { err: &TelioErrorVariantBadConfig {} }
-}
-
-func (e TelioErrorVariantBadConfig) destroy() {
+func NewTelioErrorBadConfig(
+) *TelioError {
+	return &TelioError { err: &TelioErrorBadConfig {} }
 }
 
+func (e TelioErrorBadConfig) destroy() {
+}
 
-func (err TelioErrorVariantBadConfig) Error() string {
+
+func (err TelioErrorBadConfig) Error() string {
 	return fmt.Sprint("BadConfig",
 		
 	)
 }
 
-func (self TelioErrorVariantBadConfig) Is(target error) bool {
-	return target == ErrTelioErrorVariantBadConfig
+func (self TelioErrorBadConfig) Is(target error) bool {
+	return target == ErrTelioErrorBadConfig
 }
-type TelioErrorVariantLockError struct {
+type TelioErrorLockError struct {
 }
-func NewTelioErrorVariantLockError(
-) *TelioErrorVariant {
-	return &TelioErrorVariant { err: &TelioErrorVariantLockError {} }
-}
-
-func (e TelioErrorVariantLockError) destroy() {
+func NewTelioErrorLockError(
+) *TelioError {
+	return &TelioError { err: &TelioErrorLockError {} }
 }
 
+func (e TelioErrorLockError) destroy() {
+}
 
-func (err TelioErrorVariantLockError) Error() string {
+
+func (err TelioErrorLockError) Error() string {
 	return fmt.Sprint("LockError",
 		
 	)
 }
 
-func (self TelioErrorVariantLockError) Is(target error) bool {
-	return target == ErrTelioErrorVariantLockError
+func (self TelioErrorLockError) Is(target error) bool {
+	return target == ErrTelioErrorLockError
 }
-type TelioErrorVariantInvalidString struct {
+type TelioErrorInvalidString struct {
 }
-func NewTelioErrorVariantInvalidString(
-) *TelioErrorVariant {
-	return &TelioErrorVariant { err: &TelioErrorVariantInvalidString {} }
-}
-
-func (e TelioErrorVariantInvalidString) destroy() {
+func NewTelioErrorInvalidString(
+) *TelioError {
+	return &TelioError { err: &TelioErrorInvalidString {} }
 }
 
+func (e TelioErrorInvalidString) destroy() {
+}
 
-func (err TelioErrorVariantInvalidString) Error() string {
+
+func (err TelioErrorInvalidString) Error() string {
 	return fmt.Sprint("InvalidString",
 		
 	)
 }
 
-func (self TelioErrorVariantInvalidString) Is(target error) bool {
-	return target == ErrTelioErrorVariantInvalidString
+func (self TelioErrorInvalidString) Is(target error) bool {
+	return target == ErrTelioErrorInvalidString
 }
-type TelioErrorVariantAlreadyStarted struct {
+type TelioErrorAlreadyStarted struct {
 }
-func NewTelioErrorVariantAlreadyStarted(
-) *TelioErrorVariant {
-	return &TelioErrorVariant { err: &TelioErrorVariantAlreadyStarted {} }
-}
-
-func (e TelioErrorVariantAlreadyStarted) destroy() {
+func NewTelioErrorAlreadyStarted(
+) *TelioError {
+	return &TelioError { err: &TelioErrorAlreadyStarted {} }
 }
 
+func (e TelioErrorAlreadyStarted) destroy() {
+}
 
-func (err TelioErrorVariantAlreadyStarted) Error() string {
+
+func (err TelioErrorAlreadyStarted) Error() string {
 	return fmt.Sprint("AlreadyStarted",
 		
 	)
 }
 
-func (self TelioErrorVariantAlreadyStarted) Is(target error) bool {
-	return target == ErrTelioErrorVariantAlreadyStarted
+func (self TelioErrorAlreadyStarted) Is(target error) bool {
+	return target == ErrTelioErrorAlreadyStarted
 }
-type TelioErrorVariantNotStarted struct {
+type TelioErrorNotStarted struct {
 }
-func NewTelioErrorVariantNotStarted(
-) *TelioErrorVariant {
-	return &TelioErrorVariant { err: &TelioErrorVariantNotStarted {} }
-}
-
-func (e TelioErrorVariantNotStarted) destroy() {
+func NewTelioErrorNotStarted(
+) *TelioError {
+	return &TelioError { err: &TelioErrorNotStarted {} }
 }
 
+func (e TelioErrorNotStarted) destroy() {
+}
 
-func (err TelioErrorVariantNotStarted) Error() string {
+
+func (err TelioErrorNotStarted) Error() string {
 	return fmt.Sprint("NotStarted",
 		
 	)
 }
 
-func (self TelioErrorVariantNotStarted) Is(target error) bool {
-	return target == ErrTelioErrorVariantNotStarted
+func (self TelioErrorNotStarted) Is(target error) bool {
+	return target == ErrTelioErrorNotStarted
 }
 
-type FfiConverterTelioErrorVariant struct{}
+type FfiConverterTelioError struct{}
 
-var FfiConverterTelioErrorVariantINSTANCE = FfiConverterTelioErrorVariant{}
+var FfiConverterTelioErrorINSTANCE = FfiConverterTelioError{}
 
-func (c FfiConverterTelioErrorVariant) Lift(eb RustBufferI) *TelioErrorVariant {
-	return LiftFromRustBuffer[*TelioErrorVariant](c, eb)
+func (c FfiConverterTelioError) Lift(eb RustBufferI) *TelioError {
+	return LiftFromRustBuffer[*TelioError](c, eb)
 }
 
-func (c FfiConverterTelioErrorVariant) Lower(value *TelioErrorVariant) C.RustBuffer {
-	return LowerIntoRustBuffer[*TelioErrorVariant](c, value)
+func (c FfiConverterTelioError) Lower(value *TelioError) C.RustBuffer {
+	return LowerIntoRustBuffer[*TelioError](c, value)
 }
 
-func (c FfiConverterTelioErrorVariant) Read(reader io.Reader) *TelioErrorVariant {
+func (c FfiConverterTelioError) Read(reader io.Reader) *TelioError {
 	errorID := readUint32(reader)
 
 	switch errorID {
 	case 1:
-		return &TelioErrorVariant{ &TelioErrorVariantUnknownError{
+		return &TelioError{ &TelioErrorUnknownError{
 			Inner: FfiConverterStringINSTANCE.Read(reader),
 		}}
 	case 2:
-		return &TelioErrorVariant{ &TelioErrorVariantInvalidKey{
+		return &TelioError{ &TelioErrorInvalidKey{
 		}}
 	case 3:
-		return &TelioErrorVariant{ &TelioErrorVariantBadConfig{
+		return &TelioError{ &TelioErrorBadConfig{
 		}}
 	case 4:
-		return &TelioErrorVariant{ &TelioErrorVariantLockError{
+		return &TelioError{ &TelioErrorLockError{
 		}}
 	case 5:
-		return &TelioErrorVariant{ &TelioErrorVariantInvalidString{
+		return &TelioError{ &TelioErrorInvalidString{
 		}}
 	case 6:
-		return &TelioErrorVariant{ &TelioErrorVariantAlreadyStarted{
+		return &TelioError{ &TelioErrorAlreadyStarted{
 		}}
 	case 7:
-		return &TelioErrorVariant{ &TelioErrorVariantNotStarted{
+		return &TelioError{ &TelioErrorNotStarted{
 		}}
 	default:
-		panic(fmt.Sprintf("Unknown error code %d in FfiConverterTelioErrorVariant.Read()", errorID))
+		panic(fmt.Sprintf("Unknown error code %d in FfiConverterTelioError.Read()", errorID))
 	}
 }
 
-func (c FfiConverterTelioErrorVariant) Write(writer io.Writer, value *TelioErrorVariant) {
+func (c FfiConverterTelioError) Write(writer io.Writer, value *TelioError) {
 	switch variantValue := value.err.(type) {
-		case *TelioErrorVariantUnknownError:
+		case *TelioErrorUnknownError:
 			writeInt32(writer, 1)
 			FfiConverterStringINSTANCE.Write(writer, variantValue.Inner)
-		case *TelioErrorVariantInvalidKey:
+		case *TelioErrorInvalidKey:
 			writeInt32(writer, 2)
-		case *TelioErrorVariantBadConfig:
+		case *TelioErrorBadConfig:
 			writeInt32(writer, 3)
-		case *TelioErrorVariantLockError:
+		case *TelioErrorLockError:
 			writeInt32(writer, 4)
-		case *TelioErrorVariantInvalidString:
+		case *TelioErrorInvalidString:
 			writeInt32(writer, 5)
-		case *TelioErrorVariantAlreadyStarted:
+		case *TelioErrorAlreadyStarted:
 			writeInt32(writer, 6)
-		case *TelioErrorVariantNotStarted:
+		case *TelioErrorNotStarted:
 			writeInt32(writer, 7)
 		default:
 			_ = variantValue
-			panic(fmt.Sprintf("invalid error value `%v` in FfiConverterTelioErrorVariant.Write", value))
+			panic(fmt.Sprintf("invalid error value `%v` in FfiConverterTelioError.Write", value))
 	}
 }
 
-type FfiDestroyerTelioErrorVariant struct {}
+type FfiDestroyerTelioError struct {}
 
-func (_ FfiDestroyerTelioErrorVariant) Destroy(value *TelioErrorVariant) {
+func (_ FfiDestroyerTelioError) Destroy(value *TelioError) {
 	switch variantValue := value.err.(type) {
-		case TelioErrorVariantUnknownError:
+		case TelioErrorUnknownError:
 			variantValue.destroy()
-		case TelioErrorVariantInvalidKey:
+		case TelioErrorInvalidKey:
 			variantValue.destroy()
-		case TelioErrorVariantBadConfig:
+		case TelioErrorBadConfig:
 			variantValue.destroy()
-		case TelioErrorVariantLockError:
+		case TelioErrorLockError:
 			variantValue.destroy()
-		case TelioErrorVariantInvalidString:
+		case TelioErrorInvalidString:
 			variantValue.destroy()
-		case TelioErrorVariantAlreadyStarted:
+		case TelioErrorAlreadyStarted:
 			variantValue.destroy()
-		case TelioErrorVariantNotStarted:
+		case TelioErrorNotStarted:
 			variantValue.destroy()
 		default:
 			_ = variantValue
-			panic(fmt.Sprintf("invalid error value `%v` in FfiDestroyerTelioErrorVariant.Destroy", value))
+			panic(fmt.Sprintf("invalid error value `%v` in FfiDestroyerTelioError.Destroy", value))
 	}
 }
 
@@ -7100,11 +6637,11 @@ func telio_cgo_dispatchCallbackInterfaceTelioEventCbMethod0(uniffiHandle C.uint6
 	
     
 	if err != nil {
-		var actualError *TelioErrorVariant
+		var actualError *TelioError
 		if errors.As(err, &actualError) {
 			*callStatus = C.RustCallStatus {
 				code: C.int8_t(uniffiCallbackResultError),
-				errorBuf: FfiConverterTelioErrorVariantINSTANCE.Lower(actualError),
+				errorBuf: FfiConverterTelioErrorINSTANCE.Lower(actualError),
 			}
 		} else {
 			*callStatus = C.RustCallStatus {
@@ -7198,11 +6735,11 @@ func telio_cgo_dispatchCallbackInterfaceTelioLoggerCbMethod0(uniffiHandle C.uint
 	
     
 	if err != nil {
-		var actualError *TelioErrorVariant
+		var actualError *TelioError
 		if errors.As(err, &actualError) {
 			*callStatus = C.RustCallStatus {
 				code: C.int8_t(uniffiCallbackResultError),
-				errorBuf: FfiConverterTelioErrorVariantINSTANCE.Lower(actualError),
+				errorBuf: FfiConverterTelioErrorINSTANCE.Lower(actualError),
 			}
 		} else {
 			*callStatus = C.RustCallStatus {
@@ -7291,11 +6828,11 @@ func telio_cgo_dispatchCallbackInterfaceTelioProtectCbMethod0(uniffiHandle C.uin
 	
     
 	if err != nil {
-		var actualError *TelioErrorVariant
+		var actualError *TelioError
 		if errors.As(err, &actualError) {
 			*callStatus = C.RustCallStatus {
 				code: C.int8_t(uniffiCallbackResultError),
-				errorBuf: FfiConverterTelioErrorVariantINSTANCE.Lower(actualError),
+				errorBuf: FfiConverterTelioErrorINSTANCE.Lower(actualError),
 			}
 		} else {
 			*callStatus = C.RustCallStatus {
@@ -8545,6 +8082,45 @@ func (_ FfiDestroyerOptionalSequenceServer) Destroy(value *[]Server) {
 
 
 
+type FfiConverterOptionalSequenceCipher struct{}
+
+var FfiConverterOptionalSequenceCipherINSTANCE = FfiConverterOptionalSequenceCipher{}
+
+func (c FfiConverterOptionalSequenceCipher) Lift(rb RustBufferI) *[]Cipher {
+	return LiftFromRustBuffer[*[]Cipher](c, rb)
+}
+
+func (_ FfiConverterOptionalSequenceCipher) Read(reader io.Reader) *[]Cipher {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterSequenceCipherINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalSequenceCipher) Lower(value *[]Cipher) C.RustBuffer {
+	return LowerIntoRustBuffer[*[]Cipher](c, value)
+}
+
+func (_ FfiConverterOptionalSequenceCipher) Write(writer io.Writer, value *[]Cipher) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterSequenceCipherINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalSequenceCipher struct {}
+
+func (_ FfiDestroyerOptionalSequenceCipher) Destroy(value *[]Cipher) {
+	if value != nil {
+		FfiDestroyerSequenceCipher{}.Destroy(*value)
+	}
+}
+
+
+
 type FfiConverterOptionalSequenceTypeIpAddr struct{}
 
 var FfiConverterOptionalSequenceTypeIpAddrINSTANCE = FfiConverterOptionalSequenceTypeIpAddr{}
@@ -8701,6 +8277,45 @@ func (_ FfiDestroyerOptionalTypeHiddenString) Destroy(value *HiddenString) {
 
 
 
+type FfiConverterOptionalTypeIpv4Addr struct{}
+
+var FfiConverterOptionalTypeIpv4AddrINSTANCE = FfiConverterOptionalTypeIpv4Addr{}
+
+func (c FfiConverterOptionalTypeIpv4Addr) Lift(rb RustBufferI) *Ipv4Addr {
+	return LiftFromRustBuffer[*Ipv4Addr](c, rb)
+}
+
+func (_ FfiConverterOptionalTypeIpv4Addr) Read(reader io.Reader) *Ipv4Addr {
+	if readInt8(reader) == 0 {
+		return nil
+	}
+	temp := FfiConverterTypeIpv4AddrINSTANCE.Read(reader)
+	return &temp
+}
+
+func (c FfiConverterOptionalTypeIpv4Addr) Lower(value *Ipv4Addr) C.RustBuffer {
+	return LowerIntoRustBuffer[*Ipv4Addr](c, value)
+}
+
+func (_ FfiConverterOptionalTypeIpv4Addr) Write(writer io.Writer, value *Ipv4Addr) {
+	if value == nil {
+		writeInt8(writer, 0)
+	} else {
+		writeInt8(writer, 1)
+		FfiConverterTypeIpv4AddrINSTANCE.Write(writer, *value)
+	}
+}
+
+type FfiDestroyerOptionalTypeIpv4Addr struct {}
+
+func (_ FfiDestroyerOptionalTypeIpv4Addr) Destroy(value *Ipv4Addr) {
+	if value != nil {
+		FfiDestroyerTypeIpv4Addr{}.Destroy(*value)
+	}
+}
+
+
+
 type FfiConverterOptionalTypeIpv4Net struct{}
 
 var FfiConverterOptionalTypeIpv4NetINSTANCE = FfiConverterOptionalTypeIpv4Net{}
@@ -8819,51 +8434,6 @@ type FfiDestroyerSequenceString struct {}
 func (FfiDestroyerSequenceString) Destroy(sequence []string) {
 	for _, value := range sequence {
 		FfiDestroyerString{}.Destroy(value)	
-	}
-}
-
-
-
-type FfiConverterSequenceLocation struct{}
-
-var FfiConverterSequenceLocationINSTANCE = FfiConverterSequenceLocation{}
-
-func (c FfiConverterSequenceLocation) Lift(rb RustBufferI) []*Location {
-	return LiftFromRustBuffer[[]*Location](c, rb)
-}
-
-func (c FfiConverterSequenceLocation) Read(reader io.Reader) []*Location {
-	length := readInt32(reader)
-	if length == 0 {
-		return nil
-	}
-	result := make([]*Location, 0, length)
-	for i := int32(0); i < length; i++ {
-		result = append(result, FfiConverterLocationINSTANCE.Read(reader))
-	}
-	return result
-}
-
-func (c FfiConverterSequenceLocation) Lower(value []*Location) C.RustBuffer {
-	return LowerIntoRustBuffer[[]*Location](c, value)
-}
-
-func (c FfiConverterSequenceLocation) Write(writer io.Writer, value []*Location) {
-	if len(value) > math.MaxInt32 {
-		panic("[]*Location is too large to fit into Int32")
-	}
-
-	writeInt32(writer, int32(len(value)))
-	for _, item := range value {
-		FfiConverterLocationINSTANCE.Write(writer, item)
-	}
-}
-
-type FfiDestroyerSequenceLocation struct {}
-
-func (FfiDestroyerSequenceLocation) Destroy(sequence []*Location) {
-	for _, value := range sequence {
-		FfiDestroyerLocation{}.Destroy(value)	
 	}
 }
 
@@ -9727,9 +9297,8 @@ func GetVersionTag() string {
 //
 // Unknown cipher names are ignored. Duplicate cipher names are
 // silently deduplicated. Parser is case-sensitive.
-// Cipher names shall follow IANA registry AEAD ciphers naming convention.
 //
-// Example input:  "AEAD_CHACHA20_POLY1305, AEAD_AEGIS256, unknown"
+// Example input:  "chacha20poly1305, aegis256, unknown"
 // Example output: [Cipher.Chacha20Poly1305, Cipher.Aegis256]
 func ParseCiphers(ciphers string) []Cipher {
 	return FfiConverterSequenceCipherINSTANCE.Lift(rustCall(func(_uniffiStatus *C.RustCallStatus) RustBufferI {
